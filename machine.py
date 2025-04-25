@@ -77,7 +77,9 @@ class ALU:
         RMD : int = 6
 
 
-    def __init__(self):
+    def __init__(self, datapath):
+        self.datapath : DataPath = datapath
+
         self.__left_term : int = 0
         self.__right_term : int = 0
         self.result : int = 0
@@ -105,9 +107,9 @@ class ALU:
         assert isinstance(sel, Sel.LeftALU), "selector must be LeftALU selector"
 
         if sel == Sel.LeftALU.REGISTER:
-            pass
-        if sel == Sel.LeftALU.IMMEDIATE:
-            pass
+            self.__left_term = self.datapath.registers[self.datapath.src_register]
+        if sel == Sel.LeftALU.VALUE:
+            self.__left_term = self.datapath.control_unit.value_register
         if sel == Sel.LeftALU.ZERO:
             self.__left_term = 0
     
@@ -115,11 +117,11 @@ class ALU:
         assert isinstance(sel, Sel.RightALU), "selector must be RightALU selector"
 
         if sel == Sel.RightALU.REGISTER:
-            pass
-        if sel == Sel.RightALU.IMMEDIATE:
-            pass
+            self.__right_term = self.datapath.registers[self.datapath.src_register]
+        if sel == Sel.RightALU.VALUE:
+            self.__right_term = self.datapath.control_unit.value_register
         if sel == Sel.RightALU.DATA_REGISTER:
-            pass
+            self.__right_term = self.datapath.data_register
         if sel == Sel.RightALU.PLUS_1:
             self.__right_term = 1
         if sel == Sel.RightALU.MINUS_1:
@@ -180,8 +182,8 @@ class Memory:
 
 
 class ControlUnit:
-    def __init__(self):
-        self.datapath : DataPath = None
+    def __init__(self, datapath):
+        self.datapath : DataPath = datapath
 
         self.program_counter : int = 0
         self.mprogram_counter : int = 0
@@ -317,7 +319,7 @@ class ControlUnit:
         if sel == Sel.ProgramCounter.JUMP:
             pass
         if sel == Sel.ProgramCounter.NEXT:
-            pass
+            self.program_counter += 1
 
     def latch_mprogram_counter(self, sel: Sel.MProgramCounter):
         assert isinstance(sel, Sel.MProgramCounter), "selector must be MProgramCounter selector"
@@ -340,8 +342,8 @@ class ControlUnit:
 
 class DataPath:
     def __init__(self, input_address, output_address):
-        self.control_unit : ControlUnit = ControlUnit()
-        self.alu : ALU = ALU()
+        self.control_unit : ControlUnit = ControlUnit(self)
+        self.alu : ALU = ALU(self)
         self.registers : Registers = Registers()
 
         self.data_register : int = 0
