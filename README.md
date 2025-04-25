@@ -74,42 +74,8 @@ comment ::= ; <any symbols>
 
 - `halt` - завершить выполнение программы
 
-```
-mov opcode──┐type┐reg1────┐reg2────┐                           
-    │   5   ││ 2 ││   5   ││   5   │                           
-    └───────┘└───┘└───────┘└───────┘                           
-                  reg─────┐mem─────┐                           
-                  │   5   ││  32   │                           
-                  └───────┘└───────┘                           
-                  mem─────┐reg─────┐                           
-                  │  32   ││   5   │                           
-                  └───────┘└───────┘                           
-                  val─────┐reg─────┐                           
-                  │  32   ││   5   │                           
-                  └───────┘└───────┘                           
-                                                               
-inc opcode──┐type┐reg─────┐                                    
-dec │   5   ││ 1 ││   5   │                                    
-push└───────┘└───┘└───────┘                                    
-jmp               mem─────┐                                    
-call              │  32   │                                    
-                  └───────┘                                    
-                                                               
-add opcode──┐type┐n───────┐out─────┐reg1────┐...─────┐regn────┐
-sub │   5   ││ 1 ││   5   ││   5   ││   5   ││   5   ││   5   │
-mul └───────┘└───┘└───────┘└───────┘└───────┘└───────┘└───────┘
-div                                 mem1────┐...─────┐memn────┐
-rmd,and                             │  32   ││  32   ││  32   │
-or,eq,neq                           └───────┘└───────┘└───────┘
-lt, gt                                                         
-                                                               
-pop opcode──┐                                                  
-ret │   5   │                                                  
-hlt └───────┘                                                                                                                             
-```
 
-
-микрокод - должен быть реализован как в железе
+<!-- микрокод - должен быть реализован как в железе
 то есть микрокод должен располагаться линейно
 opcode -> address check lectures
 
@@ -117,7 +83,15 @@ MMIO - wrench like thing
 bind IO address in config
 
 устройство процессора - harward risc processor micro arch
-- david harris and sara harris
+- david harris and sara harris -->
 
+## Модель процессора
+### Datapath
 ![datapath](resources/datapath.png)
+### Control unit
+![datapath](resources/control.png)
+#TODO
+если я захочу мувнуть из reg1 по адрессу reg2?
+- mov очень странно спроектирован, переделать
+- 
 ![isa](resources/isa.png)
