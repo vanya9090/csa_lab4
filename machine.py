@@ -12,6 +12,7 @@ class Signal(Enum):
     LATCH_PROGRAM_COUNTER : int = 3
     LATCH_MPROGRAM_COUNTER : int = 4
     LATCH_INSTRUCTION : int = 11
+    LATCH_VALUE_REGISTER : int = 14
     TICK : int = 12
 
     LATCH_LEFT_ALU : int = 5
@@ -56,9 +57,9 @@ class Sel:
         IMMEDIATE : int = 1
         ALU : int = 2
         DATA_REGISTER : int = 3
-    class Instruction(Enum):
-        INSTRUCTION: int = 0
-        IMMEDIATE : int = 1
+    # class Instruction(Enum):
+    #     INSTRUCTION: int = 0
+    #     IMMEDIATE : int = 1
 
 
 class ALU:
@@ -187,7 +188,7 @@ class ControlUnit:
         self.program_counter : int = 0
         self.mprogram_counter : int = 0
 
-        self.immediate : int = 0
+        self.value_register : int = 0
         self.mem_address : int = 0
         self.n : int = 0
 
@@ -199,7 +200,7 @@ class ControlUnit:
             # instruction fetch
             (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
             (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
-            (Signal.LATCH_INSTRUCTION, Sel.Instruction.INSTRUCTION),
+            (Signal.LATCH_INSTRUCTION),
             (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.OPCODE),
             # MOV register
             #TODO add MProgramCounter selector, which select offset to right type
@@ -222,7 +223,7 @@ class ControlUnit:
             (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
             (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
             (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
-            (Signal.LATCH_INSTRUCTION, Sel.Instruction.IMMEDIATE),
+            (Signal.LATCH_VALUE_REGISTER),
             (Signal.LATCH_REGISTER, Sel.Register.IMMEDIATE),
             (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
             (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
@@ -230,7 +231,7 @@ class ControlUnit:
             (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
             (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
             (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
-            (Signal.LATCH_INSTRUCTION, Sel.Instruction.IMMEDIATE), # address in imm
+            (Signal.LATCH_VALUE_REGISTER), # address in imm
             (Signal.LATCH_REGISTER, Sel.Register.IMMEDIATE), # dst register
             (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.REGISTER),
             (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
@@ -244,8 +245,8 @@ class ControlUnit:
             (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
             (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
             (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
-            (Signal.LATCH_INSTRUCTION, Sel.Instruction.IMMEDIATE), # address of address in imm
-            
+            (Signal.LATCH_VALUE_REGISTER), # address of address in imm
+
         ]
 
     def decode(self, instruction: Instruction):
@@ -290,20 +291,11 @@ class ControlUnit:
     def latch_mprogram_counter(self, sel: Sel.MProgramCounter):
         pass
 
-    def latch_immediate(self):
-        pass
+    def latch_instruction(self):
+        self.decode(self.datapath.data_register)
 
-    def latch_mem_address(self):
-        pass
-
-    def latch_instruction(self, sel : Sel.Instruction):
-        assert isinstance(sel, Sel.Instruction), "selector must be Instruction selector"
-
-        if sel == Sel.Instruction.INSTRUCTION:
-            self.decode(self.datapath.data_register)
-        elif sel == Sel.Instruction.IMMEDIATE:
-            self.immediate = self.datapath.data_register
-
+    def latch_value_register(self):
+        self.value_register = self.datapath.data_register
 
 
 
