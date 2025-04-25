@@ -114,13 +114,45 @@ class ALU:
         self.result = self.__operations[operation](self.__left_term, self.__right_term)
         self.__set_flags()
 
+class Registers:
+    class Registers(Enum):
+        RSP : int = 0
+        AR : int = 1
+        DR : int = 2
+        R0 : int = 3
+        R1 : int = 4
+        R2 : int = 5
+        R3 : int = 6
+        R4 : int = 7
+        R5 : int = 8
+        R6 : int = 9
+        R7 : int = 10
+    
+    def __init__(self):
+        self.registers_value : dict[Registers.Registers, int] = {
+            Registers.Registers.RSP : 0,
+            Registers.Registers.AR : 0,
+            Registers.Registers.DR : 0,
+            Registers.Registers.R0 : 0,
+            Registers.Registers.R1 : 0,
+            Registers.Registers.R2 : 0,
+            Registers.Registers.R3 : 0,
+            Registers.Registers.R4 : 0,
+            Registers.Registers.R5 : 0,
+            Registers.Registers.R6 : 0,
+            Registers.Registers.R7 : 0,
+        }
+
 
 class Memory:
-    pass
-
-
-class Registers:
-    pass
+    def __init__(self, memory_size):
+        self.memory = [0] * memory_size
+    
+    def __getitem__(self, key) -> int: # TODO rewrite to address register
+        return self.memory[key]
+    
+    def __setitem__(self, key, value) -> None:
+        self.memory[key] = value
 
 
 class ControlUnit:
@@ -143,3 +175,8 @@ class DataPath:
 if __name__ == "__main__":
     alu = ALU()
     print(alu.flags[alu.Flags.ZERO])
+
+    memory = Memory(1024)
+    print(memory.memory)
+    memory[0] = 1234
+    print(memory[0])
