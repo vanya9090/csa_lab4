@@ -1,7 +1,7 @@
 from enum import Enum 
 from dataclasses import dataclass
-from typing import Callable, Dict, Any
-from isa import Opcode, Term, TermType, Instruction
+from typing import Callable, Dict, Any, ClassVar
+from isa import Opcode, Term, Instruction
 
 
 class Signal(Enum):
@@ -77,8 +77,8 @@ class ALU:
         RMD : int = 6
 
 
-    def __init__(self, datapath):
-        self.datapath : DataPath = datapath
+    def __init__(self, datapath : "DataPath"):
+        self.datapath = datapath
 
         self.__left_term : int = 0
         self.__right_term : int = 0
@@ -182,8 +182,8 @@ class Memory:
 
 
 class ControlUnit:
-    def __init__(self, datapath):
-        self.datapath : DataPath = datapath
+    def __init__(self, datapath : "DataPath"):
+        self.datapath = datapath
 
         self.program_counter : int = 0
         self.mprogram_counter : int = 0
@@ -191,6 +191,20 @@ class ControlUnit:
         self.value_register : int = 0
         self.mem_address : int = 0
         self.n : int = 0
+
+        self.signals : dict[Signal, Callable] = {
+            Signal.LATCH_VALUE_REGISTER : self.latch_value_register,
+            Signal.LATCH_INSTRUCTION : self.latch_instruction,
+            Signal.LATCH_PROGRAM_COUNTER : self.latch_program_counter,
+            Signal.LATCH_MPROGRAM_COUNTER : self.latch_mprogram_counter,
+            Signal.LATCH_ADDRESS_REGISTER : self.datapath.latch_address_register,
+            Signal.LATCH_DATA_REGISTER : self.datapath.latch_data_register,
+            Signal.LATCH_LEFT_ALU: self.datapath.alu.latch_left_alu,
+            Signal.LATCH_RIGHT_ALU: self.datapath.alu.latch_right_alu,
+            Signal.EXECUTE_ALU: self.datapath.alu.perform,
+            Signal.LATCH_REGISTER : self.datapath.latch_register,
+            # Signal.LATCH_STACK_POINTER_REGISTER : self.datapath.la
+        }
 
         self.opcode_to_mPC : dict[Opcode, int] = {
             Opcode.MOV : 1,
@@ -337,6 +351,8 @@ class ControlUnit:
     def latch_value_register(self):
         self.value_register = self.datapath.data_register
 
+    
+
 
 
 
@@ -365,11 +381,11 @@ class DataPath:
         assert isinstance(sel, Sel.DataRegister), "selector must be DataRegister selector"
 
         if sel == Sel.DataRegister.ALU:
-            self.data_register = alu.result
+            self.data_register = self.alu.result
         elif sel == Sel.DataRegister.MEMORY:
-            self.data_register = memory[self.address_register]
+            self.data_register = self.memory[self.address_register]
         
-    def lathc_address_register(self, sel : Sel.AddressRegister):
+    def latch_address_register(self, sel : Sel.AddressRegister):
         assert isinstance(sel, Sel.AddressRegister), "selector must be AddressRegister selector"
 
         if sel == Sel.AddressRegister.CONTROL_UNIT:
@@ -383,7 +399,7 @@ class DataPath:
         assert isinstance(sel, Sel.Register), "selector must be Register selector"
 
         if sel == Sel.Register.ALU:
-            self.registers[register] = alu.result
+            self.registers[register] = self.alu.result
         elif sel == Sel.Register.DATA_REGISTER:
             self.registers[register] = self.data_register
         elif sel == Sel.Register.IMMEDIATE:
@@ -401,10 +417,10 @@ class DataPath:
 
 
 if __name__ == "__main__":
-    alu = ALU()
-    print(alu.flags[alu.Flags.ZERO])
+    instruction = Instruction(Opcode.MOV, [Term(0), Term(Registers.Registers.R0), Term(Registers.Registers.R1)])
+    print(instruction)
 
-    memory = Memory(1024)
-    print(memory.memory)
-    memory[0] = 1234
-    print(memory[0])
+    datapath = DataPath(100, 120)
+    datapath.control_unit.decode(instruction)
+    print(datapath.control_unit.terms, datapath.control_unit.opcode)
+    print(datapath.src_register, datapath.dst_register)

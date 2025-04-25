@@ -1,5 +1,6 @@
 from enum import Enum 
 from dataclasses import dataclass
+from typing import Any
 
 class Opcode(Enum):
     MOV : int = 0
@@ -27,17 +28,17 @@ class Opcode(Enum):
     RET : int = 22
     HLT : int = 23
 
-class TermType(Enum):
-    REGISTER : int = 0
-    REGISTER_INDIRECT : int = 1
-    IMMEDIATE : int = 2
-    DIRECT : int = 3
-    INDIRECT : int = 4
+# class TermType(Enum):
+#     REGISTER : int = 0
+#     REGISTER_INDIRECT : int = 1
+#     IMMEDIATE : int = 2
+#     DIRECT : int = 3
+#     INDIRECT : int = 4
 
 @dataclass
 class Term:
-    value : int
-    term_type: TermType
+    value : Any
+    # term_type: TermType
 
 @dataclass
 class Instruction:
