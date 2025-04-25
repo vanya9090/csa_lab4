@@ -43,23 +43,20 @@ class Sel:
         ZERO : int = 1
     class LeftALU(Enum):
         REGISTER : int = 0
-        IMMEDIATE : int = 1
+        VALUE : int = 1
         ZERO : int = 2
     class RightALU(Enum):
         REGISTER : int = 0
-        IMMEDIATE : int = 1
+        VALUE : int = 1
         DATA_REGISTER : int = 2
         PLUS_1 : int = 3
         MINUS_1 : int = 4
         ZERO : int = 5
     class Register(Enum):
         REGISTER : int = 0
-        IMMEDIATE : int = 1
+        VALUE : int = 1
         ALU : int = 2
         DATA_REGISTER : int = 3
-    # class Instruction(Enum):
-    #     INSTRUCTION: int = 0
-    #     IMMEDIATE : int = 1
 
 
 class ALU:
@@ -223,16 +220,14 @@ class ControlUnit:
             (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
             (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
             (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
-            (Signal.LATCH_VALUE_REGISTER),
-            (Signal.LATCH_REGISTER, Sel.Register.IMMEDIATE),
+            (Signal.LATCH_REGISTER, Sel.Register.DATA_REGISTER),
             (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
             (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
             # direct address
             (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
             (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
             (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
-            (Signal.LATCH_VALUE_REGISTER), # address in imm
-            (Signal.LATCH_REGISTER, Sel.Register.IMMEDIATE), # dst register
+            (Signal.LATCH_REGISTER, Sel.Register.DATA_REGISTER),
             (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.REGISTER),
             (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
             (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
@@ -245,7 +240,6 @@ class ControlUnit:
             (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
             (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
             (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
-            (Signal.LATCH_VALUE_REGISTER), # address of address in imm
 
         ]
 
