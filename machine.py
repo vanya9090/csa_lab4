@@ -1,6 +1,7 @@
 from enum import Enum 
 from dataclasses import dataclass
 from typing import Callable, Dict, Any
+from isa import Opcode, Term, TermType, Instruction
 
 
 class Signal(Enum):
@@ -130,9 +131,10 @@ class Registers:
     
     def __init__(self):
         self.registers_value : dict[Registers.Registers, int] = {
-            Registers.Registers.RSP : 0,
-            Registers.Registers.AR : 0,
-            Registers.Registers.DR : 0,
+            #TODO think about this three registers
+            # Registers.Registers.RSP : 0,
+            # Registers.Registers.AR : 0,
+            # Registers.Registers.DR : 0,
             Registers.Registers.R0 : 0,
             Registers.Registers.R1 : 0,
             Registers.Registers.R2 : 0,
@@ -142,6 +144,12 @@ class Registers:
             Registers.Registers.R6 : 0,
             Registers.Registers.R7 : 0,
         }
+    
+    # def latch_register(self, sel : Sel.Register, register : Registers):
+    #     assert isinstance(sel, Sel.Register), "selector must be Register selector"
+
+    #     if sel == Sel.Register.ALU:
+    #         self.registers_value[register] = 
 
 
 class Memory:
@@ -156,7 +164,16 @@ class Memory:
 
 
 class ControlUnit:
-    pass
+    def __init__(self):
+        self.program_counter : int = 0
+        self.mprogram_counter : int = 0
+
+    def decode(self, instruction: Instruction):
+        opcode : Opcode = instruction.opcode
+        terms : list[Term] = instruction.terms
+
+
+
 
 
 class DataPath:
@@ -167,7 +184,37 @@ class DataPath:
 
         self.data_register : int = 0
         self.address_register : int = 0
+        self.choose_register : Registers.Registers = None
 
+    def latch_data_register(self, sel : Sel.DataRegister):
+        assert isinstance(sel, Sel.DataRegister), "selector must be DataRegister selector"
+
+        if sel == Sel.DataRegister.ALU:
+            self.data_register = alu.result
+        elif sel == Sel.DataRegister.MEMORY:
+            self.data_register = memory[self.address_register]
+        
+    def lathc_address_register(self, sel : Sel.AddressRegister):
+        assert isinstance(sel, Sel.AddressRegister), "selector must be AddressRegister selector"
+
+        if sel == Sel.AddressRegister.CONTROL_UNIT:
+            self.address_register = self.control_unit.program_counter
+        elif sel == Sel.AddressRegister.REGISTER:
+            self.address_register = self.registers[self.choose_register]
+        elif sel == Sel.AddressRegister.STACK_POINTER_REGISTER: # TODO remove RSP 
+            self.address_register = self.registers[Registers.Registers.RSP]
+
+    def latch_register(self, sel : Sel.Register, register : Registers.Registers):
+        assert isinstance(sel, Sel.Register), "selector must be Register selector"
+
+        if sel == Sel.Register.ALU:
+            self.registers[register] = alu.result
+        elif sel == Sel.Register.DATA_REGISTER:
+            self.registers[register] = self.data_register
+        elif sel == Sel.Register.IMMEDIATE:
+            self.registers[register] = self.control_unit.immediate
+        elif sel == Sel.Register.REGISTER:
+            self.registers[register] == self.registers[self.choose_register]
 
 
 
