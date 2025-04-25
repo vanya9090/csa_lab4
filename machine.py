@@ -17,6 +17,11 @@ class Signal(Enum):
 
     LATCH_REGISTER : int = 7
 
+    READ : int = 8
+    WRITE : int = 9
+
+    ZERO: int = 10
+
 
 class Sel:
     class DataRegister(Enum):
@@ -165,19 +170,80 @@ class Memory:
 
 class ControlUnit:
     def __init__(self):
+        self.datapath : DataPath = None
+
         self.program_counter : int = 0
         self.mprogram_counter : int = 0
+
+        self.immediate : int = 0
+        self.mem_address : int = 0
+        self.n : int = 0
+
+        self.opcode_to_mPC : dict[Opcode, int] = {
+            Opcode.MOV : 1,
+        }
+
+        self.mprogram = [
+            # instruction fetch
+            (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
+            (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY)
+            (Signal.LATCH_PROGRAMM_COUNTER)
+        ]
 
     def decode(self, instruction: Instruction):
         opcode : Opcode = instruction.opcode
         terms : list[Term] = instruction.terms
+
+        if opcode == Opcode.MOV:
+            if terms[0].value == 0 or terms[0].value == 1:
+                self.datapath.select_dst_register(terms[1].value)
+                self.datapath.select_src_register(terms[2].value)
+            else: 
+                self.datapath.select_dst_register(terms[1].value)
+        
+        if opcode == Opcode.INC:
+            if terms[0].value == 0:
+                self.datapath.select_dst_register(terms[1].value)
+                self.datapath.select_src_register(terms[1].value)
+
+        ALU_operations = (Opcode.ADD, Opcode.SUB, Opcode.MUL,
+                      Opcode.DIV, Opcode.RMD, Opcode.AND,
+                      Opcode.OR, Opcode.EQ, Opcode.NEQ,
+                      Opcode.LT, Opcode.GT)
+        
+        if opcode in ALU_operations:
+            self.n = terms[1].value
+            self.datapath.select_dst_register(terms[2].value)
+
+        if opcode in (Opcode.BEQZ, Opcode.BNEZ, Opcode.BGZ, Opcode.BLZ):
+            self.datapath.select_src_register(terms[1])
+        
+        if opcode in (Opcode.PUSH, Opcode.JMP, Opcode.CALL):
+            if terms[1].value == 0:
+                self.datapath.select_src_register(terms[2].value)
+            
+
+    def latch_program_counter(self, sel : Sel.ProgramCounter):
+        if sel == Sel.ProgramCounter.JUMP:
+            pass
+        if sel == Sel.ProgramCounter.NEXT:
+            pass
+
+    def latch_mprogram_counter(self, sel: Sel.MProgramCounter):
+        pass
+
+    def latch_immediate(self):
+        pass
+
+    def latch_mem_address(self):
+        pass
 
 
 
 
 
 class DataPath:
-    def __init__(self):
+    def __init__(self, input_address, output_address):
         self.control_unit : ControlUnit = ControlUnit()
         self.alu : ALU = ALU()
         self.registers : Registers = Registers()
@@ -185,6 +251,17 @@ class DataPath:
         self.data_register : int = 0
         self.address_register : int = 0
         self.choose_register : Registers.Registers = None
+        self.src_register : Registers.Registers = None
+        self.dst_register : Registers.Registers = None
+
+        self.input_address : int = input_address
+        self.output_address : int = output_address
+
+    def select_src_register(self, register : Registers.Registers):
+        self.src_register = register
+
+    def select_dst_register(self, register : Registers.Registers):
+        self.dst_register = register
 
     def latch_data_register(self, sel : Sel.DataRegister):
         assert isinstance(sel, Sel.DataRegister), "selector must be DataRegister selector"
@@ -215,6 +292,12 @@ class DataPath:
             self.registers[register] = self.control_unit.immediate
         elif sel == Sel.Register.REGISTER:
             self.registers[register] == self.registers[self.choose_register]
+
+    # def read_from_memory(self) -> int:
+    #     if self.address_register == self.input_address:
+    #         pass
+    #     else:
+    #         return memory[self.address_register]
 
 
 

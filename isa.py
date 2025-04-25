@@ -33,12 +33,10 @@ class TermType(Enum):
     IMMEDIATE : int = 2
     DIRECT : int = 3
     INDIRECT : int = 4
-    N: int = 5
-    TYPE: int = 6
 
 @dataclass
 class Term:
-    value: int
+    value : int
     term_type: TermType
 
 @dataclass
