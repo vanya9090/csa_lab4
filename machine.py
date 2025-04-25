@@ -65,9 +65,9 @@ class ALU:
 
 
     def __init__(self):
-        self.__left_term : int = None
-        self.__right_term : int = None
-        self.result : int = None
+        self.__left_term : int = 0
+        self.__right_term : int = 0
+        self.result : int = 0
         self.flags : dict[ALU.Flags, bool] = {
             self.Flags.ZERO : False,
             self.Flags.CARRY: False,
@@ -113,7 +113,32 @@ class ALU:
     def perform(self, operation : Operations) -> None:
         self.result = self.__operations[operation](self.__left_term, self.__right_term)
         self.__set_flags()
-        
+
+
+class Memory:
+    pass
+
+
+class Registers:
+    pass
+
+
+class ControlUnit:
+    pass
+
+
+class DataPath:
+    def __init__(self):
+        self.control_unit : ControlUnit = ControlUnit()
+        self.alu : ALU = ALU()
+        self.registers : Registers = Registers()
+
+        self.data_register : int = 0
+        self.address_register : int = 0
+
+
+
+
 
 if __name__ == "__main__":
     alu = ALU()
