@@ -87,6 +87,8 @@ bind IO address in config
 
 ## Модель процессора
 ### Datapath
+#TODO
+add mux (memory, alu) -> DR
 ![datapath](resources/datapath.png)
 ### Control unit
 ![datapath](resources/control.png)
