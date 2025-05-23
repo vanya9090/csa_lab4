@@ -24,6 +24,8 @@ class Signal(Enum):
     READ : int = 8
     WRITE : int = 9
 
+    LATCH_MEMORY : int = 15
+
     ZERO: int = 10
 
 
@@ -46,6 +48,8 @@ class Sel:
         REGISTER : int = 0
         VALUE : int = 1
         ZERO : int = 2
+        PLUS_1 : int = 3
+        MINUS_1 : int = 4
     class RightALU(Enum):
         REGISTER : int = 0
         VALUE : int = 1
@@ -112,6 +116,10 @@ class ALU:
             self.__left_term = self.datapath.control_unit.value_register
         if sel == Sel.LeftALU.ZERO:
             self.__left_term = 0
+        if sel == Sel.RightALU.PLUS_1:
+            self.__left_term = 1
+        if sel == Sel.RightALU.MINUS_1:
+            self.__left_term = -1
     
     def latch_right_alu(self, sel : Sel.RightALU) -> None:
         assert isinstance(sel, Sel.RightALU), "selector must be RightALU selector"
@@ -208,14 +216,17 @@ class ControlUnit:
 
         self.opcode_to_mPC : dict[Opcode, int] = {
             Opcode.MOV : 1,
+            Opcode.INC : 6,
+            Opcode.DEC : 8,
         }
 
+        # TODO make micro program memory linear: architect micro program cell, change type section in ISA
         self.mprogram = [
             (
                 # instruction fetch
                 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
                 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
-                (Signal.LATCH_INSTRUCTION),
+                (Signal.LATCH_INSTRUCTION, None),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.OPCODE),
             ),
             (
@@ -292,6 +303,55 @@ class ControlUnit:
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
             ),
+            (
+                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.TYPE), # jmp to type
+                # INC register
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER), # src register
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.PLUS_1),
+                (Signal.EXECUTE_ALU, ALU.Operations.ADD),
+                (Signal.LATCH_REGISTER, Sel.Register.ALU), # dst register (same src for this command)
+                (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+
+            ),
+            (
+                # INC mem cell
+                (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+                (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
+                (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.PLUS_1),
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
+                (Signal.EXECUTE_ALU, ALU.Operations.ADD),
+                (Signal.LATCH_DATA_REGISTER, Sel.AddressRegister.ALU),
+                (Signal.LATCH_MEMORY)
+
+                (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+            ),
+            (
+                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.TYPE), # jmp to type
+                # DEC register
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER), # src register
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.MINUS_1),
+                (Signal.EXECUTE_ALU, ALU.Operations.ADD),
+                (Signal.LATCH_REGISTER, Sel.Register.ALU), # dst register (same src for this command)
+                (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+            ),
+            (
+                # DEC mem cell
+                (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+                (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
+                (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.MINUS_1),
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
+                (Signal.EXECUTE_ALU, ALU.Operations.ADD),
+                (Signal.LATCH_DATA_REGISTER, Sel.AddressRegister.ALU),
+                (Signal.LATCH_MEMORY)
+
+                (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+            ),
         ]
 
     def decode(self, instruction: Instruction):
@@ -351,16 +411,23 @@ class ControlUnit:
     def latch_value_register(self):
         self.value_register = self.datapath.data_register
 
-    
+    def execute_signal(self, signal : Signal, *arg):
+        self.signals[signal](*arg)
 
+    def run(self):
+        for signal in self.mprogram[self.mprogram_counter]:
+            print(signal)
+            if None in signal: self.execute_signal(signal[0]) 
+            else: self.execute_signal(signal[0], signal[1])
 
 
 
 class DataPath:
     def __init__(self, input_address, output_address):
-        self.control_unit : ControlUnit = ControlUnit(self)
         self.alu : ALU = ALU(self)
+        self.control_unit : ControlUnit = ControlUnit(self)
         self.registers : Registers = Registers()
+        self.memory = Memory(1024)
 
         self.data_register : int = 0
         self.address_register : int = 0
@@ -417,10 +484,11 @@ class DataPath:
 
 
 if __name__ == "__main__":
-    instruction = Instruction(Opcode.MOV, [Term(0), Term(Registers.Registers.R0), Term(Registers.Registers.R1)])
-    print(instruction)
+    # instruction = Instruction(Opcode.MOV, [Term(0), Term(Registers.Registers.R0), Term(Registers.Registers.R1)])
+    # print(instruction)
 
     datapath = DataPath(100, 120)
-    datapath.control_unit.decode(instruction)
-    print(datapath.control_unit.terms, datapath.control_unit.opcode)
-    print(datapath.src_register, datapath.dst_register)
+    # datapath.control_unit.decode(instruction)
+    # print(datapath.control_unit.terms, datapath.control_unit.opcode)
+    # print(datapath.src_register, datapath.dst_register)
+    datapath.control_unit.run()
