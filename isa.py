@@ -6,6 +6,7 @@ class Opcode(Enum):
     MOV : int = 4
     INC : int = 59
     DEC : int = 76
+    STORE : int = 100
     ADD : int = 3
     SUB : int = 4
     MUL : int = 5

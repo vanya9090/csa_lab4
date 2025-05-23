@@ -337,6 +337,41 @@ class ControlUnit:
                 (Signal.LATCH_MEMORY, None),
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+
+                # STORE reg direct ()()
+                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.TYPE), # jmp to type
+
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.REGISTER), # src register
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
+                (Signal.EXECUTE_ALU, ALU.Operations.ADD), 
+                (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.ALU), # src_reg -> DR
+
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER), # dst register
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
+                (Signal.EXECUTE_ALU, ALU.Operations.ADD),
+                (Signal.LATCH_ADDRESS_REGISTER, Sel.DataRegister.ALU), # dst_reg -> AR
+
+                (Signal.LATCH_MEMORY, None), # src_reg -> mem[dst_reg]
+
+                # STORE reg indirect ()()
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER), # dst register
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
+                (Signal.EXECUTE_ALU, ALU.Operations.ADD),
+                (Signal.LATCH_ADDRESS_REGISTER, Sel.DataRegister.ALU), # dst_reg -> AR
+
+                (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY), # mem[dst_reg] -> DR
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
+                (Signal.EXECUTE_ALU, ALU.Operations.ADD),
+                (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU), # mem[dst_reg] -> AR
+
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.REGISTER), # src register
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
+                (Signal.EXECUTE_ALU, ALU.Operations.ADD), 
+                (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.ALU), # src_reg + 0 -> DR
+
+                (Signal.LATCH_MEMORY, None), # src_reg -> mem[mem[dst_reg]]
+
         ]
 
     def decode(self, instruction: Instruction):
