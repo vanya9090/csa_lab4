@@ -3,9 +3,9 @@ from dataclasses import dataclass
 from typing import Any
 
 class Opcode(Enum):
-    MOV : int = 0
-    INC : int = 1
-    DEC : int = 2
+    MOV : int = 4
+    INC : int = 59
+    DEC : int = 76
     ADD : int = 3
     SUB : int = 4
     MUL : int = 5
