@@ -92,8 +92,4 @@ add mux (memory, alu) -> DR
 ![datapath](resources/datapath.png)
 ### Control unit
 ![datapath](resources/control.png)
-#TODO
-если я захочу мувнуть из reg1 по адрессу reg2?
-- mov очень странно спроектирован, переделать
-- 
 ![isa](resources/isa.png)
