@@ -402,12 +402,16 @@ class ControlUnit:
     def execute_signal(self, signal : Signal, *arg):
         self.signals[signal](*arg)
 
-    def run(self):
-        for signal in self.mprogram[self.mprogram_counter]:
-            print(signal)
-            if None in signal: self.execute_signal(signal[0]) 
-            else: self.execute_signal(signal[0], signal[1])
-
+    def run_single_micro(self):
+        mpc_now = self.mprogram_counter
+        signal, *maybe_sel = self.mprogram[mpc_now]
+        print(mpc_now, signal, maybe_sel[0])
+        if maybe_sel and maybe_sel[0] is not None:
+            self.execute_signal(signal, maybe_sel[0])
+        else:
+            self.execute_signal(signal)
+        if self.mprogram_counter == mpc_now:
+            self.mprogram_counter += 1
 
 
 class DataPath:
@@ -464,16 +468,3 @@ class DataPath:
 
     def latch_memory(self):
         self.memory[self.address_register] = self.data_register
-
-
-
-
-if __name__ == "__main__":
-    # instruction = Instruction(Opcode.MOV, [Term(0), Term(Registers.Registers.R0), Term(Registers.Registers.R1)])
-    # print(instruction)
-
-    datapath = DataPath(100, 120)
-    # datapath.control_unit.decode(instruction)
-    # print(datapath.control_unit.terms, datapath.control_unit.opcode)
-    # print(datapath.src_register, datapath.dst_register)
-    datapath.control_unit.run()
