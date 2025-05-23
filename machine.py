@@ -106,12 +106,12 @@ class ALU:
         self.flags[self.Flags.ZERO] = self.result == 0
         self.flags[self.Flags.NEGATIVE] = self.result < 0
 
+    # left alu only can manipulate left_register
     def latch_left_alu(self, sel : Sel.LeftALU) -> None:
         assert isinstance(sel, Sel.LeftALU), "selector must be LeftALU selector"
 
         if sel == Sel.LeftALU.REGISTER:
-            print(self.datapath.src_register)
-            self.__left_term = self.datapath.registers[self.datapath.src_register]
+            self.__left_term = self.datapath.registers[self.datapath.left_register]
         if sel == Sel.LeftALU.VALUE:
             self.__left_term = self.datapath.control_unit.value_register
         if sel == Sel.LeftALU.ZERO:
@@ -121,11 +121,12 @@ class ALU:
         if sel == Sel.RightALU.MINUS_1:
             self.__left_term = -1
     
+    # right alu only can manipulate right_register
     def latch_right_alu(self, sel : Sel.RightALU) -> None:
         assert isinstance(sel, Sel.RightALU), "selector must be RightALU selector"
 
         if sel == Sel.RightALU.REGISTER:
-            self.__right_term = self.datapath.registers[self.datapath.src_register]
+            self.__right_term = self.datapath.registers[self.datapath.right_register]
         if sel == Sel.RightALU.VALUE:
             self.__right_term = self.datapath.control_unit.value_register
         if sel == Sel.RightALU.DATA_REGISTER:
@@ -220,13 +221,6 @@ class ControlUnit:
             Signal.LATCH_MEMORY : self.datapath.latch_memory,
         }
 
-        # self.opcode_to_mPC : dict[Opcode, int] = {
-        #     Opcode.MOV : 5,
-        #     Opcode.INC : 60,
-        #     Opcode.DEC : 77,
-        # }
-
-        # TODO make micro program memory linear: architect micro program cell, change type section in ISA
         self.mprogram : list[tuple[Signal, Sel]] = [
                 # instruction fetch (0)
                 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
@@ -244,9 +238,9 @@ class ControlUnit:
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
                 # MOV register indirect (11)(6)
-                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER),
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER), # src register
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
-                (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU), # src register
+                (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU),
                 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
@@ -355,22 +349,34 @@ class ControlUnit:
         print(self.opcode)
         if self.opcode == Opcode.MOV:
             if self.terms[0].value == 0 or self.terms[0].value == 1:
-                self.datapath.select_dst_register(self.terms[1].value)
-                self.datapath.select_src_register(self.terms[2].value)
+                self.datapath.select_right_register(self.terms[1].value)
+                self.datapath.select_left_register(self.terms[2].value)
             else: 
-                self.datapath.select_dst_register(self.terms[1].value)
+                self.datapath.select_right_register(self.terms[1].value)
+
         elif (self.opcode == Opcode.INC) or (self.opcode == Opcode.DEC):
             if self.terms[0].value == 0:
-                self.datapath.select_dst_register(self.terms[1].value)
-                self.datapath.select_src_register(self.terms[1].value)
+                self.datapath.select_right_register(self.terms[1].value)
+                self.datapath.select_left_register(self.terms[1].value)
+
+        elif (self.opcode == Opcode.STORE):
+            if self.terms[0].value == 0 or self.terms[0].value == 1:
+                self.datapath.select_right_register(self.terms[1].value)
+                self.datapath.select_left_register(self.terms[2].value)
+            else:
+                self.datapath.select_right_register(self.terms[1].value)
+
         elif self.opcode in ALU_operations:
             self.n = self.terms[1].value
-            self.datapath.select_dst_register(self.terms[2].value)
+            self.datapath.select_right_register(self.terms[2].value)
+
         elif self.opcode in (Opcode.BEQZ, Opcode.BNEZ, Opcode.BGZ, Opcode.BLZ):
-            self.datapath.select_src_register(self.terms[1])
+            self.datapath.select_left_register(self.terms[1])
+
         elif self.opcode in (Opcode.PUSH, Opcode.JMP, Opcode.CALL):
             if self.terms[1].value == 0:
-                self.datapath.select_src_register(self.terms[2].value)
+                self.datapath.select_left_register(self.terms[2].value)
+
         else:
             raise RuntimeError()
             
@@ -424,17 +430,17 @@ class DataPath:
         self.data_register : int = 0
         self.address_register : int = 0
         self.choose_register : Registers.Registers = None
-        self.src_register : Registers.Registers = None
-        self.dst_register : Registers.Registers = None
+        self.left_register : Registers.Registers = None
+        self.right_register : Registers.Registers = None
 
         self.input_address : int = input_address
         self.output_address : int = output_address
 
-    def select_src_register(self, register : Registers.Registers):
-        self.src_register = register
+    def select_left_register(self, register : Registers.Registers):
+        self.left_register = register
 
-    def select_dst_register(self, register : Registers.Registers):
-        self.dst_register = register
+    def select_right_register(self, register : Registers.Registers):
+        self.right_register = register
 
     def latch_data_register(self, sel : Sel.DataRegister):
         assert isinstance(sel, Sel.DataRegister), "selector must be DataRegister selector"
@@ -458,13 +464,13 @@ class DataPath:
         assert isinstance(sel, Sel.Register), "selector must be Register selector"
 
         if sel == Sel.Register.ALU:
-            self.registers[self.dst_register] = self.alu.result
+            self.registers[self.right_register] = self.alu.result
         elif sel == Sel.Register.DATA_REGISTER:
-            self.registers[self.dst_register] = self.data_register
+            self.registers[self.right_register] = self.data_register
         elif sel == Sel.Register.IMMEDIATE:
-            self.registers[self.dst_register] = self.control_unit.immediate
+            self.registers[self.right_register] = self.control_unit.immediate
         elif sel == Sel.Register.REGISTER:
-            self.registers[self.dst_register] == self.registers[self.choose_register]
+            self.registers[self.right_register] == self.registers[self.choose_register]
 
     def latch_memory(self):
         self.memory[self.address_register] = self.data_register
