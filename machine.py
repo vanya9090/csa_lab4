@@ -372,6 +372,38 @@ class ControlUnit:
 
                 (Signal.LATCH_MEMORY, None), # src_reg -> mem[mem[dst_reg]]
 
+                # STORE mem direct ()()
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.VALUE), # mem address
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
+                (Signal.EXECUTE_ALU, ALU.Operations.ADD),
+                (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU), # address -> AR
+
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.REGISTER),
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
+                (Signal.EXECUTE_ALU, ALU.Operations.ADD),
+                (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.ALU), # src_reg -> DR
+
+                (Signal.LATCH_MEMORY, None), # src_reg -> mem[address]
+
+                # STORE mem indirect ()()
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.VALUE), # mem address
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
+                (Signal.EXECUTE_ALU, ALU.Operations.ADD),
+                (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU), # address -> AR
+
+                (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY), # mem[address] -> DR
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
+                (Signal.EXECUTE_ALU, ALU.Operations.ADD),
+                (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU), # mem[address] -> AR
+
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.REGISTER),
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
+                (Signal.EXECUTE_ALU, ALU.Operations.ADD),
+                (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.ALU), # src_reg -> DR
+
+                (Signal.LATCH_MEMORY, None), # src_reg -> mem[mem[address]]
+
         ]
 
     def decode(self, instruction: Instruction):
@@ -464,6 +496,7 @@ class DataPath:
 
         self.data_register : int = 0
         self.address_register : int = 0
+        # TODO make list of chosen registers logic
         self.choose_register : Registers.Registers = None
         self.left_register : Registers.Registers = None
         self.right_register : Registers.Registers = None
@@ -491,7 +524,7 @@ class DataPath:
         if sel == Sel.AddressRegister.CONTROL_UNIT:
             self.address_register = self.control_unit.program_counter
         elif sel == Sel.AddressRegister.REGISTER:
-            self.address_register = self.registers[self.choose_register]
+            self.address_register = self.registers[self.left_register]
         elif sel == Sel.AddressRegister.STACK_POINTER_REGISTER: # TODO remove RSP 
             self.address_register = self.registers[Registers.Registers.RSP]
 
@@ -505,7 +538,7 @@ class DataPath:
         elif sel == Sel.Register.IMMEDIATE:
             self.registers[self.right_register] = self.control_unit.immediate
         elif sel == Sel.Register.REGISTER:
-            self.registers[self.right_register] == self.registers[self.choose_register]
+            self.registers[self.right_register] == self.registers[self.left_register]
 
     def latch_memory(self):
         self.memory[self.address_register] = self.data_register
