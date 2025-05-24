@@ -23,7 +23,8 @@ class Signal(Enum):
     READ : int = 8
     WRITE : int = 9
 
-    LATCH_MEMORY : int = 15
+    LATCH_MEMORY : int = 14
+    LATCH_N : int = 15
 
     ZERO: int = 10
 
@@ -43,6 +44,8 @@ class Sel:
         OPCODE : int = 0
         ZERO : int = 1
         TYPE : int = 2
+        N : int = 3
+        PLUS_1 : int = 4
     class LeftALU(Enum):
         REGISTER : int = 0
         VALUE : int = 1
@@ -61,6 +64,11 @@ class Sel:
         VALUE : int = 1
         ALU : int = 2
         DATA_REGISTER : int = 3
+    class N(Enum):
+        DECODER : int = 0
+        MINUS_1 : int = 1
+        ZERO : int = 2
+
 
 
 class ALU:
@@ -202,6 +210,7 @@ class ControlUnit:
         self.n : int = 0
 
         self.signals : dict[Signal, Callable] = {
+            Signal.LATCH_N : self.latch_n,
             Signal.LATCH_INSTRUCTION : self.latch_instruction,
             Signal.LATCH_PROGRAM_COUNTER : self.latch_program_counter,
             Signal.LATCH_MPROGRAM_COUNTER : self.latch_mprogram_counter,
@@ -411,6 +420,16 @@ class ControlUnit:
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
                 # ADD reg ()()
+                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.TYPE), # jmp to type
+
+                # ADD mem ()()
+                (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+                (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER),
+                (Signal.EXECUTE_ALU, ALU.Operations.ADD),
+                (Signal.LATCH_REGISTER, Sel.Register.ALU), # mem(1) + dst_reg -> dst_reg
+
 
         ]
 
@@ -464,18 +483,35 @@ class ControlUnit:
         if sel == Sel.ProgramCounter.NEXT:
             self.program_counter += 1
 
-    def latch_mprogram_counter(self, sel: Sel.MProgramCounter):
+    def latch_mprogram_counter(self, sel : Sel.MProgramCounter):
         assert isinstance(sel, Sel.MProgramCounter), "selector must be MProgramCounter selector"
 
         if sel == Sel.MProgramCounter.ZERO:
             self.mprogram_counter = 0
+        if sel == Sel.MProgramCounter.PLUS_1:
+            self.mprogram_counter += 1
         if sel == Sel.MProgramCounter.OPCODE:
             self.mprogram_counter = self.opcode.value
         if sel == Sel.MProgramCounter.TYPE:
             self.mprogram_counter += self.terms[0].value
+        if self == Sel.MProgramCounter.N:
+            if self.n == 0:
+                self.mprogram_counter += 1
+            else:
+                self.mprogram_counter = self.opcode.value
 
     def latch_instruction(self):
         self.decode(self.datapath.data_register)
+
+    def latch_n(self, sel : Sel.N):
+        assert isinstance(sel, Sel.N), "selector must be N selector"
+
+        if sel == Sel.N.DECODER:
+            self.n = self.terms[1]
+        if sel == Sel.N.MINUS_1:
+            self.n -= 1
+        if sel == Sel.N.ZERO:
+            self.n = 0
 
     def execute_signal(self, signal : Signal, *arg):
         self.signals[signal](*arg)
@@ -488,6 +524,7 @@ class ControlUnit:
             self.execute_signal(signal, maybe_sel[0])
         else:
             self.execute_signal(signal)
+
         if self.mprogram_counter == mpc_now:
             self.mprogram_counter += 1
 
