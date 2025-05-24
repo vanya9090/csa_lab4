@@ -12,7 +12,6 @@ class Signal(Enum):
     LATCH_PROGRAM_COUNTER : int = 3
     LATCH_MPROGRAM_COUNTER : int = 4
     LATCH_INSTRUCTION : int = 11
-    LATCH_VALUE_REGISTER : int = 14
     TICK : int = 12
 
     LATCH_LEFT_ALU : int = 5
@@ -112,8 +111,6 @@ class ALU:
 
         if sel == Sel.LeftALU.REGISTER:
             self.__left_term = self.datapath.registers[self.datapath.left_register]
-        if sel == Sel.LeftALU.VALUE:
-            self.__left_term = self.datapath.control_unit.value_register
         if sel == Sel.LeftALU.ZERO:
             self.__left_term = 0
         if sel == Sel.RightALU.PLUS_1:
@@ -127,8 +124,6 @@ class ALU:
 
         if sel == Sel.RightALU.REGISTER:
             self.__right_term = self.datapath.registers[self.datapath.right_register]
-        if sel == Sel.RightALU.VALUE:
-            self.__right_term = self.datapath.control_unit.value_register
         if sel == Sel.RightALU.DATA_REGISTER:
             self.__right_term = self.datapath.data_register
         if sel == Sel.RightALU.PLUS_1:
@@ -203,12 +198,10 @@ class ControlUnit:
         self.program_counter : int = 0
         self.mprogram_counter : int = 0
 
-        self.value_register : int = 0
         self.mem_address : int = 0
         self.n : int = 0
 
         self.signals : dict[Signal, Callable] = {
-            Signal.LATCH_VALUE_REGISTER : self.latch_value_register,
             Signal.LATCH_INSTRUCTION : self.latch_instruction,
             Signal.LATCH_PROGRAM_COUNTER : self.latch_program_counter,
             Signal.LATCH_MPROGRAM_COUNTER : self.latch_mprogram_counter,
@@ -221,6 +214,7 @@ class ControlUnit:
             Signal.LATCH_MEMORY : self.datapath.latch_memory,
         }
 
+        # TODO remove TYPE, just use opcode for addressing
         self.mprogram : list[tuple[Signal, Sel]] = [
                 # instruction fetch (0)
                 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
@@ -416,6 +410,8 @@ class ControlUnit:
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
+                # ADD reg ()()
+
         ]
 
     def decode(self, instruction: Instruction):
@@ -480,9 +476,6 @@ class ControlUnit:
 
     def latch_instruction(self):
         self.decode(self.datapath.data_register)
-
-    def latch_value_register(self):
-        self.value_register = self.datapath.data_register
 
     def execute_signal(self, signal : Signal, *arg):
         self.signals[signal](*arg)
