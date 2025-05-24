@@ -338,7 +338,7 @@ class ControlUnit:
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-                # STORE reg direct ()()
+                # STORE reg direct (103)(0)
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.TYPE), # jmp to type
 
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.REGISTER), # src register
@@ -353,7 +353,10 @@ class ControlUnit:
 
                 (Signal.LATCH_MEMORY, None), # src_reg -> mem[dst_reg]
 
-                # STORE reg indirect ()()
+                (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+
+                # STORE reg indirect (115)(12)
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER), # dst register
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD),
@@ -372,7 +375,10 @@ class ControlUnit:
 
                 (Signal.LATCH_MEMORY, None), # src_reg -> mem[mem[dst_reg]]
 
-                # STORE mem direct ()()
+                (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+
+                # STORE mem direct (131)(28)
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.VALUE), # mem address
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD),
@@ -385,7 +391,10 @@ class ControlUnit:
 
                 (Signal.LATCH_MEMORY, None), # src_reg -> mem[address]
 
-                # STORE mem indirect ()()
+                (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+
+                # STORE mem indirect (142)(39)
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.VALUE), # mem address
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD),
@@ -403,6 +412,9 @@ class ControlUnit:
                 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.ALU), # src_reg -> DR
 
                 (Signal.LATCH_MEMORY, None), # src_reg -> mem[mem[address]]
+
+                (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
         ]
 
@@ -497,7 +509,7 @@ class DataPath:
         self.data_register : int = 0
         self.address_register : int = 0
         # TODO make list of chosen registers logic
-        self.choose_register : Registers.Registers = None
+        self.chosen_registers : list[Registers.Registers] = None
         self.left_register : Registers.Registers = None
         self.right_register : Registers.Registers = None
 
