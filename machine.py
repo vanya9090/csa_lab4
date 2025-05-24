@@ -43,8 +43,7 @@ class Sel:
     class MProgramCounter(Enum):
         OPCODE : int = 0
         ZERO : int = 1
-        TYPE : int = 2
-        N : int = 3
+        N : int = 2
         PLUS_1 : int = 4
     class LeftALU(Enum):
         REGISTER : int = 0
@@ -223,7 +222,6 @@ class ControlUnit:
             Signal.LATCH_MEMORY : self.datapath.latch_memory,
         }
 
-        # TODO remove TYPE, just use opcode for addressing
         self.mprogram : list[tuple[Signal, Sel]] = [
                 # instruction fetch (0)
                 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
@@ -232,7 +230,6 @@ class ControlUnit:
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.OPCODE),
 
                 # MOV register (4)(0)
-                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.TYPE), # jmp to type
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER), # src register
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD),
@@ -300,7 +297,6 @@ class ControlUnit:
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
                 # INC register (59)(0)
-                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.TYPE), # jmp to type
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER), # src register
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.PLUS_1),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD),
@@ -321,7 +317,6 @@ class ControlUnit:
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
                 # DEC register (76)(0)
-                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.TYPE), # jmp to type
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER), # src register
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.MINUS_1),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD),
@@ -342,8 +337,6 @@ class ControlUnit:
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
                 # STORE reg direct (103)(0)
-                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.TYPE), # jmp to type
-
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.REGISTER), # src register
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD), 
@@ -420,8 +413,7 @@ class ControlUnit:
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
                 # ADD reg ()()
-                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.TYPE), # jmp to type
-                
+
 
                 # ADD mem ()()
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
@@ -439,42 +431,58 @@ class ControlUnit:
         ]
 
     def decode(self, instruction: Instruction):
-        ALU_operations = (Opcode.ADD, Opcode.SUB, Opcode.MUL,
-              Opcode.DIV, Opcode.RMD, Opcode.AND,
-              Opcode.OR, Opcode.EQ, Opcode.NEQ,
-              Opcode.LT, Opcode.GT)
+        ALU_reg_operations = (Opcode.ADD_r, Opcode.SUB_r,
+                              Opcode.MUL_r, Opcode.DIV_r,
+                              Opcode.RMD_r, Opcode.AND_r,
+                              Opcode.OR_r, Opcode.EQ_r,
+                              Opcode.NEQ_r, Opcode.LT_r,
+                              Opcode.GT_r)
+        ALU_mem_operations = (Opcode.ADD_mem, Opcode.SUB_mem,
+                              Opcode.MUL_mem, Opcode.DIV_mem,
+                              Opcode.RMD_mem, Opcode.AND_mem,
+                              Opcode.OR_mem, Opcode.EQ_mem,
+                              Opcode.NEQ_mem, Opcode.LT_mem,
+                              Opcode.GT_mem)
+        MOV_codes = (Opcode.MOV_r2r, Opcode.MOV_rd2r,
+                     Opcode.MOV_imm2r, Opcode.MOV_da2r,
+                     Opcode.MOV_ia2r)
+        INC_DEC_codes = (Opcode.INC_mem, Opcode.INC_r,
+                         Opcode.DEC_mem, Opcode.DEC_r)
+        STORE_codes = (Opcode.MOV_r2rd, Opcode.MOV_r2ri,
+                       Opcode.MOV_r2imm, Opcode.MOV_r2da)
+        
         self.opcode : Opcode = instruction.opcode
         self.terms : list[Term] = instruction.terms
         print(self.opcode)
-        if self.opcode == Opcode.MOV:
-            if self.terms[0].value == 0 or self.terms[0].value == 1:
-                self.datapath.select_right_register(self.terms[1].value)
-                self.datapath.select_left_register(self.terms[2].value)
-            else: 
-                self.datapath.select_right_register(self.terms[1].value)
-
-        elif (self.opcode == Opcode.INC) or (self.opcode == Opcode.DEC):
-            if self.terms[0].value == 0:
-                self.datapath.select_right_register(self.terms[1].value)
+        if self.opcode in MOV_codes:
+            if self.opcode in (Opcode.MOV_r2r, Opcode.MOV_rd2r):
+                self.datapath.select_right_register(self.terms[0].value)
                 self.datapath.select_left_register(self.terms[1].value)
+            else: 
+                self.datapath.select_right_register(self.terms[0].value)
 
-        elif (self.opcode == Opcode.STORE):
-            if self.terms[0].value == 0 or self.terms[0].value == 1:
-                self.datapath.select_right_register(self.terms[1].value)
-                self.datapath.select_left_register(self.terms[2].value)
+        elif self.opcode in INC_DEC_codes:
+            if self.opcode in (Opcode.INC_r, Opcode.DEC_r):
+                self.datapath.select_right_register(self.terms[0].value)
+                self.datapath.select_left_register(self.terms[0].value)
+
+        elif self.opcode in STORE_codes:
+            if self.opcode in (Opcode.MOV_r2rd, Opcode.MOV_r2ri):
+                self.datapath.select_right_register(self.terms[0].value)
+                self.datapath.select_left_register(self.terms[1].value)
             else:
-                self.datapath.select_right_register(self.terms[1].value)
+                self.datapath.select_right_register(self.terms[0].value)
 
-        elif self.opcode in ALU_operations:
-            self.n = self.terms[1].value
-            self.datapath.select_right_register(self.terms[2].value)
+        elif self.opcode in ALU_reg_operations or self.opcode in ALU_mem_operations:
+            self.n = self.terms[0].value
+            self.datapath.select_right_register(self.terms[1].value)
 
-        elif self.opcode in (Opcode.BEQZ, Opcode.BNEZ, Opcode.BGZ, Opcode.BLZ):
-            self.datapath.select_left_register(self.terms[1])
+        # elif self.opcode in (Opcode.BEQZ, Opcode.BNEZ, Opcode.BGZ, Opcode.BLZ):
+        #     self.datapath.select_left_register(self.terms[0])
 
-        elif self.opcode in (Opcode.PUSH, Opcode.JMP, Opcode.CALL):
-            if self.terms[1].value == 0:
-                self.datapath.select_left_register(self.terms[2].value)
+        # elif self.opcode in (Opcode.PUSH, Opcode.JMP, Opcode.CALL):
+        #     if self.terms[0].value == 0:
+        #         self.datapath.select_left_register(self.terms[0].value)
 
         else:
             raise RuntimeError()
@@ -497,8 +505,6 @@ class ControlUnit:
             self.mprogram_counter += 1
         if sel == Sel.MProgramCounter.OPCODE:
             self.mprogram_counter = self.opcode.value
-        if sel == Sel.MProgramCounter.TYPE:
-            self.mprogram_counter += self.terms[0].value
         if self == Sel.MProgramCounter.N:
             if self.n == 0:
                 self.mprogram_counter += 1
@@ -512,7 +518,7 @@ class ControlUnit:
         assert isinstance(sel, Sel.N), "selector must be N selector"
 
         if sel == Sel.N.DECODER:
-            self.n = self.terms[1]
+            self.n = self.terms[0]
         if sel == Sel.N.MINUS_1:
             self.n -= 1
         if sel == Sel.N.ZERO:
