@@ -421,6 +421,7 @@ class ControlUnit:
 
                 # ADD reg ()()
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.TYPE), # jmp to type
+                
 
                 # ADD mem ()()
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
@@ -430,7 +431,11 @@ class ControlUnit:
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD),
                 (Signal.LATCH_REGISTER, Sel.Register.ALU), # mem(1) + dst_reg -> dst_reg
 
+                (Signal.LATCH_N, Sel.N.MINUS_1),
+                (Signal.LATCH_PROGRAM_COUNTER, Sel.MProgramCounter.N),
 
+                (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
         ]
 
     def decode(self, instruction: Instruction):
