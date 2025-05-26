@@ -28,6 +28,8 @@ class Signal(Enum):
 
     ZERO: int = 10
 
+    LATCH_RSP : int = 19
+
 class Sel:
     class DataRegister(Enum):
         MEMORY : int = 0
@@ -35,7 +37,7 @@ class Sel:
     class AddressRegister(Enum):
         CONTROL_UNIT : int = 0
         ALU :int = 1
-        STACK_POINTER_REGISTER : int = 2
+        RSP : int = 2
     class ProgramCounter(Enum):
         CONDITION : int = 0
         NEXT : int = 1
@@ -50,6 +52,7 @@ class Sel:
         ZERO : int = 2
         PLUS_1 : int = 3
         MINUS_1 : int = 4
+        PC : int = 5
     class RightALU(Enum):
         REGISTER : int = 0
         VALUE : int = 1
@@ -77,6 +80,9 @@ class Sel:
         INVERSE : int = 1
     class Jump(Enum):
         ALU : int = 0
+    class RSP(Enum):
+        PLUS_1 : int = 0
+        MINUS_1 : int = 0
 
 
 class ALUOperations(Enum):

@@ -52,6 +52,8 @@ class ALU:
             self.__left_term = 1
         if sel == Sel.LeftALU.MINUS_1:
             self.__left_term = -1
+        if sel == Sel.LeftALU.PC:
+            self.__left_term = self.datapath.program_counter
     
     # right alu only can get right_register
     def latch_right_alu(self, sel : Sel.RightALU) -> None:
@@ -76,8 +78,6 @@ class ALU:
 class Registers:
     class Registers(Enum):
         RSP : int = 0
-        AR : int = 1
-        DR : int = 2
         R0 : int = 3
         R1 : int = 4
         R2 : int = 5
@@ -89,10 +89,7 @@ class Registers:
     
     def __init__(self):
         self.registers_value : dict[Registers.Registers, int] = {
-            #TODO think about this three registers
-            # Registers.Registers.RSP : 0,
-            # Registers.Registers.AR : 0,
-            # Registers.Registers.DR : 0,
+            Registers.Registers.RSP : 0,
             Registers.Registers.R0 : 0,
             Registers.Registers.R1 : 0,
             Registers.Registers.R2 : 0,
@@ -109,6 +106,11 @@ class Registers:
     def __setitem__(self, key : Registers, value : int) -> None:
         self.registers_value[key] = value
 
+    def latch_rsp(self, sel : Sel.RSP):
+        if sel == Sel.RSP.PLUS_1:
+            self.registers_value[Registers.Registers.RSP] += 1
+        if sel == Sel.RSP.MINUS_1:
+            self.registers_value[Registers.Registers.RSP] -= 1
 
 class Memory:
     def __init__(self, memory_size):
@@ -144,6 +146,7 @@ class ControlUnit:
             Signal.EXECUTE_ALU: self.datapath.alu.perform,
             Signal.LATCH_REGISTER : self.datapath.latch_register,
             Signal.LATCH_MEMORY : self.datapath.latch_memory,
+            Signal.LATCH_RSP : self.datapath.registers.latch_rsp,
         }
 
         self.mprogram = mprogram
@@ -193,10 +196,11 @@ class ControlUnit:
         elif self.opcode in (Opcode.BEQZ, Opcode.BNEZ, Opcode.BGZ, Opcode.BLZ):
             self.datapath.select_left_register(self.terms[0].value)
 
-        elif self.opcode in (Opcode.PUSH, Opcode.JMP_r, Opcode.CALL):
+        elif self.opcode in (Opcode.PUSH, Opcode.JMP_r):
             self.datapath.select_left_register(self.terms[0].value)
-        elif self.opcode == Opcode.JMP_imm:
+        elif self.opcode in (Opcode.JMP_imm, Opcode.CALL, Opcode.RET):
             pass
+
 
         else:
             raise RuntimeError()
@@ -248,9 +252,10 @@ class ControlUnit:
 class DataPath:
     def __init__(self, input_address, output_address):
         self.alu : ALU = ALU(self)
-        self.control_unit : ControlUnit = ControlUnit(self)
         self.registers : Registers = Registers()
+        self.control_unit : ControlUnit = ControlUnit(self)
         self.memory = Memory(1024)
+        self.registers[Registers.Registers.RSP] = 1023
 
         self.program_counter : int = 0
         self.selected_flag : ALU.Flags = None
@@ -325,10 +330,8 @@ class DataPath:
             self.address_register = self.program_counter
         if sel == Sel.AddressRegister.ALU:
             self.address_register = self.alu.result
-        # elif sel == Sel.AddressRegister.REGISTER:
-        #     self.address_register = self.registers[self.left_register]
-        # elif sel == Sel.AddressRegister.STACK_POINTER_REGISTER: # TODO remove RSP 
-        #     self.address_register = self.registers[Registers.Registers.RSP]
+        elif sel == Sel.AddressRegister.RSP:
+            self.address_register = self.registers[Registers.Registers.RSP]
 
     def latch_register(self, sel : Sel.Register):
         assert isinstance(sel, Sel.Register), "selector must be Register selector"

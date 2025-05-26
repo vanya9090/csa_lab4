@@ -7,14 +7,18 @@ from isa import Instruction, Opcode, Term
 from machine.machine import Registers
 
 
-REG_RE = re.compile(r"R([0-7])\Z", re.IGNORECASE)
+REG_RE = re.compile(r"(RSP|R[0-7])\Z", re.IGNORECASE)
 
 
 def _reg(token: str) -> Registers.Registers:
     m = REG_RE.fullmatch(token)
     if not m:
         raise ValueError(f"Unknown register {token!r}")
-    return Registers.Registers(int(m.group(1)) + 3)  # R0 enum value is 3
+    token = token.upper()
+    if token == "RSP":
+        return Registers.Registers.RSP
+    return Registers.Registers[f"R{token[1]}"]
+
 
 
 def _parse(token: str):
@@ -145,6 +149,21 @@ def assemble_line(src: str) -> List[Union[Instruction, int]]:
         }[mnem]
 
         return [Instruction(opcode, [Term(reg_v)]), addr_v]
+    
+    if mnem == "CALL":
+        if len(ops) != 1:
+            raise SyntaxError("CALL needs 1 operand")
+        op_k, op_v = _parse(ops[0])
+        if op_k == "reg":
+            return [Instruction(Opcode.CALL, [Term(op_v)])]
+        if op_k == "direct":
+            return [Instruction(Opcode.CALL, []), op_v]
+        raise SyntaxError("CALL operand must be a register or direct address")
+
+    if mnem == "RET":
+        if len(ops) != 0:
+            raise SyntaxError("RET takes no operands")
+        return [Instruction(Opcode.RET, [])]
 
 
     raise NotImplementedError(f"asm does not support '{mnem}'")

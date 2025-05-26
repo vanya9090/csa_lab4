@@ -34,10 +34,10 @@ class Opcode(Enum):
     PUSH : int = 18
     JMP_r : int = 224
     JMP_imm : int = 231
-    CALL : int = 20
     POP : int = 21
-    RET : int = 22
     HLT : int = 23
+    CALL : int = 297
+    RET : int = 314
 
 # class TermType(Enum):
 #     REGISTER : int = 0
