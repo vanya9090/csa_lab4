@@ -39,7 +39,7 @@ class ALU:
         self.flags[self.Flags.ZERO] = self.result == 0
         self.flags[self.Flags.NEGATIVE] = self.result < 0
 
-    # left alu only can manipulate left_register
+    # left alu only can get left_register
     def latch_left_alu(self, sel : Sel.LeftALU) -> None:
         assert isinstance(sel, Sel.LeftALU), "selector must be LeftALU selector"
 
@@ -52,7 +52,7 @@ class ALU:
         if sel == Sel.LeftALU.MINUS_1:
             self.__left_term = -1
     
-    # right alu only can manipulate right_register
+    # right alu only can get right_register
     def latch_right_alu(self, sel : Sel.RightALU) -> None:
         assert isinstance(sel, Sel.RightALU), "selector must be RightALU selector"
 
@@ -69,7 +69,7 @@ class ALU:
 
     def perform(self, operation : ALUOperations) -> None:
         self.result = self.__operations[operation](self.__left_term, self.__right_term)
-        print(self.__left_term, self.__right_term, self.result)
+        print(self.__left_term, operation.name, self.__right_term, self.result)
         self.__set_flags()
 
 
@@ -124,7 +124,6 @@ class ControlUnit:
     def __init__(self, datapath : "DataPath"):
         self.datapath = datapath
 
-        self.program_counter : int = 0
         self.mprogram_counter : int = 0
 
         self.mem_address : int = 0
@@ -133,7 +132,9 @@ class ControlUnit:
         self.signals : dict[Signal, Callable] = {
             Signal.LATCH_N : self.latch_n,
             Signal.LATCH_INSTRUCTION : self.latch_instruction,
-            Signal.LATCH_PROGRAM_COUNTER : self.latch_program_counter,
+            Signal.LATCH_PROGRAM_COUNTER : self.datapath.latch_program_counter,
+            Signal.LATCH_FLAG : self.datapath.latch_flag,
+            Signal.LATCH_INVERSE : self.datapath.latch_inverse,
             Signal.LATCH_MPROGRAM_COUNTER : self.latch_mprogram_counter,
             Signal.LATCH_ADDRESS_REGISTER : self.datapath.latch_address_register,
             Signal.LATCH_DATA_REGISTER : self.datapath.latch_data_register,
@@ -188,24 +189,15 @@ class ControlUnit:
             self.datapath.select_right_register(self.terms[1].value)
             self.datapath.select_left_register(self.terms[1].value)
 
-        # elif self.opcode in (Opcode.BEQZ, Opcode.BNEZ, Opcode.BGZ, Opcode.BLZ):
-        #     self.datapath.select_left_register(self.terms[0])
+        elif self.opcode in (Opcode.BEQZ, Opcode.BNEZ, Opcode.BGZ, Opcode.BLZ):
+            self.datapath.select_left_register(self.terms[0])
 
-        # elif self.opcode in (Opcode.PUSH, Opcode.JMP, Opcode.CALL):
-        #     if self.terms[0].value == 0:
-        #         self.datapath.select_left_register(self.terms[0].value)
+        elif self.opcode in (Opcode.PUSH, Opcode.JMP, Opcode.CALL):
+            if self.terms[0].value == 0:
+                self.datapath.select_left_register(self.terms[0].value)
 
         else:
             raise RuntimeError()
-            
-
-    def latch_program_counter(self, sel : Sel.ProgramCounter):
-        assert isinstance(sel, Sel.ProgramCounter), "selector must be ProgramCounter selector"
-
-        if sel == Sel.ProgramCounter.JUMP:
-            pass
-        if sel == Sel.ProgramCounter.NEXT:
-            self.program_counter += 1
 
     def latch_mprogram_counter(self, sel : Sel.MProgramCounter):
         assert isinstance(sel, Sel.MProgramCounter), "selector must be MProgramCounter selector"
@@ -258,6 +250,10 @@ class DataPath:
         self.registers : Registers = Registers()
         self.memory = Memory(1024)
 
+        self.program_counter : int = 0
+        self.selected_flag : ALU.Flags = None
+        self.inverse_flag : bool = False
+
         self.data_register : int = 0
         self.address_register : int = 0
         # TODO make list of chosen registers logic
@@ -273,6 +269,38 @@ class DataPath:
 
     def select_right_register(self, register : Registers.Registers):
         self.right_register = register
+
+    def latch_flag(self, sel : Sel.Flag):
+        if sel == Sel.Flag.CARRY:
+            self.selected_flag = ALU.Flags.CARRY
+        if sel == Sel.Flag.OVERFLOW:
+            self.selected_flag = ALU.Flags.OVERFLOW
+        if sel == Sel.Flag.NEGATIVE:
+            self.selected_flag = ALU.Flags.NEGATIVE
+        if sel == Sel.Flag.ZERO:
+            self.selected_flag = ALU.Flags.ZERO
+        if sel == Sel.Flag.NONE:
+            self.selected_flag = None
+
+    def latch_inverse(self, sel : Sel.Inverse):
+        if sel == Sel.Inverse.IDENTITY:
+            self.inverse_flag = False
+        if sel == Sel.Inverse.INVERSE:
+            self.inverse_flag = True
+
+    def latch_program_counter(self, sel : Sel.ProgramCounter):
+        assert isinstance(sel, Sel.ProgramCounter), "selector must be ProgramCounter selector"
+
+        if sel == Sel.ProgramCounter.ALU:
+            if self.selected_flag == None:
+                self.program_counter = self.alu.result
+            else:
+                if self.alu.flags[self.selected_flag] ^ self.inverse_flag:
+                    self.program_counter = self.alu.result
+                else: 
+                    self.program_counter += 1
+        if sel == Sel.ProgramCounter.NEXT:
+            self.program_counter += 1
 
     def latch_data_register(self, sel : Sel.DataRegister):
         assert isinstance(sel, Sel.DataRegister), "selector must be DataRegister selector"

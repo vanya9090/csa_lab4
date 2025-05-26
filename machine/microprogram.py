@@ -291,4 +291,77 @@ mprogram = [
                 
 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+
+# JUMP register ()
+(Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER),
+(Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
+(Signal.EXECUTE_ALU, ALUOperations.ADD),
+(Signal.LATCH_FLAG, Sel.Flag.NONE),
+(Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.ALU),
+
+(Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+
+# JUMP immediate ()
+(Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+(Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
+(Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+(Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
+(Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
+(Signal.EXECUTE_ALU, ALUOperations.ADD),
+(Signal.LATCH_FLAG, Sel.Flag.NONE),
+(Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.ALU),
+
+(Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+
+# BEQZ ()
+(Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+(Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
+(Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+(Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
+(Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
+(Signal.EXECUTE_ALU, ALUOperations.ADD),
+(Signal.LATCH_FLAG, Sel.Flag.ZERO),
+(Signal.LATCH_INVERSE, Sel.Inverse.IDENTITY),
+(Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.ALU),
+
+(Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+
+# BNEZ ()
+(Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+(Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
+(Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+(Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
+(Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
+(Signal.EXECUTE_ALU, ALUOperations.ADD),
+(Signal.LATCH_FLAG, Sel.Flag.ZERO),
+(Signal.LATCH_INVERSE, Sel.Inverse.INVERSE),
+(Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.ALU),
+
+(Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+
+# BGZ ()
+(Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+(Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
+(Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+(Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
+(Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
+(Signal.EXECUTE_ALU, ALUOperations.ADD),
+(Signal.LATCH_FLAG, Sel.Flag.NEGATIVE),
+(Signal.LATCH_INVERSE, Sel.Inverse.INVERSE),
+(Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.ALU),
+
+(Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+
+# BLZ ()
+(Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+(Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
+(Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+(Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
+(Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
+(Signal.EXECUTE_ALU, ALUOperations.ADD),
+(Signal.LATCH_FLAG, Sel.Flag.NEGATIVE),
+(Signal.LATCH_INVERSE, Sel.Inverse.IDENTITY),
+(Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.ALU),
+
+(Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 ]

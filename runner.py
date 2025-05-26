@@ -48,11 +48,11 @@ for addr, w in enumerate(words):
     dp.memory[addr + PROGRAM_OFFSET] = w
 print(f"Program size: {len(words)} words")
 
-dp.control_unit.program_counter = PROGRAM_OFFSET
+dp.program_counter = PROGRAM_OFFSET
 MAX_CYCLES = 1000
 for cycle in range(MAX_CYCLES):
     dp.control_unit.run_single_micro()
-    if dp.control_unit.program_counter >= len(words) + PROGRAM_OFFSET:
+    if dp.program_counter >= len(words) + PROGRAM_OFFSET:
         print(f"\nProgram finished after {cycle+1} micro-cycles.")
         break
 else:
