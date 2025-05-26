@@ -4,20 +4,20 @@ from typing import Any
 
 class Opcode(Enum):
     MOV_r2r : int = 4
-    MOV_rd2r : int = 11
-    MOV_imm2r : int = 21
-    MOV_da2r : int = 27
-    MOV_ia2r : int = 41
-    INC_r : int = 59
-    INC_mem : int = 66
-    DEC_r : int = 76
-    DEC_mem : int = 93
-    MOV_r2rd : int = 103
-    MOV_r2ri : int = 115
-    MOV_r2imm : int = 131
-    MOV_r2da : int = 142
+    MOV_rd2r : int = 10
+    MOV_imm2r : int = 20
+    MOV_da2r : int = 26
+    MOV_ia2r : int = 40
+    INC_r : int = 58
+    INC_mem : int = 64
+    DEC_r : int = 79
+    DEC_mem : int = 85
+    STORE_r2rd : int = 100
+    STORE_r2ri : int = 111
+    STORE_r2da : int = 127
+    STORE_r2ia : int = 138
     ADD_r : int = 1
-    ADD_mem : int = 2
+    ADD_mem : int = 154
     SUB_r : int = 3
     SUB_mem : int = 4
     MUL_r : int = 5
