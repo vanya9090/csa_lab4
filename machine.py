@@ -120,9 +120,9 @@ class ALU:
             self.__left_term = self.datapath.registers[self.datapath.left_register]
         if sel == Sel.LeftALU.ZERO:
             self.__left_term = 0
-        if sel == Sel.RightALU.PLUS_1:
+        if sel == Sel.LeftALU.PLUS_1:
             self.__left_term = 1
-        if sel == Sel.RightALU.MINUS_1:
+        if sel == Sel.LeftALU.MINUS_1:
             self.__left_term = -1
     
     # right alu only can manipulate right_register
@@ -142,6 +142,7 @@ class ALU:
 
     def perform(self, operation : Operations) -> None:
         self.result = self.__operations[operation](self.__left_term, self.__right_term)
+        print(self.__left_term, self.__right_term, self.result)
         self.__set_flags()
 
 
