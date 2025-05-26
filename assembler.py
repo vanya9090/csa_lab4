@@ -4,7 +4,7 @@ import re
 from typing import List, Union
 
 from isa import Instruction, Opcode, Term
-from machine import Registers
+from machine.machine import Registers
 
 
 REG_RE = re.compile(r"R([0-7])\Z", re.IGNORECASE)

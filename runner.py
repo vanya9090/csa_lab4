@@ -1,4 +1,4 @@
-from machine import DataPath, ControlUnit
+from machine.machine import DataPath, ControlUnit
 from isa import Instruction, Opcode
 import assembler
 
