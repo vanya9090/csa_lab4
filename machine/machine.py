@@ -36,8 +36,9 @@ class ALU:
         }
 
     def __set_flags(self) -> None:
-        self.flags[self.Flags.ZERO] = self.result == 0
-        self.flags[self.Flags.NEGATIVE] = self.result < 0
+        print('set flags:', self.result)
+        self.flags[self.Flags.ZERO] = (self.result == 0)
+        self.flags[self.Flags.NEGATIVE] = (self.result < 0)
 
     # left alu only can get left_register
     def latch_left_alu(self, sel : Sel.LeftALU) -> None:
@@ -69,7 +70,6 @@ class ALU:
 
     def perform(self, operation : ALUOperations) -> None:
         self.result = self.__operations[operation](self.__left_term, self.__right_term)
-        print(self.__left_term, operation.name, self.__right_term, self.result)
         self.__set_flags()
 
 
@@ -133,6 +133,7 @@ class ControlUnit:
             Signal.LATCH_N : self.latch_n,
             Signal.LATCH_INSTRUCTION : self.latch_instruction,
             Signal.LATCH_PROGRAM_COUNTER : self.datapath.latch_program_counter,
+            Signal.LATCH_JUMP : self.datapath.latch_jump,
             Signal.LATCH_FLAG : self.datapath.latch_flag,
             Signal.LATCH_INVERSE : self.datapath.latch_inverse,
             Signal.LATCH_MPROGRAM_COUNTER : self.latch_mprogram_counter,
@@ -190,11 +191,12 @@ class ControlUnit:
             self.datapath.select_left_register(self.terms[1].value)
 
         elif self.opcode in (Opcode.BEQZ, Opcode.BNEZ, Opcode.BGZ, Opcode.BLZ):
-            self.datapath.select_left_register(self.terms[0])
+            self.datapath.select_left_register(self.terms[0].value)
 
-        elif self.opcode in (Opcode.PUSH, Opcode.JMP, Opcode.CALL):
-            if self.terms[0].value == 0:
-                self.datapath.select_left_register(self.terms[0].value)
+        elif self.opcode in (Opcode.PUSH, Opcode.JMP_r, Opcode.CALL):
+            self.datapath.select_left_register(self.terms[0].value)
+        elif self.opcode == Opcode.JMP_imm:
+            pass
 
         else:
             raise RuntimeError()
@@ -253,6 +255,7 @@ class DataPath:
         self.program_counter : int = 0
         self.selected_flag : ALU.Flags = None
         self.inverse_flag : bool = False
+        self.jump_register : int = 0
 
         self.data_register : int = 0
         self.address_register : int = 0
@@ -269,6 +272,9 @@ class DataPath:
 
     def select_right_register(self, register : Registers.Registers):
         self.right_register = register
+
+    def latch_jump(self, sel : Sel.Jump):
+        self.jump_register = self.alu.result
 
     def latch_flag(self, sel : Sel.Flag):
         if sel == Sel.Flag.CARRY:
@@ -290,13 +296,15 @@ class DataPath:
 
     def latch_program_counter(self, sel : Sel.ProgramCounter):
         assert isinstance(sel, Sel.ProgramCounter), "selector must be ProgramCounter selector"
-
-        if sel == Sel.ProgramCounter.ALU:
+        print('latch_program_counter')
+        if sel == Sel.ProgramCounter.CONDITION:
             if self.selected_flag == None:
-                self.program_counter = self.alu.result
+                print(self.alu.result)
+                self.program_counter = self.jump_register
             else:
+                print(self.selected_flag, self.alu.flags[self.selected_flag], self.inverse_flag)
                 if self.alu.flags[self.selected_flag] ^ self.inverse_flag:
-                    self.program_counter = self.alu.result
+                    self.program_counter = self.jump_register
                 else: 
                     self.program_counter += 1
         if sel == Sel.ProgramCounter.NEXT:
@@ -309,13 +317,12 @@ class DataPath:
             self.data_register = self.alu.result
         elif sel == Sel.DataRegister.MEMORY:
             self.data_register = self.memory[self.address_register]
-            print('latch DR:', self.data_register, self.address_register)
         
     def latch_address_register(self, sel : Sel.AddressRegister):
         assert isinstance(sel, Sel.AddressRegister), "selector must be AddressRegister selector"
 
         if sel == Sel.AddressRegister.CONTROL_UNIT:
-            self.address_register = self.control_unit.program_counter
+            self.address_register = self.program_counter
         if sel == Sel.AddressRegister.ALU:
             self.address_register = self.alu.result
         # elif sel == Sel.AddressRegister.REGISTER:
@@ -334,5 +341,4 @@ class DataPath:
             self.registers[self.right_register] == self.registers[self.left_register]
 
     def latch_memory(self):
-        print(self.address_register, self.data_register)
         self.memory[self.address_register] = self.data_register

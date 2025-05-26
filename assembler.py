@@ -115,6 +115,37 @@ def assemble_line(src: str) -> List[Union[Instruction, int]]:
             raise SyntaxError(f"ADD expects {n} addresses, but got {len(addresses)}")
 
         return [Instruction(Opcode.ADD_mem, [Term(n), Term(dst_v)])] + addresses
+    
+    if mnem == "JMP":
+        if len(ops) != 1:
+            raise SyntaxError("JMP needs 1 operand")
+        op_k, op_v = _parse(ops[0])
+        if op_k == "reg":
+            return [Instruction(Opcode.JMP_r, [Term(op_v)])]
+        if op_k == "direct":
+            return [Instruction(Opcode.JMP_imm, []), op_v]
+        raise SyntaxError("JMP operand must be a register or direct address")
+
+    if mnem in ("BEQZ", "BNEZ", "BGZ", "BLZ"):
+        if len(ops) != 2:
+            raise SyntaxError(f"{mnem} needs 2 operands")
+        reg_k, reg_v = _parse(ops[0])
+        addr_k, addr_v = _parse(ops[1])
+
+        if reg_k != "reg":
+            raise SyntaxError(f"First operand of {mnem} must be a register")
+        if addr_k != "direct":
+            raise SyntaxError(f"Second operand of {mnem} must be a direct address")
+
+        opcode = {
+            "BEQZ": Opcode.BEQZ,
+            "BNEZ": Opcode.BNEZ,
+            "BGZ": Opcode.BGZ,
+            "BLZ": Opcode.BLZ,
+        }[mnem]
+
+        return [Instruction(opcode, [Term(reg_v)]), addr_v]
+
 
     raise NotImplementedError(f"asm does not support '{mnem}'")
 

@@ -8,6 +8,7 @@ class Signal(Enum):
     LATCH_PROGRAM_COUNTER : int = 3
     LATCH_FLAG : int = 16
     LATCH_INVERSE : int = 17
+    LATCH_JUMP : int = 18
 
     LATCH_MPROGRAM_COUNTER : int = 4
     LATCH_INSTRUCTION : int = 11
@@ -36,7 +37,7 @@ class Sel:
         ALU :int = 1
         STACK_POINTER_REGISTER : int = 2
     class ProgramCounter(Enum):
-        ALU : int = 0
+        CONDITION : int = 0
         NEXT : int = 1
     class MProgramCounter(Enum):
         OPCODE : int = 0
@@ -74,6 +75,8 @@ class Sel:
     class Inverse(Enum):
         IDENTITY : int = 0
         INVERSE : int = 1
+    class Jump(Enum):
+        ALU : int = 0
 
 
 class ALUOperations(Enum):
