@@ -60,7 +60,7 @@ class Sel:
         ZERO : int = 5
     class Register(Enum):
         REGISTER : int = 0
-        VALUE : int = 1
+        # VALUE : int = 1
         ALU : int = 2
         DATA_REGISTER : int = 3
     class N(Enum):
@@ -180,12 +180,6 @@ class Registers:
     
     def __setitem__(self, key : Registers, value : int) -> None:
         self.registers_value[key] = value
-    
-    # def latch_register(self, sel : Sel.Register, register : Registers):
-    #     assert isinstance(sel, Sel.Register), "selector must be Register selector"
-
-    #     if sel == Sel.Register.ALU:
-    #         self.registers_value[register] = 
 
 
 class Memory:
@@ -229,7 +223,7 @@ class ControlUnit:
                 (Signal.LATCH_INSTRUCTION, None),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.OPCODE),
 
-                # MOV register (4)(0)
+                # MOV register (4)
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER), # src register
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD),
@@ -237,7 +231,7 @@ class ControlUnit:
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-                # MOV register indirect (11)(6)
+                # MOV register indirect (10)
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER), # src register
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
                 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU),
@@ -249,7 +243,7 @@ class ControlUnit:
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-                # MOV immediate (21)(16)
+                # MOV immediate (20)
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT), # for get imm value
                 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
                 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
@@ -257,7 +251,7 @@ class ControlUnit:
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-                # MOV direct address (27)(22)
+                # MOV direct address (26)
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
                 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
@@ -274,7 +268,7 @@ class ControlUnit:
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-                # MOV indirect address (41)(36)
+                # MOV indirect address (40)
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
                 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
@@ -296,7 +290,7 @@ class ControlUnit:
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-                # INC register (59)(0)
+                # INC register (58)
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER), # src register
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.PLUS_1),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD),
@@ -304,7 +298,7 @@ class ControlUnit:
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-                # INC mem cell (66)(7)
+                # INC mem cell (64)
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
                 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
@@ -316,7 +310,7 @@ class ControlUnit:
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-                # DEC register (76)(0)
+                # DEC register (74)
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER), # src register
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.MINUS_1),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD),
@@ -324,7 +318,7 @@ class ControlUnit:
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-                # DEC mem cell (93)(7)
+                # DEC mem cell (80)
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
                 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
@@ -336,7 +330,7 @@ class ControlUnit:
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-                # STORE reg direct (103)(0)
+                # STORE reg direct (90)
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.REGISTER), # src register
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD), 
@@ -345,18 +339,18 @@ class ControlUnit:
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER), # dst register
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD),
-                (Signal.LATCH_ADDRESS_REGISTER, Sel.DataRegister.ALU), # dst_reg -> AR
+                (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU), # dst_reg -> AR
 
                 (Signal.LATCH_MEMORY, None), # src_reg -> mem[dst_reg]
 
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-                # STORE reg indirect (115)(12)
+                # STORE reg indirect (101)
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER), # dst register
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD),
-                (Signal.LATCH_ADDRESS_REGISTER, Sel.DataRegister.ALU), # dst_reg -> AR
+                (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU), # dst_reg -> AR
 
                 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY), # mem[dst_reg] -> DR
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
@@ -374,9 +368,12 @@ class ControlUnit:
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-                # STORE mem direct (131)(28)
-                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.VALUE), # mem address
-                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
+                # STORE mem direct (117)
+                (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+                (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
+                (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY), # address -> DR
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD),
                 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU), # address -> AR
 
@@ -390,9 +387,12 @@ class ControlUnit:
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-                # STORE mem indirect (142)(39)
-                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.VALUE), # mem address
-                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
+                # STORE mem indirect (128)
+                (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+                (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
+                (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY), # address -> DR
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD),
                 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU), # address -> AR
 
@@ -413,15 +413,16 @@ class ControlUnit:
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
                 # ADD reg ()()
+                # (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+                # (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
 
-
-                # ADD mem ()()
+                # ADD mem (144)
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD),
-                (Signal.LATCH_REGISTER, Sel.Register.ALU), # mem(1) + dst_reg -> dst_reg
+                (Signal.LATCH_REGISTER, Sel.Register.ALU), # mem(i) + dst_reg -> dst_reg
 
                 (Signal.LATCH_N, Sel.N.MINUS_1),
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.MProgramCounter.N),
@@ -448,8 +449,8 @@ class ControlUnit:
                      Opcode.MOV_ia2r)
         INC_DEC_codes = (Opcode.INC_mem, Opcode.INC_r,
                          Opcode.DEC_mem, Opcode.DEC_r)
-        STORE_codes = (Opcode.MOV_r2rd, Opcode.MOV_r2ri,
-                       Opcode.MOV_r2imm, Opcode.MOV_r2da)
+        STORE_codes = (Opcode.STORE_r2rd, Opcode.STORE_r2ri,
+                       Opcode.STORE_r2ia, Opcode.STORE_r2da)
         
         self.opcode : Opcode = instruction.opcode
         self.terms : list[Term] = instruction.terms
@@ -467,7 +468,7 @@ class ControlUnit:
                 self.datapath.select_left_register(self.terms[0].value)
 
         elif self.opcode in STORE_codes:
-            if self.opcode in (Opcode.MOV_r2rd, Opcode.MOV_r2ri):
+            if self.opcode in (Opcode.STORE_r2rd, Opcode.STORE_r2ri):
                 self.datapath.select_right_register(self.terms[0].value)
                 self.datapath.select_left_register(self.terms[1].value)
             else:
@@ -505,7 +506,7 @@ class ControlUnit:
             self.mprogram_counter += 1
         if sel == Sel.MProgramCounter.OPCODE:
             self.mprogram_counter = self.opcode.value
-        if self == Sel.MProgramCounter.N:
+        if sel == Sel.MProgramCounter.N:
             if self.n == 0:
                 self.mprogram_counter += 1
             else:
@@ -576,10 +577,12 @@ class DataPath:
 
         if sel == Sel.AddressRegister.CONTROL_UNIT:
             self.address_register = self.control_unit.program_counter
-        elif sel == Sel.AddressRegister.REGISTER:
-            self.address_register = self.registers[self.left_register]
-        elif sel == Sel.AddressRegister.STACK_POINTER_REGISTER: # TODO remove RSP 
-            self.address_register = self.registers[Registers.Registers.RSP]
+        if sel == Sel.AddressRegister.ALU:
+            self.address_register = self.alu.result
+        # elif sel == Sel.AddressRegister.REGISTER:
+        #     self.address_register = self.registers[self.left_register]
+        # elif sel == Sel.AddressRegister.STACK_POINTER_REGISTER: # TODO remove RSP 
+        #     self.address_register = self.registers[Registers.Registers.RSP]
 
     def latch_register(self, sel : Sel.Register):
         assert isinstance(sel, Sel.Register), "selector must be Register selector"
