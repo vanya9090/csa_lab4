@@ -50,26 +50,71 @@ def assemble_line(src: str) -> List[Union[Instruction, int]]:
             raise SyntaxError("destination of MOV must be a register")
 
         if src_k == "reg":
-            return [Instruction(Opcode.MOV, [Term(0), Term(dst_v), Term(src_v)])]
+            return [Instruction(Opcode.MOV_r2r, [Term(dst_v), Term(src_v)])]
         if src_k == "reg_ind":
-            return [Instruction(Opcode.MOV, [Term(7), Term(dst_v), Term(src_v)])]
+            return [Instruction(Opcode.MOV_rd2r, [Term(dst_v), Term(src_v)])]
         if src_k == "imm":
-            return [Instruction(Opcode.MOV, [Term(17), Term(dst_v)]), src_v]
+            return [Instruction(Opcode.MOV_imm2r, [Term(dst_v)]), src_v]
         if src_k == "direct":
-            return [Instruction(Opcode.MOV, [Term(23), Term(dst_v)]), src_v]
+            return [Instruction(Opcode.MOV_da2r, [Term(dst_v)]), src_v]
         if src_k == "indirect":
-            return [Instruction(Opcode.MOV, [Term(37), Term(dst_v)]), src_v]
+            return [Instruction(Opcode.MOV_ia2r, [Term(dst_v)]), src_v]
+    
+    if mnem == "STORE":
+        if len(ops) != 2:
+            raise SyntaxError("STORE needs 2 operands")
+
+        src_k, src_v = _parse(ops[0])
+        dst_k, dst_v = _parse(ops[1])
+
+        if src_k != "reg":
+            raise SyntaxError("source of STORE must be a register")
+
+        if dst_k == "reg":
+            return [Instruction(Opcode.STORE_r2rd, [Term(src_v), Term(dst_v)])]
+        if dst_k == "reg_ind":
+            return [Instruction(Opcode.STORE_r2ri, [Term(src_v), Term(dst_v)])]
+        if dst_k == "direct":
+            return [Instruction(Opcode.STORE_r2da, [Term(src_v)]), dst_v]
+        if dst_k == "indirect":
+            return [Instruction(Opcode.STORE_r2imm, [Term(src_v)]), dst_v]
+
+        raise SyntaxError("invalid destination in STORE")
+
 
     if mnem in ("INC", "DEC"):
         if len(ops) != 1:
             raise SyntaxError(f"{mnem} needs 1 operand")
         op_k, op_v = _parse(ops[0])
 
-        opcode = Opcode.INC if mnem == "INC" else Opcode.DEC
         if op_k == "reg":
-            return [Instruction(opcode, [Term(0), Term(op_v)])]
-        if op_k in ("direct", "indirect"):
-            return [Instruction(opcode, [Term(7)]), op_v]
+            return [Instruction(Opcode.INC_r if mnem == "INC" else Opcode.DEC_r, [Term(op_v)])]
+        if op_k == "direct":
+            return [Instruction(Opcode.INC_mem if mnem == "INC" else Opcode.DEC_mem, []), op_v]
+
+    if mnem == "ADD":
+        if len(ops) < 2:
+            raise SyntaxError("ADD needs at least two operands (N and destination register)")
+        try:
+            n = int(ops[0], 0)
+        except ValueError:
+            raise SyntaxError("First operand of ADD must be an integer constant (N)")
+
+        dst_k, dst_v = _parse(ops[1])
+        if dst_k != "reg":
+            raise SyntaxError("Second operand of ADD must be a destination register")
+
+        addresses = []
+        for token in ops[2:]:
+            addr_k, addr_v = _parse(token)
+            if addr_k != "direct":
+                raise SyntaxError("ADD currently only supports direct addressing for source values")
+            addresses.append(addr_v)
+
+        if len(addresses) != n:
+            raise SyntaxError(f"ADD expects {n} addresses, but got {len(addresses)}")
+
+        return [Instruction(Opcode.ADD_mem, [Term(n), Term(dst_v)])] + addresses
 
     raise NotImplementedError(f"asm does not support '{mnem}'")
 

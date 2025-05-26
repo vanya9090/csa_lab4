@@ -400,7 +400,7 @@ class ControlUnit:
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-                # STORE mem indirect (138)
+                # STORE mem indirect (141)
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
                 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY), # address -> DR
@@ -425,32 +425,29 @@ class ControlUnit:
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-                # ADD reg ()()
-                # (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
-                # (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
-
-                # ADD mem (154)
+                # ADD direct address (160)
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+                (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
                 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+                (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
+                (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
+                (Signal.EXECUTE_ALU, ALU.Operations.ADD),
+                (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU),
+                (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY), # mem[address] -> DR
+
                 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DATA_REGISTER),
                 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER),
                 (Signal.EXECUTE_ALU, ALU.Operations.ADD),
-                (Signal.LATCH_REGISTER, Sel.Register.ALU), # mem(i) + dst_reg -> dst_reg
+                (Signal.LATCH_REGISTER, Sel.Register.ALU), # mem[address + i] + dst_reg -> dst_reg
 
                 (Signal.LATCH_N, Sel.N.MINUS_1),
-                (Signal.LATCH_PROGRAM_COUNTER, Sel.MProgramCounter.N),
+                (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.N),
 
                 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
                 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
         ]
 
     def decode(self, instruction: Instruction):
-        ALU_reg_operations = (Opcode.ADD_r, Opcode.SUB_r,
-                              Opcode.MUL_r, Opcode.DIV_r,
-                              Opcode.RMD_r, Opcode.AND_r,
-                              Opcode.OR_r, Opcode.EQ_r,
-                              Opcode.NEQ_r, Opcode.LT_r,
-                              Opcode.GT_r)
         ALU_mem_operations = (Opcode.ADD_mem, Opcode.SUB_mem,
                               Opcode.MUL_mem, Opcode.DIV_mem,
                               Opcode.RMD_mem, Opcode.AND_mem,
@@ -487,9 +484,10 @@ class ControlUnit:
             else:
                 self.datapath.select_right_register(self.terms[0].value)
 
-        elif self.opcode in ALU_reg_operations or self.opcode in ALU_mem_operations:
+        elif self.opcode in ALU_mem_operations:
             self.n = self.terms[0].value
             self.datapath.select_right_register(self.terms[1].value)
+            self.datapath.select_left_register(self.terms[1].value)
 
         # elif self.opcode in (Opcode.BEQZ, Opcode.BNEZ, Opcode.BGZ, Opcode.BLZ):
         #     self.datapath.select_left_register(self.terms[0])
@@ -584,6 +582,7 @@ class DataPath:
             self.data_register = self.alu.result
         elif sel == Sel.DataRegister.MEMORY:
             self.data_register = self.memory[self.address_register]
+            print('latch DR:', self.data_register, self.address_register)
         
     def latch_address_register(self, sel : Sel.AddressRegister):
         assert isinstance(sel, Sel.AddressRegister), "selector must be AddressRegister selector"
@@ -604,8 +603,6 @@ class DataPath:
             self.registers[self.right_register] = self.alu.result
         elif sel == Sel.Register.DATA_REGISTER:
             self.registers[self.right_register] = self.data_register
-        elif sel == Sel.Register.IMMEDIATE:
-            self.registers[self.right_register] = self.control_unit.immediate
         elif sel == Sel.Register.REGISTER:
             self.registers[self.right_register] == self.registers[self.left_register]
 
