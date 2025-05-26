@@ -12,13 +12,15 @@ import assembler
 # """
 
 SRC = """
-MOV R0, #21     ; 0
-MOV R1, #0     ; 2
-DEC R0         ; 4
-INC R1         ; 5
-BEQZ R0, 10    ; 6, 7
-JMP 4          ; 8, 9
-STORE R1, 0    ; 10, 11
+MOV R0, #100       ; 0: loop counter
+MOV R1, #0       ; 2: accumulator
+MOV R2, R0       ; 4: temp copy of R0
+STORE R2, 20     ; 5: store R0 → mem[20] for ADD
+ADD 1, R1, 20    ; 7: R1 += mem[20]
+DEC R0           ; 9: R0 -= 1
+BEQZ R0, 14      ; 10: if R0 == 0 → jump to STORE
+JMP 4            ; 12: jump to MOV R2, R0 (line 4)
+STORE R1, 19     ; 14: store result (15) in mem[0]
 """
 
 PROGRAM_OFFSET = 0
