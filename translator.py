@@ -105,7 +105,7 @@ class Generator:
                 else:
                     raise RuntimeError(f"operation: f{op}")
                 
-    def handle_atom(self, atom : Atom) -> Union[Registers.Registers, int]:
+    def handle_atom(self, atom : Atom):
         if isinstance(atom.value, Number):
             return atom.value.value
         elif isinstance(atom.value, Symbol):
@@ -149,24 +149,26 @@ class RegisterController:
         self.available.append(reg)
 
 class VariableAllocator:
-    def __init__(self, reg_controller):
-        self.var_map : dict[str, Registers.Registers] = {}
-        self.reg_controller = reg_controller
+    def __init__(self, base_address: int = 1000):
+        self.var_map: dict[str, int] = {}
+        self.next_free_address = base_address
 
-    def allocate(self, varname : str) -> Registers.Registers:
+    def allocate(self, varname: str) -> int:
         if varname in self.var_map:
             return self.var_map[varname]
-        reg = self.reg_controller.alloc()
-        self.var_map[varname] = reg
-        return reg
-    
-    def __getitem__(self, varname : str):
+        addr = self.next_free_address
+        self.var_map[varname] = addr
+        print(self.next_free_address)
+        self.next_free_address += 1
+        return addr
+
+    def __getitem__(self, varname: str) -> int:
         return self.var_map[varname]
 
 
 if __name__ == "__main__":
     reg_controller = RegisterController()
-    var_allocator = VariableAllocator(reg_controller)
+    var_allocator = VariableAllocator()
 
     # expression = """(+ 1 (* 2 3))"""
     expression = """(begin (setq r 8) (* 3 (* r r)))"""
@@ -178,6 +180,7 @@ if __name__ == "__main__":
     print()
     print(generator.generate(parser.parse(tokenizer.tokenize(expression))))
 
+# доступ к immeadiate есть напрямую, потому что они хранятся отдельным словом в памяти и мы знаем их адрес
 
 #TODO 
 # на данный момент все переменные хранятся в регистрах
