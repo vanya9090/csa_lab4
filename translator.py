@@ -1,8 +1,8 @@
-from enum import Enum
+from enum import Enum, auto
 from dataclasses import dataclass
 from typing import Union, Callable
 from isa import Instruction, Opcode, Term
-from machine.machine import Registers, Memory, Address
+from machine.machine import Registers, Memory, Address, DataPath
 
 @dataclass
 class Number:
@@ -24,7 +24,16 @@ class Operation(Enum):
     RMD = '%'
     LT = '<'
     GT = '>'
-    EQ = '='
+    EQ = '=='
+    NEQ = '!='
+
+class AddressingType(Enum):
+    REG2REG = auto()
+    MEM2REG = auto()
+    MIX2REG1 = auto()
+    MIX2REG2 = auto()
+    MEM2MEM = auto()
+
 
 @dataclass
 class Exp:
@@ -32,15 +41,24 @@ class Exp:
     operands : list[Union[Atom, 'Exp']]
 
 
-BINOP_OPCODE : dict[Operation, Opcode] = {
-    Operation.ADD: Opcode.ADD_mem,
-    Operation.SUB: Opcode.SUB_mem,
-    Operation.MUL: Opcode.MUL_mem,
-    Operation.LT: Opcode.LT,
-    Operation.GT: Opcode.GT,
-    Operation.EQ: Opcode.EQ,
+BINOP_OPCODE : dict[Operation : dict[AddressingType, Opcode]] = {
+    Operation.ADD : {AddressingType.MEM2MEM: Opcode.ADD_mem2mem,
+                     AddressingType.REG2REG: Opcode.ADD_reg2reg,
+                     AddressingType.MEM2REG: Opcode.ADD_mem2reg,
+                     AddressingType.MIX2REG1: Opcode.ADD_mix2reg1,
+                     AddressingType.MIX2REG2: Opcode.ADD_mix2reg2},
+    # Operation.ADD : {AddressingType.MEM2MEM: Opcode.ADD_mem2mem,
+    #                  AddressingType.REG2REG: Opcode.ADD_reg2reg,
+    #                  AddressingType.MIX2REG1: Opcode.ADD_mix2reg1,
+    #                  AddressingType.MIX2REG2: Opcode.ADD_mix2reg2},
 }
 
+COMPARE_OPCODE: dict[Operation, Opcode] = {
+    Operation.LT: Opcode.BLZ,
+    Operation.GT: Opcode.BGZ,
+    Operation.EQ: Opcode.BEQZ,
+    Operation.NEQ: Opcode.BNEZ,
+}
 
 # первоначальный этап обработки программы на LISP 
 class Tokenizer:
@@ -90,9 +108,9 @@ class Program:
 class Generator:
     def __init__(self, var_allocator : "VariableAllocator", reg_controller : "RegisterController", program : Program):
         self.handlers_map : dict[str, Callable[[list], None]] = {
-            'begin': self.handle_token_begin,
-            'setq': self.handle_token_setq,
-            'binop': self.handle_token_binop,
+            'begin': self.handle_begin,
+            'setq': self.handle_setq,
+            'binop': self.handle_binop,
             'defun': None,
             'while': self.handle_while,
 
@@ -118,77 +136,88 @@ class Generator:
                 else:
                     raise RuntimeError(f"operation: f{op}")
 
-    def handle_atom(self, atom : Atom) -> Union[Address, Number]:
+
+    def handle_begin(self, operands : list[Exp], dst_type : None) -> None:
+        [self.generate(operand, dst_type=Address) for operand in operands]
+
+    def handle_atom(self, atom : Atom) -> Union[Address, Registers.Registers]:
         if isinstance(atom.value, Symbol):
             address = self.var_allocator.allocate(atom.value.value)
             return address
-        return atom.value
-
-    # def handle_atom(self, atom : Atom) -> Address:
-    #     if isinstance(atom.value, Symbol):
-    #         address = self.var_allocator.allocate(atom.value.value)
-    #         return address
-    #     elif isinstance(atom.value, Number):
-    #         self.PC += 1
-    #         return Address(self.PC)
-    #     else:
-    #         raise RuntimeError(f"{atom} isn't atom")
-
-    def handle_token_binop(self, operation : Operation, operands : list[Exp], dst_type : Union[Address, Registers.Registers]) -> Union[Address, Registers.Registers]:
-        first : Union[Address, Number] = self.generate(operands[0], dst_type=Address)
-        second : Union[Address, Number] = self.generate(operands[1], dst_type=Address)
-
-        if isinstance(first, Number):
-            first : Address = self.PC
-        if isinstance(second, Number):
-            second : Address = self.PC
-
-        reg = self.reg_controller.alloc()
-        print(self.PC, [Instruction(BINOP_OPCODE[operation], [reg]), first, second])
-        self.PC += 3
-
-        if dst_type == Registers.Registers:
+        elif isinstance(atom.value, Number):
+            reg = self.reg_controller.alloc()
+            self.program.memory[Address(self.PC)] = Instruction(Opcode.MOV_imm2r, [Term(reg)])
+            self.program.memory[Address(self.PC + 1)] = atom.value.value
+            self.PC += 2
             return reg
-        elif dst_type == Address:
-            temp_add = self.var_allocator.allocate('temp')
-            print(self.PC, [Instruction(Opcode.STORE_r2da, [reg]), temp_add])
-            self.PC += 2
-            return temp_add 
         else:
-            raise RuntimeError(f"{dst_type} isn't dst type")
+            raise RuntimeError(f"{atom} isn't atom")
+        
+    def handle_binop(self, operation : Operation, operands : list[Exp], dst_type : Union[Registers.Registers, Address]):
+        first = self.generate(operands[0], dst_type=Registers.Registers)
+        second = self.generate(operands[1], dst_type=Registers.Registers)
+        dst_reg = self.reg_controller.alloc()
 
-    def handle_token_begin(self, operands : list[Exp], dst_type : None) -> None:
-        [self.generate(operand, dst_type=Address) for operand in operands]
+        if isinstance(first, Registers.Registers):
+            if isinstance(second, Registers.Registers):
+                self.program.memory[Address(self.PC)] = Instruction(BINOP_OPCODE[operation][AddressingType.REG2REG],
+                                                                    [Term(dst_reg), Term(first), Term(second)])
+                self.PC += 1
 
-    def handle_token_setq(self, operands : list[Exp], dst_type : Address) -> Address:
+                self.reg_controller.release(first)
+                self.reg_controller.release(second)
+
+            elif isinstance(second, Address):
+                self.program.memory[Address(self.PC)] = Instruction(BINOP_OPCODE[operation][AddressingType.MIX2REG1],
+                                                                    [Term(dst_reg), Term(first)])
+                self.program.memory[Address(self.PC + 1)] = second.value
+                self.PC += 2
+
+                self.reg_controller.release(first)
+            
+        elif isinstance(first, Address):
+            if isinstance(second, Address):
+                self.program.memory[Address(self.PC)] = Instruction(BINOP_OPCODE[operation][AddressingType.MEM2REG],
+                                                                    [Term(dst_reg)])
+                self.program.memory[Address(self.PC + 1)] = first.value
+                self.program.memory[Address(self.PC + 2)] = second.value
+                self.PC += 3
+
+            elif isinstance(second, Registers.Registers):
+                self.program.memory[Address(self.PC)] = Instruction(BINOP_OPCODE[operation][AddressingType.MIX2REG2],
+                                                                    [Term(dst_reg), Term(first)])
+                self.program.memory[Address(self.PC + 1)] = second.value
+                self.PC += 2
+
+                self.reg_controller.release(first)
+
+        return dst_reg
+
+    def handle_setq(self, operands : list[Exp], dst_type : Address) -> Address:
         var_address : Address = self.generate(operands[0], dst_type=Address)
-        var_value : Union[Number, Registers.Registers] = self.generate(operands[1], dst_type=Registers.Registers)
-        if isinstance(var_value, Number):
-            self.program.memory[var_address] = var_value.value
-        elif isinstance(var_value, Registers.Registers):
-            print(self.PC, [Instruction(Opcode.STORE_r2da, [var_value]), var_address])
-            self.PC += 2
-            self.reg_controller.release(var_value)
-        else:
-            raise RuntimeError(f"{var_value} isn't dst type")
+        var_value : Registers.Registers = self.generate(operands[1], dst_type=Registers.Registers)
+            
+        self.program.memory[Address(self.PC)] = Instruction(Opcode.STORE_r2da, [Term(var_value)])
+        self.program.memory[Address(self.PC + 1)] = var_address.value
+
+        self.PC += 2
+        self.reg_controller.release(var_value)
 
         return var_value
 
     def handle_while(self, operands : list[Exp], dst_type : Address) -> None:
         start_PC = self.PC
-        condition_res_reg : Registers.Registers = self.generate(operands[0], dst_type=Registers.Registers)
-        print(self.PC, [Instruction(Opcode.BEQZ, [condition_res_reg]), [None]])
-        self.PC += 2
+        self.generate(operands[0], dst_type=None)
+        jmp_PC = self.PC
+
         [self.generate(operand, dst_type=Address) for operand in operands[1:]]
-        print(self.PC, [Instruction(Opcode.JMP_imm, []), start_PC])
+
+        self.program.memory[Address(self.PC)] = Instruction(Opcode.JMP_imm, [])
+        self.program.memory[Address(self.PC + 1)] = start_PC
+
         self.PC += 2
-        self.reg_controller.release(condition_res_reg)
+        self.program.memory[Address(jmp_PC - 1)] = self.PC
 
-
-
-# класс, который отвечает за обработку и хранение лейблов (label -> address map)
-class LabelController:
-    pass
 
 # RegisterController - хранить в себе стек свободных регистров регистров, аллоцирует регистры и освобождает их
 # в регистрах могут лежать переменные (TODO частоиспользуемые) и какие-то промежуточные значения
@@ -225,22 +254,24 @@ if __name__ == "__main__":
     var_allocator = VariableAllocator()
 
     # expression = """(+ 1 (* 2 3))"""
-    # expression = """(begin (setq r 8) (* 3 (* r r)))"""
-    expression = """
-(begin
-    (setq n 10)
-    (setq sum 0)
-    (setq sum2 0)
-    (setq i 0)
-    (while (< i n)
-        (setq sum (+ sum i))
-        (setq sum2 (+ sum2 (* i i)))
-        (setq i (+ i 1))
-    ) 
-    (setq num (+ 1 2))
-)
-    """
-    memory = Memory(1024)
+    expression = """(begin (setq r 8) (setq res (+ r r)))"""
+#     expression = """
+# (begin
+#     (setq n 10)
+#     (setq sum 0)
+#     (setq sum2 0)
+#     (setq i 0)
+#     (while (< i n)
+#         (setq sum (+ sum i))
+#         (setq sum2 (+ sum2 (* i i)))
+#         (setq i (+ i 1))
+#     ) 
+#     (setq num (+ 1 2))
+# )
+#     """
+    dp = DataPath(input_address=0, output_address=0)
+
+    memory = dp.memory
     program = Program(memory)
 
     tokenizer = Tokenizer()
@@ -251,8 +282,40 @@ if __name__ == "__main__":
     print()
     print(generator.generate(parser.parse(tokenizer.tokenize(expression)), dst_type=Address))
     print()
-    print(' '.join(str(memory[Address(i)]) for i in range(0, 10)))
-    print(var_allocator.var_map)
+    inv_var_map = {v.value: k for k, v in var_allocator.var_map.items()}
+    for i in range(0, 40):
+        if isinstance(memory[Address(i)], Instruction):
+            print(f"{i}: {memory[Address(i)]}")
+        elif memory[Address(i)] in inv_var_map.keys():
+            print(f"{i}({inv_var_map[memory[Address(i)]]}): {memory[Address(i)]}")
+        else: 
+            print(f"{i}: {memory[Address(i)]}")
+    print('\n')
+
+    dp.program_counter = 0
+    MAX_CYCLES = 10_000
+    for cycle in range(MAX_CYCLES):
+        dp.control_unit.run_single_micro()
+        if dp.program_counter >= 5:
+            print(f"\nProgram finished after {cycle+1} micro-cycles.")
+            break
+    else:
+        print("cycle limit hit")
+
+    print("\nRegister file:")
+    for r, v in dp.registers.registers_value.items():
+        print(f"  {r.name:3} = {v}")
+
+    print()
+    inv_var_map = {v.value: k for k, v in var_allocator.var_map.items()}
+    for i in range(1000, 1010):
+        if isinstance(memory[Address(i)], Instruction):
+            print(f"{i}: {memory[Address(i)]}")
+        elif memory[Address(i)] in inv_var_map.keys():
+            print(f"{i}({inv_var_map[memory[Address(i)]]}): {memory[Address(i)]}")
+        else: 
+            print(f"{i}: {memory[Address(i)]}")
+    print('\n')
 
 # доступ к immeadiate есть напрямую, потому что они хранятся отдельным словом в памяти и мы знаем их адрес
 

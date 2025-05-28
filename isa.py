@@ -35,14 +35,11 @@ class Opcode(Enum):
     LT : int = 0
     GT : int = 1
     EQ : int = 2
-    ADD_mem : int = 0
-    SUB_mem : int = 0
-    MUL_mem : int = 0
-    DIV_mem : int = 0
-    RMD_mem : int = 0
-    AND_mem : int = 0
-    OR_mem : int = 0
-    XOR_mem : int = 0
+    ADD_reg2reg : int = 337
+    ADD_mem2reg : int = 343
+    ADD_mem2mem : int = 358
+    ADD_mix2reg1 : int = 379
+    ADD_mix2reg2 : int = 379
 
 # class TermType(Enum):
 #     REGISTER : int = 0
