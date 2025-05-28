@@ -47,10 +47,10 @@ BINOP_OPCODE : dict[Operation : dict[AddressingType, Opcode]] = {
                      AddressingType.MEM2REG: Opcode.ADD_mem2reg,
                      AddressingType.MIX2REG1: Opcode.ADD_mix2reg1,
                      AddressingType.MIX2REG2: Opcode.ADD_mix2reg2},
-    # Operation.ADD : {AddressingType.MEM2MEM: Opcode.ADD_mem2mem,
-    #                  AddressingType.REG2REG: Opcode.ADD_reg2reg,
-    #                  AddressingType.MIX2REG1: Opcode.ADD_mix2reg1,
-    #                  AddressingType.MIX2REG2: Opcode.ADD_mix2reg2},
+    Operation.SUB : {AddressingType.MEM2MEM: Opcode.SUB_mem2mem,
+                     AddressingType.REG2REG: Opcode.SUB_reg2reg,
+                     AddressingType.MIX2REG1: Opcode.SUB_mix2reg1,
+                     AddressingType.MIX2REG2: Opcode.SUB_mix2reg2},
 }
 
 COMPARE_OPCODE: dict[Operation, Opcode] = {
@@ -157,7 +157,7 @@ class Generator:
         first = self.generate(operands[0], dst_type=Registers.Registers)
         second = self.generate(operands[1], dst_type=Registers.Registers)
         dst_reg = self.reg_controller.alloc()
-
+        print(first, second)
         if isinstance(first, Registers.Registers):
             if isinstance(second, Registers.Registers):
                 self.program.memory[Address(self.PC)] = Instruction(BINOP_OPCODE[operation][AddressingType.REG2REG],
@@ -267,6 +267,7 @@ if __name__ == "__main__":
         (setq r 8)
         (setq res (+ r (+ 3 (+ 3 r))))
         (setq r res)
+        (setq a (- 10 r))
     )
     """
 #     expression = """

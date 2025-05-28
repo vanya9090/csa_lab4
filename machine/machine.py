@@ -161,36 +161,31 @@ class ControlUnit:
                               Opcode.NMUL_mem, Opcode.NAND_mem,
                               Opcode.NOR_mem)
         ALU_reg2reg_operations = (
-            Opcode.ADD_reg2reg,
-            # Opcode.SUB_reg,
+            Opcode.ADD_reg2reg, Opcode.SUB_reg2reg,
             #                   Opcode.MUL_reg2reg, Opcode.DIV_reg2reg,
             #                   Opcode.AND_reg2reg, Opcode.OR_reg2reg,
             #                   Opcode.XOR_reg2reg, Opcode.RMD_reg2reg
                               )
         ALU_mem2reg_operations = (
-            Opcode.ADD_mem2reg,
-            # Opcode.SUB_mem2reg,
+            Opcode.ADD_mem2reg, Opcode.SUB_mem2reg,
             #                   Opcode.MUL_mem2reg, Opcode.DIV_mem2reg,
             #                   Opcode.AND_mem2reg, Opcode.OR_mem2reg,
             #                   Opcode.XOR_mem2reg, Opcode.RMD_mem2reg
                               )
         ALU_mix2reg1_operations = (
-            Opcode.ADD_mix2reg1,
-            # Opcode.SUB_mix2reg1,
+            Opcode.ADD_mix2reg1, Opcode.SUB_mix2reg1,
             #                   Opcode.MUL_mix2reg1, Opcode.DIV_mix2reg1,
             #                   Opcode.AND_mix2reg1, Opcode.OR_mix2reg1,
             #                   Opcode.XOR_mix2reg1, Opcode.RMD_mix2reg1
                               )
         ALU_mix2reg2_operations = (
-            Opcode.ADD_mix2reg1,
-            # Opcode.SUB_mix2reg2,
+            Opcode.ADD_mix2reg1, Opcode.SUB_mix2reg2,
             #                   Opcode.MUL_mix2reg1, Opcode.DIV_mix2reg2,
             #                   Opcode.AND_mix2reg1, Opcode.OR_mix2reg1,
             #                   Opcode.XOR_mix2reg1, Opcode.RMD_mix2reg2
                               )
         ALU_mem2mem_operations = (
-            Opcode.ADD_mem2mem,
-            # Opcode.SUB_mem2mem,
+            Opcode.ADD_mem2mem, Opcode.SUB_mem2mem,
             #                   Opcode.MUL_mem2mem, Opcode.DIV_mem2mem,
             #                   Opcode.AND_mem2mem, Opcode.OR_mem2mem,
             #                   Opcode.XOR_mem2mem, Opcode.RMD_mem2mem

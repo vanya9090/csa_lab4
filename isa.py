@@ -36,10 +36,17 @@ class Opcode(Enum):
     GT : int = 1
     EQ : int = 2
     ADD_reg2reg : int = 337
-    ADD_mem2reg : int = 343
-    ADD_mem2mem : int = 359
-    ADD_mix2reg1 : int = 380
-    ADD_mix2reg2 : int = 380
+    ADD_mem2reg : int = ADD_reg2reg + 6
+    ADD_mem2mem : int = ADD_mem2reg + 16
+    ADD_mix2reg1 : int = ADD_mem2mem + 21
+    ADD_mix2reg2 : int = ADD_mem2mem + 21
+
+    SUB_reg2reg : int = 407
+    SUB_mem2reg : int = SUB_reg2reg + 6
+    SUB_mem2mem : int = SUB_mem2reg + 16
+    SUB_mix2reg1 : int = SUB_mem2mem + 21
+    SUB_mix2reg2 : int = SUB_mix2reg1 + 11
+
     MOV_mem2mem : int = 391
 
 # class TermType(Enum):
