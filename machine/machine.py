@@ -160,10 +160,23 @@ class ControlUnit:
         N_ALU_mem_operations = (Opcode.NADD_mem, Opcode.NSUB_mem,
                               Opcode.NMUL_mem, Opcode.NAND_mem,
                               Opcode.NOR_mem)
-        ALU_mem_operations = (Opcode.ADD_mem, Opcode.SUB_mem,
-                              Opcode.MUL_mem, Opcode.DIV_mem,
-                              Opcode.AND_mem, Opcode.OR_mem,
-                              Opcode.XOR_mem, Opcode.RMD_mem)
+        ALU_reg2reg_operations = (Opcode.ADD_reg2reg, Opcode.SUB_reg,
+                              Opcode.MUL_reg2reg, Opcode.DIV_reg2reg,
+                              Opcode.AND_reg2reg, Opcode.OR_reg2reg,
+                              Opcode.XOR_reg2reg, Opcode.RMD_reg2reg)
+        ALU_mem2reg_operations = (Opcode.ADD_mem2reg, Opcode.SUB_mem2reg,
+                              Opcode.MUL_mem2reg, Opcode.DIV_mem2reg,
+                              Opcode.AND_mem2reg, Opcode.OR_mem2reg,
+                              Opcode.XOR_mem2reg, Opcode.RMD_mem2reg)
+        ALU_mix2reg_operations = (Opcode.ADD_mix2reg, Opcode.SUB_mix2reg,
+                              Opcode.MUL_mix2reg, Opcode.DIV_mix2reg,
+                              Opcode.AND_mix2reg, Opcode.OR_mix2reg,
+                              Opcode.XOR_mix2reg, Opcode.RMD_mix2reg)
+        ALU_mem2mem_operations = (Opcode.ADD_mem2mem, Opcode.SUB_mem2mem,
+                              Opcode.MUL_mem2mem, Opcode.DIV_mem2mem,
+                              Opcode.AND_mem2mem, Opcode.OR_mem2mem,
+                              Opcode.XOR_mem2mem, Opcode.RMD_mem2mem)
+        
         MOV_codes = (Opcode.MOV_r2r, Opcode.MOV_rd2r,
                      Opcode.MOV_imm2r, Opcode.MOV_da2r,
                      Opcode.MOV_ia2r)
@@ -206,7 +219,7 @@ class ControlUnit:
         elif self.opcode in (Opcode.JMP_imm, Opcode.CALL, Opcode.RET):
             pass
 
-        elif self.opcode in ALU_mem_operations:
+        elif self.opcode in ALU_reg2reg_operations:
             self.datapath.select_dst_register(self.terms[0].value)
             self.datapath.select_left_register(self.terms[1].value)
             self.datapath.select_right_register(self.terms[2].value)

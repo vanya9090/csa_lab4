@@ -208,7 +208,7 @@ mprogram = [
 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-# ADD direct address (160)
+# NADD direct address (160)
 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
@@ -229,7 +229,7 @@ mprogram = [
 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-# SUB direct address (176)
+# NSUB direct address (176)
 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
@@ -250,7 +250,7 @@ mprogram = [
 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-# OR direct address (192)
+# NOR direct address (192)
 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
@@ -427,7 +427,7 @@ mprogram = [
 # (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT), # PC + 1 -> PC
 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-# MUL direct address (321)
+# NMUL direct address (321)
 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
@@ -448,7 +448,7 @@ mprogram = [
 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-# ADD mem ()
+# ADD reg to reg (337)
 (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER),
 (Signal.LATCH_RIGHT_ALU, Sel.RightALU.REGISTER),
 (Signal.EXECUTE_ALU, ALUOperations.ADD),
@@ -457,7 +457,7 @@ mprogram = [
 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-# ADD dst_reg direct address ()
+# ADD mem to reg (343)
 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
@@ -478,7 +478,7 @@ mprogram = [
 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 
-# ADD dst_address direct address ()
+# ADD mem to mem (358)
 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
 (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
@@ -499,8 +499,29 @@ mprogram = [
 (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.DR),
 
 (Signal.EXECUTE_ALU, ALUOperations.ADD),
-(Signal.LATCH_DATA_REGISTER, Sel.DataRegister.ALU) 
-(Signal.LATCH_MEMORY, None) # mem[address+1] + mem[address+2] -> mem[address+3]
+(Signal.LATCH_DATA_REGISTER, Sel.DataRegister.ALU),
+(Signal.LATCH_MEMORY, None), # mem[address+1] + mem[address+2] -> mem[address+3]
+
+(Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+(Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+
+# ADD mix to reg (379)
+(Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+(Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
+(Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+(Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.DR),
+(Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY), # mem[address+1] -> DR
+(Signal.LATCH_LEFT_ALU, Sel.LeftALU.DR), # mem[address+1] -> left_alu
+
+(Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+(Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
+(Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+(Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.DR),
+(Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY), # mem[address+2] -> DR
+(Signal.LATCH_RIGHT_ALU, Sel.RightALU.DR), # mem[address+2] -> right_alu
+
+(Signal.EXECUTE_ALU, ALUOperations.ADD),
+(Signal.LATCH_REGISTER, Sel.Register.ALU), # mem[address+1] + mem[address+2] -> dst_register
 
 (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
 (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
