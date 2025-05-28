@@ -37,9 +37,10 @@ class Opcode(Enum):
     EQ : int = 2
     ADD_reg2reg : int = 337
     ADD_mem2reg : int = 343
-    ADD_mem2mem : int = 358
-    ADD_mix2reg1 : int = 379
-    ADD_mix2reg2 : int = 379
+    ADD_mem2mem : int = 359
+    ADD_mix2reg1 : int = 380
+    ADD_mix2reg2 : int = 380
+    MOV_mem2mem : int = 391
 
 # class TermType(Enum):
 #     REGISTER : int = 0

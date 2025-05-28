@@ -185,25 +185,32 @@ class Generator:
 
             elif isinstance(second, Registers.Registers):
                 self.program.memory[Address(self.PC)] = Instruction(BINOP_OPCODE[operation][AddressingType.MIX2REG2],
-                                                                    [Term(dst_reg), Term(first)])
-                self.program.memory[Address(self.PC + 1)] = second.value
+                                                                    [Term(dst_reg), Term(second)])
+                self.program.memory[Address(self.PC + 1)] = first.value
                 self.PC += 2
 
-                self.reg_controller.release(first)
+                self.reg_controller.release(second)
 
         return dst_reg
 
-    def handle_setq(self, operands : list[Exp], dst_type : Address) -> Address:
+    def handle_setq(self, operands : list[Exp], dst_type) -> Address:
         var_address : Address = self.generate(operands[0], dst_type=Address)
-        var_value : Registers.Registers = self.generate(operands[1], dst_type=Registers.Registers)
-            
-        self.program.memory[Address(self.PC)] = Instruction(Opcode.STORE_r2da, [Term(var_value)])
-        self.program.memory[Address(self.PC + 1)] = var_address.value
+        var_value : Union[Registers.Registers, Address] = self.generate(operands[1], dst_type=Registers.Registers)
+        
+        if isinstance(var_value, Address):
+            self.program.memory[Address(self.PC)] = Instruction(Opcode.MOV_mem2mem, [])
+            self.program.memory[Address(self.PC + 1)] = var_value.value
+            self.program.memory[Address(self.PC + 2)] = var_address.value
+            self.PC += 3
 
-        self.PC += 2
-        self.reg_controller.release(var_value)
+        elif isinstance(var_value, Registers.Registers):
+            self.program.memory[Address(self.PC)] = Instruction(Opcode.STORE_r2da, [Term(var_value)])
+            self.program.memory[Address(self.PC + 1)] = var_address.value
 
-        return var_value
+            self.PC += 2
+            self.reg_controller.release(var_value)
+
+        return var_address
 
     def handle_while(self, operands : list[Exp], dst_type : Address) -> None:
         start_PC = self.PC
@@ -225,9 +232,10 @@ class RegisterController:
     def __init__(self):
         self.available = [3,4,5,6,7,8,9,10]
     def alloc(self):
+        print(self.available)
         return Registers.Registers(self.available.pop())
-    def release(self, reg):
-        self.available.append(reg)
+    def release(self, reg : Registers.Registers):
+        self.available.append(reg.value)
 
 class VariableAllocator:
     def __init__(self, base_address: int = 1000):
@@ -254,7 +262,13 @@ if __name__ == "__main__":
     var_allocator = VariableAllocator()
 
     # expression = """(+ 1 (* 2 3))"""
-    expression = """(begin (setq r 8) (setq res (+ r r)))"""
+    expression = """
+    (begin
+        (setq r 8)
+        (setq res (+ r (+ 3 (+ 3 r))))
+        (setq r res)
+    )
+    """
 #     expression = """
 # (begin
 #     (setq n 10)
@@ -291,12 +305,12 @@ if __name__ == "__main__":
         else: 
             print(f"{i}: {memory[Address(i)]}")
     print('\n')
-
+    print(f"PC: {generator.PC}")
     dp.program_counter = 0
-    MAX_CYCLES = 10_000
+    MAX_CYCLES = 1000
     for cycle in range(MAX_CYCLES):
         dp.control_unit.run_single_micro()
-        if dp.program_counter >= 5:
+        if dp.program_counter >= generator.PC:
             print(f"\nProgram finished after {cycle+1} micro-cycles.")
             break
     else:
