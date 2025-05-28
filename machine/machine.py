@@ -112,15 +112,19 @@ class Registers:
         if sel == Sel.RSP.MINUS_1:
             self.registers_value[Registers.Registers.RSP] -= 1
 
+@dataclass
+class Address:
+    value : int
+
 class Memory:
     def __init__(self, memory_size):
         self.memory = [0] * memory_size
+
+    def __getitem__(self, key : Address) -> int:
+        return self.memory[key.value]
     
-    def __getitem__(self, key) -> int:
-        return self.memory[key]
-    
-    def __setitem__(self, key, value) -> None:
-        self.memory[key] = value
+    def __setitem__(self, key : Address, value : int) -> None:
+        self.memory[key.value] = value
 
 class ControlUnit:
     def __init__(self, datapath : "DataPath"):
@@ -321,7 +325,7 @@ class DataPath:
         if sel == Sel.DataRegister.ALU:
             self.data_register = self.alu.result
         elif sel == Sel.DataRegister.MEMORY:
-            self.data_register = self.memory[self.address_register]
+            self.data_register = self.memory[Address(self.address_register)]
         
     def latch_address_register(self, sel : Sel.AddressRegister):
         assert isinstance(sel, Sel.AddressRegister), "selector must be AddressRegister selector"
@@ -344,4 +348,4 @@ class DataPath:
             self.registers[self.right_register] == self.registers[self.left_register]
 
     def latch_memory(self):
-        self.memory[self.address_register] = self.data_register
+        self.memory[Address(self.address_register)] = self.data_register

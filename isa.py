@@ -38,6 +38,9 @@ class Opcode(Enum):
     HLT : int = 23
     CALL : int = 297
     RET : int = 314
+    LT : int = 0
+    GT : int = 1
+    EQ : int = 2
 
 # class TermType(Enum):
 #     REGISTER : int = 0
