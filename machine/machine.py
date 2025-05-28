@@ -36,16 +36,15 @@ class ALU:
         }
 
     def __set_flags(self) -> None:
-        print('set flags:', self.result)
         self.flags[self.Flags.ZERO] = (self.result == 0)
         self.flags[self.Flags.NEGATIVE] = (self.result < 0)
 
-    # left alu only can get left_register
+    # left alu only can get src_left_register
     def latch_left_alu(self, sel : Sel.LeftALU) -> None:
         assert isinstance(sel, Sel.LeftALU), "selector must be LeftALU selector"
 
         if sel == Sel.LeftALU.REGISTER:
-            self.__left_term = self.datapath.registers[self.datapath.left_register]
+            self.__left_term = self.datapath.registers[self.datapath.src_left_register]
         if sel == Sel.LeftALU.ZERO:
             self.__left_term = 0
         if sel == Sel.LeftALU.PLUS_1:
@@ -54,14 +53,16 @@ class ALU:
             self.__left_term = -1
         if sel == Sel.LeftALU.PC:
             self.__left_term = self.datapath.program_counter
+        if sel == Sel.LeftALU.DR:
+            self.__left_term = self.datapath.data_register
     
-    # right alu only can get right_register
+    # right alu only can get src_right_register
     def latch_right_alu(self, sel : Sel.RightALU) -> None:
         assert isinstance(sel, Sel.RightALU), "selector must be RightALU selector"
 
         if sel == Sel.RightALU.REGISTER:
-            self.__right_term = self.datapath.registers[self.datapath.right_register]
-        if sel == Sel.RightALU.DATA_REGISTER:
+            self.__right_term = self.datapath.registers[self.datapath.src_right_register]
+        if sel == Sel.RightALU.DR:
             self.__right_term = self.datapath.data_register
         if sel == Sel.RightALU.PLUS_1:
             self.__right_term = 1
@@ -73,7 +74,7 @@ class ALU:
     def perform(self, operation : ALUOperations) -> None:
         self.result = self.__operations[operation](self.__left_term, self.__right_term)
         self.__set_flags()
-
+        print(self.result)
 
 class Registers:
     class Registers(Enum):
@@ -156,12 +157,13 @@ class ControlUnit:
         self.mprogram = mprogram
 
     def decode(self, instruction: Instruction):
+        N_ALU_mem_operations = (Opcode.NADD_mem, Opcode.NSUB_mem,
+                              Opcode.NMUL_mem, Opcode.NAND_mem,
+                              Opcode.NOR_mem)
         ALU_mem_operations = (Opcode.ADD_mem, Opcode.SUB_mem,
                               Opcode.MUL_mem, Opcode.DIV_mem,
-                              Opcode.RMD_mem, Opcode.AND_mem,
-                              Opcode.OR_mem, Opcode.EQ_mem,
-                              Opcode.NEQ_mem, Opcode.LT_mem,
-                              Opcode.GT_mem)
+                              Opcode.AND_mem, Opcode.OR_mem,
+                              Opcode.XOR_mem, Opcode.RMD_mem)
         MOV_codes = (Opcode.MOV_r2r, Opcode.MOV_rd2r,
                      Opcode.MOV_imm2r, Opcode.MOV_da2r,
                      Opcode.MOV_ia2r)
@@ -169,20 +171,19 @@ class ControlUnit:
                          Opcode.DEC_mem, Opcode.DEC_r)
         STORE_codes = (Opcode.STORE_r2rd, Opcode.STORE_r2ri,
                        Opcode.STORE_r2ia, Opcode.STORE_r2da)
-        
+        print(instruction)
         self.opcode : Opcode = instruction.opcode
         self.terms : list[Term] = instruction.terms
-        print(self.opcode)
         if self.opcode in MOV_codes:
             if self.opcode in (Opcode.MOV_r2r, Opcode.MOV_rd2r):
-                self.datapath.select_right_register(self.terms[0].value)
+                self.datapath.select_dst_register(self.terms[0].value)
                 self.datapath.select_left_register(self.terms[1].value)
             else: 
-                self.datapath.select_right_register(self.terms[0].value)
+                self.datapath.select_dst_register(self.terms[0].value)
 
         elif self.opcode in INC_DEC_codes:
             if self.opcode in (Opcode.INC_r, Opcode.DEC_r):
-                self.datapath.select_right_register(self.terms[0].value)
+                self.datapath.select_dst_register(self.terms[0].value)
                 self.datapath.select_left_register(self.terms[0].value)
 
         elif self.opcode in STORE_codes:
@@ -192,9 +193,9 @@ class ControlUnit:
             else:
                 self.datapath.select_right_register(self.terms[0].value)
 
-        elif self.opcode in ALU_mem_operations:
+        elif self.opcode in N_ALU_mem_operations:
             self.n = self.terms[0].value
-            self.datapath.select_right_register(self.terms[1].value)
+            self.datapath.select_dst_register(self.terms[1].value)
             self.datapath.select_left_register(self.terms[1].value)
 
         elif self.opcode in (Opcode.BEQZ, Opcode.BNEZ, Opcode.BGZ, Opcode.BLZ):
@@ -205,6 +206,10 @@ class ControlUnit:
         elif self.opcode in (Opcode.JMP_imm, Opcode.CALL, Opcode.RET):
             pass
 
+        elif self.opcode in ALU_mem_operations:
+            self.datapath.select_dst_register(self.terms[0].value)
+            self.datapath.select_left_register(self.terms[1].value)
+            self.datapath.select_right_register(self.terms[2].value)
 
         else:
             raise RuntimeError()
@@ -270,17 +275,24 @@ class DataPath:
         self.address_register : int = 0
         # TODO make list of chosen registers logic
         self.chosen_registers : list[Registers.Registers] = None
-        self.left_register : Registers.Registers = None
-        self.right_register : Registers.Registers = None
+        # self.left_register : Registers.Registers = None
+        # self.right_register : Registers.Registers = None
+        self.src_left_register : Registers.Registers = None
+        self.src_right_register : Registers.Registers = None
+        self.dst_register : Registers.Registers = None
+
 
         self.input_address : int = input_address
         self.output_address : int = output_address
 
     def select_left_register(self, register : Registers.Registers):
-        self.left_register = register
+        self.src_left_register = register
 
     def select_right_register(self, register : Registers.Registers):
-        self.right_register = register
+        self.src_right_register = register
+
+    def select_dst_register(self, register : Registers.Registers):
+        self.dst_register = register
 
     def latch_jump(self, sel : Sel.Jump):
         self.jump_register = self.alu.result
@@ -332,20 +344,22 @@ class DataPath:
 
         if sel == Sel.AddressRegister.CONTROL_UNIT:
             self.address_register = self.program_counter
-        if sel == Sel.AddressRegister.ALU:
+        elif sel == Sel.AddressRegister.ALU:
             self.address_register = self.alu.result
         elif sel == Sel.AddressRegister.RSP:
             self.address_register = self.registers[Registers.Registers.RSP]
+        elif sel == Sel.AddressRegister.DR:
+            self.address_register = self.data_register
 
     def latch_register(self, sel : Sel.Register):
         assert isinstance(sel, Sel.Register), "selector must be Register selector"
 
         if sel == Sel.Register.ALU:
-            self.registers[self.right_register] = self.alu.result
-        elif sel == Sel.Register.DATA_REGISTER:
-            self.registers[self.right_register] = self.data_register
+            self.registers[self.dst_register] = self.alu.result
+        elif sel == Sel.Register.DR:
+            self.registers[self.dst_register] = self.data_register
         elif sel == Sel.Register.REGISTER:
-            self.registers[self.right_register] == self.registers[self.left_register]
+            self.registers[self.dst_register] == self.registers[self.src_left_register]
 
     def latch_memory(self):
         self.memory[Address(self.address_register)] = self.data_register

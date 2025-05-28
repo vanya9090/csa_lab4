@@ -38,6 +38,7 @@ class Sel:
         CONTROL_UNIT : int = 0
         ALU :int = 1
         RSP : int = 2
+        DR : int = 3
     class ProgramCounter(Enum):
         CONDITION : int = 0
         NEXT : int = 1
@@ -53,10 +54,11 @@ class Sel:
         PLUS_1 : int = 3
         MINUS_1 : int = 4
         PC : int = 5
+        DR : int = 6
     class RightALU(Enum):
         REGISTER : int = 0
         VALUE : int = 1
-        DATA_REGISTER : int = 2
+        DR : int = 2
         PLUS_1 : int = 3
         MINUS_1 : int = 4
         ZERO : int = 5
@@ -64,7 +66,7 @@ class Sel:
         REGISTER : int = 0
         # VALUE : int = 1
         ALU : int = 2
-        DATA_REGISTER : int = 3
+        DR : int = 3
     class N(Enum):
         DECODER : int = 0
         MINUS_1 : int = 1

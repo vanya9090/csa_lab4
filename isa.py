@@ -16,17 +16,11 @@ class Opcode(Enum):
     STORE_r2ri : int = 111
     STORE_r2da : int = 127
     STORE_r2ia : int = 141
-    ADD_mem : int = 160
-    SUB_mem : int = 176
-    MUL_mem : int = 5
-    DIV_mem : int = 6
-    RMD_mem : int = 7
-    AND_mem : int = 208
-    OR_mem : int = 192
-    EQ_mem : int = 10
-    NEQ_mem : int = 11
-    LT_mem : int = 12
-    GT_mem : int = 13
+    NADD_mem : int = 160
+    NSUB_mem : int = 176
+    NMUL_mem : int = 321
+    NAND_mem : int = 208
+    NOR_mem : int = 192
     BEQZ : int = 241
     BNEZ : int = 255
     BGZ : int = 269
@@ -41,6 +35,14 @@ class Opcode(Enum):
     LT : int = 0
     GT : int = 1
     EQ : int = 2
+    ADD_mem : int = 0
+    SUB_mem : int = 0
+    MUL_mem : int = 0
+    DIV_mem : int = 0
+    RMD_mem : int = 0
+    AND_mem : int = 0
+    OR_mem : int = 0
+    XOR_mem : int = 0
 
 # class TermType(Enum):
 #     REGISTER : int = 0

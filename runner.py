@@ -1,4 +1,4 @@
-from machine.machine import DataPath, ControlUnit
+from machine.machine import DataPath, ControlUnit, Address
 from isa import Instruction, Opcode
 import assembler
 
@@ -23,20 +23,20 @@ import assembler
 # STORE R1, 19     ; 14: store result (15) in mem[0]
 # """
 
-SRC = """
-MOV RSP, #200      ; initialize stack pointer
-MOV R0, #3         ; countdown from 3
+# SRC = """
+# MOV RSP, #200      ; initialize stack pointer
+# MOV R0, #3         ; countdown from 3
 
-CALL 6             ; call addr 6 (loop start)
+# CALL 6             ; call addr 6 (loop start)
 
-JMP 11             ; skip function after call
+# JMP 11             ; skip function after call
 
-DEC R0             ; addr 6: function body
-BEQZ R0, 10        ; if zero, jump to RET
-CALL 6             ; recurse
-RET                ; addr 10
+# DEC R0             ; addr 6: function body
+# BEQZ R0, 10        ; if zero, jump to RET
+# CALL 6             ; recurse
+# RET                ; addr 10
 
-"""
+# """
 
 PROGRAM_OFFSET = 0
 
@@ -46,7 +46,7 @@ for word in words:
 
 dp = DataPath(input_address=0, output_address=0)
 for addr, w in enumerate(words):
-    dp.memory[addr + PROGRAM_OFFSET] = w
+    dp.memory[Address(addr + PROGRAM_OFFSET)] = w
 print(f"Program size: {len(words)} words")
 
 dp.program_counter = PROGRAM_OFFSET
@@ -65,4 +65,4 @@ for r, v in dp.registers.registers_value.items():
 
 print("\nMemory:")
 for i in range(20):
-    print(dp.memory[i])
+    print(dp.memory[Address(i)])
