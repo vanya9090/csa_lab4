@@ -168,10 +168,14 @@ class ControlUnit:
                               Opcode.MUL_mem2reg, Opcode.DIV_mem2reg,
                               Opcode.AND_mem2reg, Opcode.OR_mem2reg,
                               Opcode.XOR_mem2reg, Opcode.RMD_mem2reg)
-        ALU_mix2reg_operations = (Opcode.ADD_mix2reg, Opcode.SUB_mix2reg,
-                              Opcode.MUL_mix2reg, Opcode.DIV_mix2reg,
-                              Opcode.AND_mix2reg, Opcode.OR_mix2reg,
-                              Opcode.XOR_mix2reg, Opcode.RMD_mix2reg)
+        ALU_mix2reg1_operations = (Opcode.ADD_mix2reg1, Opcode.SUB_mix2reg1,
+                              Opcode.MUL_mix2reg1, Opcode.DIV_mix2reg1,
+                              Opcode.AND_mix2reg1, Opcode.OR_mix2reg1,
+                              Opcode.XOR_mix2reg1, Opcode.RMD_mix2reg1)
+        ALU_mix2reg2_operations = (Opcode.ADD_mix2reg1, Opcode.SUB_mix2reg2,
+                              Opcode.MUL_mix2reg1, Opcode.DIV_mix2reg2,
+                              Opcode.AND_mix2reg1, Opcode.OR_mix2reg1,
+                              Opcode.XOR_mix2reg1, Opcode.RMD_mix2reg2)
         ALU_mem2mem_operations = (Opcode.ADD_mem2mem, Opcode.SUB_mem2mem,
                               Opcode.MUL_mem2mem, Opcode.DIV_mem2mem,
                               Opcode.AND_mem2mem, Opcode.OR_mem2mem,
@@ -223,6 +227,16 @@ class ControlUnit:
             self.datapath.select_dst_register(self.terms[0].value)
             self.datapath.select_left_register(self.terms[1].value)
             self.datapath.select_right_register(self.terms[2].value)
+        elif self.opcode in ALU_mem2reg_operations:
+            self.datapath.select_dst_register(self.terms[0].value)
+        elif self.opcode in ALU_mix2reg1_operations:
+            self.datapath.select_dst_register(self.terms[0].value)
+            self.datapath.select_left_register(self.terms[1].value) # set left register
+        elif self.opcode in ALU_mix2reg2_operations:
+            self.datapath.select_dst_register(self.terms[0].value)
+            self.datapath.select_right_register(self.terms[1].value) # set right register
+        elif self.opcode in ALU_mem2mem_operations:
+            pass
 
         else:
             raise RuntimeError()
