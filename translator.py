@@ -147,6 +147,7 @@ class Generator:
             'binop': self.handle_binop,
             'defun': None,
             'while': self.handle_while,
+            'cond': self.handle_cond,
 
         }
         self.var_allocator = var_allocator
@@ -269,6 +270,18 @@ class Generator:
         self.PC += 2
         self.program.memory[Address(jmp_PC)] = self.PC
 
+    def handle_cond(self, operands : list[Exp], dst_type) -> None:
+        for i, op in enumerate(operands):
+            if i % 2 == 0:
+                cond_reg = self.generate(op, dst_type=Registers.Registers)
+                self.program.memory[Address(self.PC)] = Instruction(COMPARE_OPCODE[op.operation], [Term(cond_reg)])
+                self.program.memory[Address(self.PC + 1)] = None # placeholder
+                jmp_PC = self.PC + 1
+                self.PC += 2
+            else:
+                self.generate(op, dst_type=Registers.Registers)
+                self.program.memory[Address(jmp_PC)] = self.PC
+
 
 
 # RegisterController - хранить в себе стек свободных регистров регистров, аллоцирует регистры и освобождает их
@@ -306,20 +319,29 @@ if __name__ == "__main__":
     reg_controller = RegisterController()
     var_allocator = VariableAllocator()
 
-    # expression = """(+ 1 (* 2 3))"""
     expression = """
     (begin
-        (setq i 0)
-        (setq n 10)
-        (setq sum 10)
-        (setq sum2 10)
-        (while (< i n)
-            (setq sum (+ sum i))
-            (setq sum2 (+ sum2 (* i i)))
-            (setq i (+ i 1))
-        ) 
+        (cond (< 5 3) (begin (setq i 1))
+              (> 1 3) (begin (setq j 1))
+        )
     )
-    """
+"""
+    # expression = """(+ 1 (* 2 3))"""
+    # expression = """
+    # (begin
+    #     (setq i 0)
+    #     (setq n 3)
+    #     (setq sum 0)
+    #     (setq sum2 0)
+    #     (while (< i n)
+    #         (setq sum (+ sum i))
+    #         (setq sum2 (+ sum2 (* i i)))
+    #         (setq i (+ i 1))
+    #     )
+    #     (setq sum (* sum sum))
+    #     (setq res (- sum sum2))
+    # )
+    # """
 #     expression = """
 # (begin
 #     (setq n 10)
@@ -358,7 +380,7 @@ if __name__ == "__main__":
     print('\n')
     print(f"PC: {generator.PC}")
     dp.program_counter = 0
-    MAX_CYCLES = 10_000
+    MAX_CYCLES = 100_000
     for cycle in range(MAX_CYCLES):
         dp.control_unit.run_single_micro()
         if dp.program_counter >= generator.PC:
