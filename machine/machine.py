@@ -30,6 +30,7 @@ class ALU:
             ALUOperations.SUB : lambda x, y : x - y,
             ALUOperations.AND : lambda x, y : x & y,
             ALUOperations.OR : lambda x, y : x | y,
+            ALUOperations.XOR : lambda x, y : x ^ y,
             ALUOperations.MUL : lambda x, y : x * y,
             ALUOperations.DIV : lambda x, y : x // y,
             ALUOperations.RMD : lambda x, y : x % y

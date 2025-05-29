@@ -95,3 +95,4 @@ class ALUOperations(Enum):
     MUL : int = 4
     DIV : int = 5
     RMD : int = 6
+    XOR : int = 7

@@ -114,7 +114,7 @@ class Parser:
             try:
                 op = Operation(op_token)
             except ValueError:
-                op = self.atom(op_token) # created functions
+                op = self.atom(op_token)
             
             args = []
             while tokens[0] != ')':
@@ -171,7 +171,7 @@ class Generator:
                     raise RuntimeError(f"operation: f{op}")
 
 
-    def handle_begin(self, operands : list[Exp], dst_type : None) -> None:
+    def handle_begin(self, operands : list[Exp], dst_type) -> None:
         [self.generate(operand, dst_type=Address) for operand in operands]
 
     def handle_atom(self, atom : Atom) -> Union[Address, Registers.Registers]:
@@ -186,12 +186,16 @@ class Generator:
             return reg
         else:
             raise RuntimeError(f"{atom} isn't atom")
-        
-    def handle_binop(self, operation : Operation, operands : list[Exp], dst_type : Union[Registers.Registers, Address]):
+
+    def handle_binop(self, operation : Operation, operands : list[Exp], dst_type):
         first = self.generate(operands[0], dst_type=Registers.Registers)
         second = self.generate(operands[1], dst_type=Registers.Registers)
         dst_reg = self.reg_controller.alloc()
-        print(first, second)
+
+        if operation in (Operation.LT, Operation.GT, Operation.EQ, Operation.NEQ):
+            operation = Operation.SUB
+            first, second = second, first
+
         if isinstance(first, Registers.Registers):
             if isinstance(second, Registers.Registers):
                 self.program.memory[Address(self.PC)] = Instruction(BINOP_OPCODE[operation][AddressingType.REG2REG],
@@ -245,19 +249,26 @@ class Generator:
             self.reg_controller.release(var_value)
 
         return var_address
+    
+    # def _extract_cmp_op() -> 
 
-    def handle_while(self, operands : list[Exp], dst_type : Address) -> None:
+    def handle_while(self, operands : list[Exp], dst_type) -> None:
         start_PC = self.PC
-        self.generate(operands[0], dst_type=None)
-        jmp_PC = self.PC
+        cond_reg = self.generate(operands[0], dst_type=Registers.Registers)
+        self.program.memory[Address(self.PC)] = Instruction(COMPARE_OPCODE[operands[0].operation], [Term(cond_reg)])
+        self.program.memory[Address(self.PC + 1)] = None # placeholder
+        jmp_PC = self.PC + 1
+        self.PC += 2
 
+        # generate loop body
         [self.generate(operand, dst_type=Address) for operand in operands[1:]]
 
         self.program.memory[Address(self.PC)] = Instruction(Opcode.JMP_imm, [])
         self.program.memory[Address(self.PC + 1)] = start_PC
 
         self.PC += 2
-        self.program.memory[Address(jmp_PC - 1)] = self.PC
+        self.program.memory[Address(jmp_PC)] = self.PC
+
 
 
 # RegisterController - хранить в себе стек свободных регистров регистров, аллоцирует регистры и освобождает их
@@ -298,13 +309,15 @@ if __name__ == "__main__":
     # expression = """(+ 1 (* 2 3))"""
     expression = """
     (begin
-        (setq r 8)
-        (setq res (+ r (+ 3 (+ 3 r))))
-        (setq r res)
-        (setq a (- 10 r))
-        (setq b (* a 2))
-        (setq c (/ 2 a))
-        (setq d (% 100 78))
+        (setq i 0)
+        (setq n 10)
+        (setq sum 10)
+        (setq sum2 10)
+        (while (< i n)
+            (setq sum (+ sum i))
+            (setq sum2 (+ sum2 (* i i)))
+            (setq i (+ i 1))
+        ) 
     )
     """
 #     expression = """
@@ -345,7 +358,7 @@ if __name__ == "__main__":
     print('\n')
     print(f"PC: {generator.PC}")
     dp.program_counter = 0
-    MAX_CYCLES = 1000
+    MAX_CYCLES = 10_000
     for cycle in range(MAX_CYCLES):
         dp.control_unit.run_single_micro()
         if dp.program_counter >= generator.PC:
