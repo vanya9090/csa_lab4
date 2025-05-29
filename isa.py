@@ -57,7 +57,7 @@ class Opcode(Enum):
     DIV_mem2reg : int = DIV_reg2reg + 6
     DIV_mem2mem : int = DIV_mem2reg + 16
     DIV_mix2reg1 : int = DIV_mem2mem + 21
-    DIV_mix2reg2 : int = DIV_mem2mem + 11
+    DIV_mix2reg2 : int = DIV_mix2reg1 + 11
 
     MOV_mem2mem : int = 391
 

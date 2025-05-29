@@ -49,8 +49,19 @@ BINOP_OPCODE : dict[Operation : dict[AddressingType, Opcode]] = {
                      AddressingType.MIX2REG2: Opcode.ADD_mix2reg2},
     Operation.SUB : {AddressingType.MEM2MEM: Opcode.SUB_mem2mem,
                      AddressingType.REG2REG: Opcode.SUB_reg2reg,
+                     AddressingType.MEM2REG: Opcode.SUB_mem2reg,
                      AddressingType.MIX2REG1: Opcode.SUB_mix2reg1,
                      AddressingType.MIX2REG2: Opcode.SUB_mix2reg2},
+    Operation.MUL : {AddressingType.MEM2MEM: Opcode.MUL_mem2mem,
+                     AddressingType.REG2REG: Opcode.MUL_reg2reg,
+                     AddressingType.MEM2REG: Opcode.MUL_mem2reg,
+                     AddressingType.MIX2REG1: Opcode.MUL_mix2reg1,
+                     AddressingType.MIX2REG2: Opcode.MUL_mix2reg2},
+    Operation.DIV : {AddressingType.MEM2MEM: Opcode.DIV_mem2mem,
+                     AddressingType.REG2REG: Opcode.DIV_reg2reg,
+                     AddressingType.MEM2REG: Opcode.DIV_mem2reg,
+                     AddressingType.MIX2REG1: Opcode.DIV_mix2reg1,
+                     AddressingType.MIX2REG2: Opcode.DIV_mix2reg2},
 }
 
 COMPARE_OPCODE: dict[Operation, Opcode] = {
@@ -268,6 +279,8 @@ if __name__ == "__main__":
         (setq res (+ r (+ 3 (+ 3 r))))
         (setq r res)
         (setq a (- 10 r))
+        (setq b (* a 2))
+        (setq c (/ 2 a))
     )
     """
 #     expression = """
