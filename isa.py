@@ -47,6 +47,18 @@ class Opcode(Enum):
     SUB_mix2reg1 : int = SUB_mem2mem + 21
     SUB_mix2reg2 : int = SUB_mix2reg1 + 11
 
+    MUL_reg2reg : int = SUB_mix2reg2 + 11
+    MUL_mem2reg : int = MUL_reg2reg + 6
+    MUL_mem2mem : int = MUL_mem2reg + 16
+    MUL_mix2reg1 : int = MUL_mem2mem + 21
+    MUL_mix2reg2 : int = MUL_mem2mem + 21
+
+    DIV_reg2reg : int = MUL_mix2reg2 + 11
+    DIV_mem2reg : int = DIV_reg2reg + 6
+    DIV_mem2mem : int = DIV_mem2reg + 16
+    DIV_mix2reg1 : int = DIV_mem2mem + 21
+    DIV_mix2reg2 : int = DIV_mem2mem + 11
+
     MOV_mem2mem : int = 391
 
 # class TermType(Enum):

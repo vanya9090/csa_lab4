@@ -174,7 +174,7 @@ class ControlUnit:
                               )
         ALU_mix2reg1_operations = (
             Opcode.ADD_mix2reg1, Opcode.SUB_mix2reg1,
-            #                   Opcode.MUL_mix2reg1, Opcode.DIV_mix2reg1,
+            #                   Opcode.MUL_mix2reg1,Opcode.DIV_mix2reg1,
             #                   Opcode.AND_mix2reg1, Opcode.OR_mix2reg1,
             #                   Opcode.XOR_mix2reg1, Opcode.RMD_mix2reg1
                               )
