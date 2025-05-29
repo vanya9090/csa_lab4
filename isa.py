@@ -59,6 +59,12 @@ class Opcode(Enum):
     DIV_mix2reg1 : int = DIV_mem2mem + 21
     DIV_mix2reg2 : int = DIV_mix2reg1 + 11
 
+    RMD_reg2reg : int = DIV_mix2reg2 + 11
+    RMD_mem2reg : int = RMD_reg2reg + 6
+    RMD_mem2mem : int = RMD_mem2reg + 16
+    RMD_mix2reg1 : int = RMD_mem2mem + 21
+    RMD_mix2reg2 : int = RMD_mix2reg1 + 11
+
     MOV_mem2mem : int = 391
 
 # class TermType(Enum):
