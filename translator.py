@@ -26,6 +26,9 @@ class Operation(Enum):
     GT = '>'
     EQ = '=='
     NEQ = '!='
+    AND = '&'
+    OR = '|'
+    XOR = '^'
 
 class AddressingType(Enum):
     REG2REG = auto()
@@ -67,6 +70,21 @@ BINOP_OPCODE : dict[Operation : dict[AddressingType, Opcode]] = {
                      AddressingType.MEM2REG: Opcode.RMD_mem2reg,
                      AddressingType.MIX2REG1: Opcode.RMD_mix2reg1,
                      AddressingType.MIX2REG2: Opcode.RMD_mix2reg2},
+    Operation.AND : {AddressingType.MEM2MEM: Opcode.AND_mem2mem,
+                     AddressingType.REG2REG: Opcode.AND_reg2reg,
+                     AddressingType.MEM2REG: Opcode.AND_mem2reg,
+                     AddressingType.MIX2REG1: Opcode.AND_mix2reg1,
+                     AddressingType.MIX2REG2: Opcode.AND_mix2reg2},
+    Operation.OR :  {AddressingType.MEM2MEM: Opcode.OR_mem2mem,
+                     AddressingType.REG2REG: Opcode.OR_reg2reg,
+                     AddressingType.MEM2REG: Opcode.OR_mem2reg,
+                     AddressingType.MIX2REG1: Opcode.OR_mix2reg1,
+                     AddressingType.MIX2REG2: Opcode.OR_mix2reg2},
+    Operation.XOR : {AddressingType.MEM2MEM: Opcode.XOR_mem2mem,
+                     AddressingType.REG2REG: Opcode.XOR_reg2reg,
+                     AddressingType.MEM2REG: Opcode.XOR_mem2reg,
+                     AddressingType.MIX2REG1: Opcode.XOR_mix2reg1,
+                     AddressingType.MIX2REG2: Opcode.XOR_mix2reg2},
 }
 
 COMPARE_OPCODE: dict[Operation, Opcode] = {

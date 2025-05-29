@@ -65,6 +65,24 @@ class Opcode(Enum):
     RMD_mix2reg1 : int = RMD_mem2mem + 21
     RMD_mix2reg2 : int = RMD_mix2reg1 + 11
 
+    AND_reg2reg : int = RMD_mix2reg2 + 11
+    AND_mem2reg : int = AND_reg2reg + 6
+    AND_mem2mem : int = AND_mem2reg + 16
+    AND_mix2reg1 : int = AND_mem2mem + 21
+    AND_mix2reg2 : int = AND_mem2mem + 21
+
+    OR_reg2reg : int = AND_mix2reg2 + 11
+    OR_mem2reg : int = OR_reg2reg + 6
+    OR_mem2mem : int = OR_mem2reg + 16
+    OR_mix2reg1 : int = OR_mem2mem + 21
+    OR_mix2reg2 : int = OR_mem2mem + 21
+
+    XOR_reg2reg : int = OR_mix2reg2 + 11
+    XOR_mem2reg : int = XOR_reg2reg + 6
+    XOR_mem2mem : int = XOR_mem2reg + 16
+    XOR_mix2reg1 : int = XOR_mem2mem + 21
+    XOR_mix2reg2 : int = XOR_mem2mem + 21
+
     MOV_mem2mem : int = 391
 
 # class TermType(Enum):
