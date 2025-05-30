@@ -145,7 +145,7 @@ class Generator:
             'begin': self.handle_begin,
             'setq': self.handle_setq,
             'binop': self.handle_binop,
-            'defun': None,
+            # 'defun': self.handle_defun,
             'while': self.handle_while,
             'cond': self.handle_cond,
 
@@ -282,6 +282,9 @@ class Generator:
                 self.generate(op, dst_type=Registers.Registers)
                 self.program.memory[Address(jmp_PC)] = self.PC
 
+    # def handle_defun(self, operands : list[Exp], dst_type) -> None:
+        
+
 
 
 # RegisterController - хранить в себе стек свободных регистров регистров, аллоцирует регистры и освобождает их
@@ -314,15 +317,15 @@ class VariableAllocator:
     def __setitem__(self, varname: str, address: int):
         self.var_map[varname] = address
 
-
+# TODO fix scopes parser: if (( or )) work incorrect
 if __name__ == "__main__":
     reg_controller = RegisterController()
     var_allocator = VariableAllocator()
 
     expression = """
     (begin
-        (cond (< 5 3) (begin (setq i 1))
-              (> 1 3) (begin (setq j 1))
+        (cond (< 3 3) (begin (setq i 1))
+              (> 3 3) (begin (setq j 1))
         )
     )
 """
