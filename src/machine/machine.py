@@ -408,11 +408,10 @@ class DataPath:
             if self.selected_flag is None:
                 self.program_counter = self.jump_register
                 print(self.jump_register)
+            elif self.alu.flags[self.selected_flag] ^ self.inverse_flag:
+                self.program_counter = self.jump_register
             else:
-                if self.alu.flags[self.selected_flag] ^ self.inverse_flag:
-                    self.program_counter = self.jump_register
-                else:
-                    self.program_counter += 1
+                self.program_counter += 1
         if sel == Sel.ProgramCounter.NEXT:
             self.program_counter += 1
 
