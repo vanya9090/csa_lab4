@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Union, Any
+from typing import Any, Union
 
 from isa import Instruction, Opcode, Term
 from machine.machine import Address, DataPath, Memory, Registers

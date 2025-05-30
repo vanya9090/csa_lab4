@@ -24,6 +24,8 @@ ignore = [
     "INP001", # init file
     "C901", # complex
     "PLR0912", # many branches
+    "ANN001",
+    "ARG002"
     ]
 select = ["ALL"]
 target-version = "py310"
