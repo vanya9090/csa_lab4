@@ -54,7 +54,7 @@ MAX_CYCLES = 1_000
 for cycle in range(MAX_CYCLES):
     dp.control_unit.run_single_micro()
     if dp.program_counter >= len(words) + PROGRAM_OFFSET:
-        print(f"\nProgram finished after {cycle+1} micro-cycles.")
+        print(f"\nProgram finished after {cycle + 1} micro-cycles.")
         break
 else:
     print("cycle limit hit")
