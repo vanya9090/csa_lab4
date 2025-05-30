@@ -1,0 +1,40 @@
+name: CI
+
+on:
+    push:
+      branches: [ main ]
+    pull_request:
+      branches: [ main ]
+
+      
+jobs:
+  quality-and-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.11"]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python }}
+        cache: "pip"
+
+    - name: Install deps
+      run: |
+        pip install --upgrade pip
+        pip install .
+        pip install ruff mypy pytest
+
+    - name: Ruff (lint & format check)
+      run: ruff check src tests
+
+    - name: mypy (static typing)
+      run: mypy src
+
+    # - name: Run pytest
+    #   run: pytest -q
