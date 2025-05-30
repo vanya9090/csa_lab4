@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Union
+from typing import Union, Any
 
 from isa import Instruction, Opcode, Term
 from machine.machine import Address, DataPath, Memory, Registers
@@ -51,7 +51,7 @@ class Exp:
     operands: list[Union[Atom, "Exp"]]
 
 
-BINOP_OPCODE: dict[Operation : dict[AddressingType, Opcode]] = {
+BINOP_OPCODE: dict[Operation, dict[AddressingType, Opcode]] = {
     Operation.ADD: {
         AddressingType.MEM2MEM: Opcode.ADD_mem2mem,
         AddressingType.REG2REG: Opcode.ADD_reg2reg,
@@ -175,7 +175,7 @@ class Generator:
         reg_controller: "RegisterController",
         program: Program,
     ):
-        self.handlers_map: dict[str, Callable[[list], None]] = {
+        self.handlers_map: dict[str, Callable[[list[Any]], None]] = {
             "begin": self.handle_begin,
             "setq": self.handle_setq,
             "binop": self.handle_binop,

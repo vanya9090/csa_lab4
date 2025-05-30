@@ -381,7 +381,7 @@ class DataPath:
     def select_dst_register(self, register: Registers.Registers) -> None:
         self.dst_register = register
 
-    def latch_jump(self) -> None:
+    def latch_jump(self, sel) -> None:
         self.jump_register = self.alu.result
 
     def latch_flag(self, sel: Sel.Flag) -> None:
