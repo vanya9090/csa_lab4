@@ -951,4 +951,21 @@ mprogram = [
     ),  # src_reg - mem[address+2] -> dst_register
     (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
     (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+    # PUSH register +11
+    (Signal.LATCH_RSP, Sel.RSP.MINUS_1),
+    (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.RSP),
+    (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER),
+    (Signal.LATCH_LEFT_ALU, Sel.RightALU.ZERO),
+    (Signal.EXECUTE_ALU, ALUOperations.ADD),
+    (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.ALU),
+    (Signal.LATCH_MEMORY, None),
+    (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+    (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+    # POP register + 9
+    (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.RSP)
+    (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+    (Signal.LATCH_REGISTER, Sel.Register.DR),
+    (Signal.LATCH_RSP, Sel.RSP.PLUS_1),
+    (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+    (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 ]

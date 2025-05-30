@@ -1,6 +1,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Union, Optional
 
 from isa import Instruction, Opcode, Term
 from machine.enums import ALUOperations, Sel, Signal
@@ -151,6 +152,7 @@ class ALU:
 
     def perform(self, operation: ALUOperations) -> None:
         self.result = self.__operations[operation](self.__left_term, self.__right_term)
+        print("ALU result:", self.result, "ALU left:", self.__left_term, "ALU right:", self.__right_term)
         self.__set_flags()
 
 
@@ -166,7 +168,7 @@ class Registers:
         R6: int = 9
         R7: int = 10
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.registers_value: dict[Registers.Registers, int] = {
             Registers.Registers.RSP: 0,
             Registers.Registers.R0: 0,
@@ -190,6 +192,7 @@ class Registers:
             self.registers_value[Registers.Registers.RSP] += 1
         if sel == Sel.RSP.MINUS_1:
             self.registers_value[Registers.Registers.RSP] -= 1
+        print("RSP:", self.registers_value[Registers.Registers.RSP], sel)
 
 
 @dataclass
@@ -204,7 +207,7 @@ class Memory:
     def __getitem__(self, key: Address) -> int:
         return self.memory[key.value]
 
-    def __setitem__(self, key: Address, value: int) -> None:
+    def __setitem__(self, key: Address, value: Optional[int | Instruction]) -> None:
         self.memory[key.value] = value
 
 
@@ -217,7 +220,7 @@ class ControlUnit:
         self.mem_address: int = 0
         self.n: int = 0
 
-        self.signals: dict[Signal, Callable] = {
+        self.signals: dict[Signal, Callable[..., None]] = {
             Signal.LATCH_N: self.latch_n,
             Signal.LATCH_INSTRUCTION: self.latch_instruction,
             Signal.LATCH_PROGRAM_COUNTER: self.datapath.latch_program_counter,
@@ -238,6 +241,7 @@ class ControlUnit:
         self.mprogram = mprogram
 
     def decode(self, instruction: Instruction) -> None:
+        print('---------------------------------')
         print(instruction)
         self.opcode: Opcode = instruction.opcode
         self.terms: list[Term] = instruction.terms
@@ -293,6 +297,11 @@ class ControlUnit:
             )  # set right register
         elif self.opcode in ALU_mem2mem_operations:
             pass
+        
+        elif self.opcode == Opcode.PUSH:
+            self.datapath.select_left_register(self.terms[0])
+        elif self.opcode == Opcode.POP:
+            self.datapath.select_dst_register(self.terms[0])
 
         else:
             raise RuntimeError
@@ -321,7 +330,7 @@ class ControlUnit:
         assert isinstance(sel, Sel.N), "selector must be N selector"
 
         if sel == Sel.N.DECODER:
-            self.n = self.terms[0]
+            self.n = self.terms[0].value
         if sel == Sel.N.MINUS_1:
             self.n -= 1
         if sel == Sel.N.ZERO:
@@ -333,7 +342,7 @@ class ControlUnit:
     def run_single_micro(self) -> None:
         mpc_now = self.mprogram_counter
         signal, *maybe_sel = self.mprogram[mpc_now]
-        print(mpc_now, signal, maybe_sel[0])
+        # print(mpc_now, signal, maybe_sel[0])
         if maybe_sel and maybe_sel[0] is not None:
             self.execute_signal(signal, maybe_sel[0])
         else:
@@ -352,19 +361,19 @@ class DataPath:
         self.registers[Registers.Registers.RSP] = 1023
 
         self.program_counter: int = 0
-        self.selected_flag: ALU.Flags = None
+        self.selected_flag: Optional[ALU.Flags] = None
         self.inverse_flag: bool = False
         self.jump_register: int = 0
 
         self.data_register: int = 0
         self.address_register: int = 0
         # TODO make list of chosen registers logic
-        self.chosen_registers: list[Registers.Registers] = None
+        self.chosen_registers: Optional[list[Registers.Registers]] = None
         # self.left_register : Registers.Registers = None
         # self.right_register : Registers.Registers = None
-        self.src_left_register: Registers.Registers = None
-        self.src_right_register: Registers.Registers = None
-        self.dst_register: Registers.Registers = None
+        self.src_left_register: Registers.Registers = Registers.Registers.R7
+        self.src_right_register: Registers.Registers = Registers.Registers.R6
+        self.dst_register: Registers.Registers = Registers.Registers.R5
 
         self.input_address: int = input_address
         self.output_address: int = output_address
@@ -378,7 +387,7 @@ class DataPath:
     def select_dst_register(self, register: Registers.Registers) -> None:
         self.dst_register = register
 
-    def latch_jump(self, sel) -> None:
+    def latch_jump(self, sel : Sel.Jump) -> None:
         print(self.alu.result)
         self.jump_register = self.alu.result
 
@@ -407,7 +416,6 @@ class DataPath:
         if sel == Sel.ProgramCounter.CONDITION:
             if self.selected_flag is None:
                 self.program_counter = self.jump_register
-                print(self.jump_register)
             elif self.alu.flags[self.selected_flag] ^ self.inverse_flag:
                 self.program_counter = self.jump_register
             else:

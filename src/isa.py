@@ -26,10 +26,8 @@ class Opcode(Enum):
     BNEZ: int = 255
     BGZ: int = 269
     BLZ: int = 283
-    PUSH: int = 18
     JMP_r: int = 224
     JMP_imm: int = 231
-    POP: int = 21
     HLT: int = 23
     CALL: int = 297
     RET: int = 314
@@ -86,6 +84,8 @@ class Opcode(Enum):
 
     MOV_mem2mem: int = 391 + 4
 
+    PUSH: int = XOR_mix2reg2 + 11
+    POP: int = PUSH + 9
 
 # class TermType(Enum):
 #     REGISTER : int = 0
