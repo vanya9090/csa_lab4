@@ -338,7 +338,7 @@ mprogram = [
     (Signal.LATCH_MEMORY, None),  # PC + 1 -> mem[RSP]
     (Signal.LATCH_RSP, Sel.RSP.MINUS_1),  # RSP --
     # jump
-    (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),  # TODO jump in microcode
+    (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
     (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
     (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
     (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DR),

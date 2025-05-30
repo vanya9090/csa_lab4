@@ -179,7 +179,7 @@ class Generator:
             "begin": self.handle_begin,
             "setq": self.handle_setq,
             "binop": self.handle_binop,
-            # 'defun': self.handle_defun,
+            'defun': self.handle_defun,
             "while": self.handle_while,
             "cond": self.handle_cond,
         }
@@ -187,6 +187,8 @@ class Generator:
         self.reg_controller = reg_controller
         self.program = program
         self.PC = 0
+        self.label_map: dict[str, Address] = {}
+        self.fn_params: dict[str, list[Address]] = {}
 
     def generate(self, expression: Exp | Atom) -> Address | Registers.Registers | None:
         if isinstance(expression, Atom):
@@ -196,7 +198,11 @@ class Generator:
             if isinstance(op, Operation):
                 return self.handlers_map["binop"](op, expression.operands)
             if isinstance(op, Atom):
-                return self.handlers_map[op.value.value](expression.operands)
+                if op.value.value in self.handlers_map:
+                    return self.handlers_map[op.value.value](expression.operands)
+                else:
+                    return self.handle_call(op, expression.operands)
+                
         err_message = f"operation: f{op}"
         raise RuntimeError(err_message)
 
@@ -294,8 +300,6 @@ class Generator:
 
         return var_address
 
-    # def _extract_cmp_op() ->
-
     def handle_while(self, operands: list[Exp]) -> None:
         start_pc = self.PC
         cond_reg = self.generate(operands[0])
@@ -331,7 +335,53 @@ class Generator:
                 self.generate(op)
                 self.program.memory[Address(jmp_pc)] = self.PC
 
-    # def handle_defun(self, operands : list[Exp]) -> None:
+    def handle_defun(self, operands: list[Exp | Atom]) -> None:
+        self.program.memory[Address(self.PC)] = Instruction(Opcode.JMP_imm, [])
+        self.program.memory[Address(self.PC + 1)] = None # placeholder
+        jmp_pc = self.PC + 1
+        self.PC += 2
+        
+        fn_atom, params_exp, body_exprs = operands
+        fn_name = fn_atom.value.value
+        print("fn:", fn_atom)
+        print("params:", params_exp)
+        print("body:", body_exprs)
+        params = [a.value.value for a in params_exp.operands]
+        self.var_allocator.push_fn_scope(params)
+
+        self.fn_params[fn_name] = [self.var_allocator[p] for p in params]
+
+        self.label_map[fn_name] = Address(self.PC)
+
+        [self.generate(exp) for exp in body_exprs.operands]
+
+        self.program.memory[Address(self.PC)] = Instruction(Opcode.RET, [])
+        self.PC += 1
+
+        self.var_allocator.pop_fn_scope()
+
+        self.program.memory[Address(jmp_pc)] = self.PC
+
+    def handle_call(self, op: Operation, operands: list[Exp | Atom]) -> None:
+        fn_name = op.value.value
+        param_addrs = self.fn_params[fn_name]
+        
+        for dest_addr, arg_expr in zip(param_addrs, operands):
+            arg_val = self.generate(arg_expr)
+            if isinstance(arg_val, Registers.Registers):
+                self.program.memory[Address(self.PC)] = Instruction(Opcode.STORE_r2da, [Term(arg_val)])
+                self.program.memory[Address(self.PC + 1)] = dest_addr.value
+                self.PC += 2
+                self.reg_controller.release(arg_val)
+            else:
+                self.program.memory[Address(self.PC)] = Instruction(Opcode.MOV_mem2mem, [])
+                self.program.memory[Address(self.PC + 1)] = arg_val.value
+                self.program.memory[Address(self.PC + 2)] = dest_addr.value
+                self.PC += 3
+
+        self.program.memory[Address(self.PC)] = Instruction(Opcode.CALL, [])
+        self.program.memory[Address(self.PC + 1)] = self.label_map[fn_name].value
+        self.PC += 2
 
 
 class RegisterController:
@@ -347,23 +397,49 @@ class RegisterController:
 
 
 class VariableAllocator:
-    def __init__(self, base_address: int = 1000):
-        self.var_map: dict[str, Address] = {}
-        self.next_free_address = base_address
+    def __init__(self, base_address: int = 1000) -> None:
+        self.next_free = base_address
+        self.scopes: list[dict[str, Address]] = [{}]
 
-    def allocate(self, varname: str) -> Address:
-        if varname in self.var_map:
-            return self.var_map[varname]
-        addr = Address(self.next_free_address)
-        self.var_map[varname] = addr
-        self.next_free_address += 1
+    def _new_addr(self) -> Address:
+        addr = Address(self.next_free)
+        self.next_free += 1
         return addr
 
-    def __getitem__(self, varname: str) -> int:
-        return self.var_map[varname]
+    def get(self, name: str) -> Address:
+        for scope in reversed(self.scopes):
+            if name in scope:
+                return scope[name]
+        raise KeyError(name)
 
-    def __setitem__(self, varname: str, address: int) -> None:
-        self.var_map[varname] = address
+    def allocate(self, name: str) -> Address:
+        scope = self.scopes[-1]
+        if name not in scope:
+            scope[name] = self._new_addr()
+        return scope[name]
+
+    def push_fn_scope(self, params: list[str]) -> None:
+        fn_scope: dict[str, Address] = {}
+        for p in params:
+            if p in fn_scope:
+                raise SyntaxError(f"parameter {p} repeated")
+            fn_scope[p] = self._new_addr()
+        self.scopes.append(fn_scope)
+
+    def pop_fn_scope(self) -> None:
+        if len(self.scopes) == 1:
+            raise RuntimeError("pop on global scope")
+        self.scopes.pop()
+
+    def __getitem__(self, name: str) -> Address:
+        return self.get(name)
+
+    def __contains__(self, name: str) -> bool:
+        try:
+            self.get(name)
+            return True
+        except KeyError:
+            return False
 
 
 # TODO fix scopes parser: if (( or )) work incorrect
@@ -373,11 +449,19 @@ if __name__ == "__main__":
 
     expression = """
     (begin
-        (cond (< 3 3) (begin (setq i 1))
-              (> 3 3) (begin (setq j 1))
-        )
+        (setq a 13)
+        (defun square (begin x) (begin (* x x)))
+        (setq a (square 21))
     )
 """
+
+#     expression = """
+#     (begin
+#         (cond (< 3 3) (begin (setq i 1))
+#               (> 3 3) (begin (setq j 1))
+#         )
+#     )
+# """
     # expression = """(+ 1 (* 2 3))"""
     # expression = """
     # (begin
@@ -425,7 +509,8 @@ if __name__ == "__main__":
         ),
     )
     print()
-    inv_var_map = {v.value: k for k, v in var_allocator.var_map.items()}
+    # inv_var_map = {v.value: k for k, v in var_allocator.var_map.items()}
+    inv_var_map = {}
     for i in range(40):
         if isinstance(memory[Address(i)], Instruction):
             print(f"{i}: {memory[Address(i)]}")
@@ -433,10 +518,8 @@ if __name__ == "__main__":
             print(f"{i}({inv_var_map[memory[Address(i)]]}): {memory[Address(i)]}")
         else:
             print(f"{i}: {memory[Address(i)]}")
-    print("\n")
-    print(f"PC: {generator.PC}")
     dp.program_counter = 0
-    MAX_CYCLES = 100_000
+    MAX_CYCLES = 10000
     for cycle in range(MAX_CYCLES):
         dp.control_unit.run_single_micro()
         if dp.program_counter >= generator.PC:
@@ -450,7 +533,8 @@ if __name__ == "__main__":
         print(f"  {r.name:3} = {v}")
 
     print()
-    inv_var_map = {v.value: k for k, v in var_allocator.var_map.items()}
+    # inv_var_map = {v.value: k for k, v in var_allocator.var_map.items()}
+    inv_var_map = {}
     for i in range(1000, 1010):
         if isinstance(memory[Address(i)], Instruction):
             print(f"{i}: {memory[Address(i)]}")

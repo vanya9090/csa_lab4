@@ -150,11 +150,8 @@ class ALU:
             self.__right_term = 0
 
     def perform(self, operation: ALUOperations) -> None:
-        print(operation)
-        print(self.__left_term, self.__right_term)
         self.result = self.__operations[operation](self.__left_term, self.__right_term)
         self.__set_flags()
-        print(self.result)
 
 
 class Registers:
@@ -406,17 +403,10 @@ class DataPath:
         assert isinstance(sel, Sel.ProgramCounter), (
             "selector must be ProgramCounter selector"
         )
-        print("latch_program_counter")
         if sel == Sel.ProgramCounter.CONDITION:
             if self.selected_flag is None:
-                print(self.alu.result)
                 self.program_counter = self.jump_register
             else:
-                print(
-                    self.selected_flag,
-                    self.alu.flags[self.selected_flag],
-                    self.inverse_flag,
-                )
                 if self.alu.flags[self.selected_flag] ^ self.inverse_flag:
                     self.program_counter = self.jump_register
                 else:
