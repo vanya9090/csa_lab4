@@ -353,7 +353,18 @@ class Generator:
 
         self.label_map[fn_name] = Address(self.PC)
 
-        [self.generate(exp) for exp in body_exprs.operands]
+        [self.generate(exp) for exp in body_exprs.operands[:-1]]
+        ret_reg = self.generate(body_exprs.operands[-1])
+
+        if isinstance(ret_reg, Address):
+            self.program.memory[Address(self.PC)] = Instruction(Opcode.MOV_da2r, [Term(Registers.Registers.R0)])
+            self.program.memory[Address(self.PC + 1)] = ret_reg.value
+            self.PC += 2
+        else:
+            self.program.memory[Address(self.PC)] = Instruction(Opcode.MOV_r2r, [Term(Registers.Registers.R0), Term(ret_reg)])
+            self.reg_controller.release(ret_reg)
+            self.PC += 1
+
 
         self.program.memory[Address(self.PC)] = Instruction(Opcode.RET, [])
         self.PC += 1
@@ -382,6 +393,8 @@ class Generator:
         self.program.memory[Address(self.PC)] = Instruction(Opcode.CALL, [])
         self.program.memory[Address(self.PC + 1)] = self.label_map[fn_name].value
         self.PC += 2
+
+        return Registers.Registers.R0
 
 
 class RegisterController:

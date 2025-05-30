@@ -19,7 +19,7 @@ class Opcode(Enum):
     STORE_r2ia: int = 141
     NADD_mem: int = 160
     NSUB_mem: int = 176
-    NMUL_mem: int = 321
+    NMUL_mem: int = 321 + 4
     NAND_mem: int = 208
     NOR_mem: int = 192
     BEQZ: int = 241
@@ -36,13 +36,13 @@ class Opcode(Enum):
     LT: int = 0
     GT: int = 1
     EQ: int = 2
-    ADD_reg2reg: int = 337
+    ADD_reg2reg: int = 337 + 4
     ADD_mem2reg: int = ADD_reg2reg + 6
     ADD_mem2mem: int = ADD_mem2reg + 16
     ADD_mix2reg1: int = ADD_mem2mem + 21
     ADD_mix2reg2: int = ADD_mem2mem + 21
 
-    SUB_reg2reg: int = 407
+    SUB_reg2reg: int = 407 + 4
     SUB_mem2reg: int = SUB_reg2reg + 6
     SUB_mem2mem: int = SUB_mem2reg + 16
     SUB_mix2reg1: int = SUB_mem2mem + 21
@@ -84,7 +84,7 @@ class Opcode(Enum):
     XOR_mix2reg1: int = XOR_mem2mem + 21
     XOR_mix2reg2: int = XOR_mem2mem + 21
 
-    MOV_mem2mem: int = 391
+    MOV_mem2mem: int = 391 + 4
 
 
 # class TermType(Enum):

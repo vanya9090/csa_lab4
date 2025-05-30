@@ -1,14 +1,14 @@
 import assembler
 from machine.machine import Address, DataPath
 
-# SRC = """
-#     MOV R0, #5     ; load literal
-#     MOV R1, R0     ; copy
-#     INC R1
-#     DEC R0
-#     STORE R1, 9
-#     STORE R1, R1
-# """
+SRC = """
+    MOV R0, #5     ; load literal
+    MOV R1, R0     ; copy
+    INC R1
+    DEC R0
+    STORE R1, 9
+    STORE R1, R1
+"""
 
 # SRC = """
 # MOV R0, #100       ; 0: loop counter

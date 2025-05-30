@@ -379,6 +379,7 @@ class DataPath:
         self.dst_register = register
 
     def latch_jump(self, sel) -> None:
+        print(self.alu.result)
         self.jump_register = self.alu.result
 
     def latch_flag(self, sel: Sel.Flag) -> None:
@@ -406,6 +407,7 @@ class DataPath:
         if sel == Sel.ProgramCounter.CONDITION:
             if self.selected_flag is None:
                 self.program_counter = self.jump_register
+                print(self.jump_register)
             else:
                 if self.alu.flags[self.selected_flag] ^ self.inverse_flag:
                     self.program_counter = self.jump_register
