@@ -9,7 +9,23 @@ requires-python = ">=3.10"
 dependencies = ["pytest", "ruff", "mypy"]
 
 [tool.ruff]
-select = ["ALL"]              # turn on every rule
+ignore = [
+    "RUF003",
+    "T201",
+    "ERA001",
+    "FIX002",
+    "TD", # TODO
+    "D", # docstrings
+    "ANN204", # type annotation for special method
+    "EM", # error messages
+    "TC003", # always type annotation
+    "S101", # assert on
+    "S105", # token isn't password
+    "INP001", # init file
+    "C901", # complex
+    "PLR0912", # many branches
+    ]
+select = ["ALL"]
 target-version = "py310"
 
 [tool.mypy]

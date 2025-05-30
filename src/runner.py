@@ -1,6 +1,5 @@
-from machine.machine import DataPath, ControlUnit, Address
-from isa import Instruction, Opcode
 import assembler
+from machine.machine import Address, DataPath
 
 # SRC = """
 #     MOV R0, #5     ; load literal

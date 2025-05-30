@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 import re
-from typing import List, Union
 
 from isa import Instruction, Opcode, Term
 from machine.machine import Registers
 
-
 REG_RE = re.compile(r"(RSP|R[0-7])\Z", re.IGNORECASE)
 
+MOV_OPERANDS = 2
+STORE_OPERANDS = 2
 
 def _reg(token: str) -> Registers.Registers:
     m = REG_RE.fullmatch(token)
@@ -20,7 +20,7 @@ def _reg(token: str) -> Registers.Registers:
     return Registers.Registers[f"R{token[1]}"]
 
 
-def _parse(token: str):
+def _parse(token: str) -> tuple[str, int]:
     token = token.strip()
     if token.startswith("#"):  # immediate
         return "imm", int(token[1:], 0)
@@ -34,7 +34,7 @@ def _parse(token: str):
     return "direct", int(token, 0)  # bare number = absolute addr
 
 
-def assemble_line(src: str) -> List[Union[Instruction, int]]:
+def assemble_line(src: str) -> list[Instruction | int]:
     src = src.partition(";")[0].strip()
     if not src:
         return []
@@ -44,8 +44,8 @@ def assemble_line(src: str) -> List[Union[Instruction, int]]:
     ops = [o.strip() for o in rest.split(",")] if rest else []
 
     if mnem == "MOV":
-        if len(ops) != 2:
-            raise SyntaxError("MOV needs 2 operands")
+        if len(ops) != MOV_OPERANDS:
+            raise SyntaxError(f"MOV needs {MOV_OPERANDS} operands")
         dst_k, dst_v = _parse(ops[0])
         src_k, src_v = _parse(ops[1])
 
@@ -64,8 +64,8 @@ def assemble_line(src: str) -> List[Union[Instruction, int]]:
             return [Instruction(Opcode.MOV_ia2r, [Term(dst_v)]), src_v]
 
     if mnem == "STORE":
-        if len(ops) != 2:
-            raise SyntaxError("STORE needs 2 operands")
+        if len(ops) != STORE_OPERANDS:
+            raise SyntaxError(f"STORE needs {2} operands")
 
         src_k, src_v = _parse(ops[0])
         dst_k, dst_v = _parse(ops[1])
@@ -92,8 +92,8 @@ def assemble_line(src: str) -> List[Union[Instruction, int]]:
         if op_k == "reg":
             return [
                 Instruction(
-                    Opcode.INC_r if mnem == "INC" else Opcode.DEC_r, [Term(op_v)]
-                )
+                    Opcode.INC_r if mnem == "INC" else Opcode.DEC_r, [Term(op_v)],
+                ),
             ]
         if op_k == "direct":
             return [
@@ -104,7 +104,7 @@ def assemble_line(src: str) -> List[Union[Instruction, int]]:
     if mnem == "ADD":
         if len(ops) < 2:
             raise SyntaxError(
-                "ADD needs at least two operands (N and destination register)"
+                "ADD needs at least two operands (N and destination register)",
             )
         try:
             n = int(ops[0], 0)
@@ -120,7 +120,7 @@ def assemble_line(src: str) -> List[Union[Instruction, int]]:
             addr_k, addr_v = _parse(token)
             if addr_k != "direct":
                 raise SyntaxError(
-                    "ADD currently only supports direct addressing for source values"
+                    "ADD currently only supports direct addressing for source values",
                 )
             addresses.append(addr_v)
 
@@ -177,8 +177,8 @@ def assemble_line(src: str) -> List[Union[Instruction, int]]:
     raise NotImplementedError(f"asm does not support '{mnem}'")
 
 
-def assemble_program(source: str) -> List[Union[Instruction, int]]:
-    program: List[Union[Instruction, int]] = []
+def assemble_program(source: str) -> list[Instruction | int]:
+    program: list[Instruction | int] = []
     for line in source.splitlines():
         program.extend(assemble_line(line))
     return program

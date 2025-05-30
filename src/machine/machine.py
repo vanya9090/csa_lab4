@@ -1,9 +1,84 @@
-from enum import Enum
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable, Dict, Any, ClassVar
-from isa import Opcode, Term, Instruction
+from enum import Enum
+
+from isa import Instruction, Opcode, Term
+from machine.enums import ALUOperations, Sel, Signal
 from machine.microprogram import mprogram
-from machine.enums import Signal, Sel, ALUOperations
+
+N_ALU_mem_operations = (
+    Opcode.NADD_mem,
+    Opcode.NSUB_mem,
+    Opcode.NMUL_mem,
+    Opcode.NAND_mem,
+    Opcode.NOR_mem,
+)
+ALU_reg2reg_operations = (
+    Opcode.ADD_reg2reg,
+    Opcode.SUB_reg2reg,
+    Opcode.MUL_reg2reg,
+    Opcode.DIV_reg2reg,
+    Opcode.AND_reg2reg,
+    Opcode.OR_reg2reg,
+    Opcode.XOR_reg2reg,
+    Opcode.RMD_reg2reg,
+)
+ALU_mem2reg_operations = (
+    Opcode.ADD_mem2reg,
+    Opcode.SUB_mem2reg,
+    Opcode.MUL_mem2reg,
+    Opcode.DIV_mem2reg,
+    Opcode.AND_mem2reg,
+    Opcode.OR_mem2reg,
+    Opcode.XOR_mem2reg,
+    Opcode.RMD_mem2reg,
+)
+ALU_mix2reg1_operations = (
+    Opcode.ADD_mix2reg1,
+    Opcode.SUB_mix2reg1,
+    Opcode.MUL_mix2reg1,
+    Opcode.DIV_mix2reg1,
+    Opcode.AND_mix2reg1,
+    Opcode.OR_mix2reg1,
+    Opcode.XOR_mix2reg1,
+    Opcode.RMD_mix2reg1,
+)
+ALU_mix2reg2_operations = (
+    Opcode.ADD_mix2reg1,
+    Opcode.SUB_mix2reg2,
+    Opcode.MUL_mix2reg1,
+    Opcode.DIV_mix2reg2,
+    Opcode.AND_mix2reg1,
+    Opcode.OR_mix2reg1,
+    Opcode.XOR_mix2reg1,
+    Opcode.RMD_mix2reg2,
+)
+ALU_mem2mem_operations = (
+    Opcode.ADD_mem2mem,
+    Opcode.SUB_mem2mem,
+    Opcode.MUL_mem2mem,
+    Opcode.DIV_mem2mem,
+    Opcode.AND_mem2mem,
+    Opcode.OR_mem2mem,
+    Opcode.XOR_mem2mem,
+    Opcode.RMD_mem2mem,
+)
+
+MOV_codes = (
+    Opcode.MOV_r2r,
+    Opcode.MOV_rd2r,
+    Opcode.MOV_imm2r,
+    Opcode.MOV_da2r,
+    Opcode.MOV_ia2r,
+    Opcode.MOV_mem2mem,
+)
+INC_DEC_codes = (Opcode.INC_mem, Opcode.INC_r, Opcode.DEC_mem, Opcode.DEC_r)
+STORE_codes = (
+    Opcode.STORE_r2rd,
+    Opcode.STORE_r2ri,
+    Opcode.STORE_r2ia,
+    Opcode.STORE_r2da,
+)
 
 
 class ALU:
@@ -113,7 +188,7 @@ class Registers:
     def __setitem__(self, key: Registers, value: int) -> None:
         self.registers_value[key] = value
 
-    def latch_rsp(self, sel: Sel.RSP):
+    def latch_rsp(self, sel: Sel.RSP) -> None:
         if sel == Sel.RSP.PLUS_1:
             self.registers_value[Registers.Registers.RSP] += 1
         if sel == Sel.RSP.MINUS_1:
@@ -126,7 +201,7 @@ class Address:
 
 
 class Memory:
-    def __init__(self, memory_size):
+    def __init__(self, memory_size: int):
         self.memory = [0] * memory_size
 
     def __getitem__(self, key: Address) -> int:
@@ -165,80 +240,7 @@ class ControlUnit:
 
         self.mprogram = mprogram
 
-    def decode(self, instruction: Instruction):
-        N_ALU_mem_operations = (
-            Opcode.NADD_mem,
-            Opcode.NSUB_mem,
-            Opcode.NMUL_mem,
-            Opcode.NAND_mem,
-            Opcode.NOR_mem,
-        )
-        ALU_reg2reg_operations = (
-            Opcode.ADD_reg2reg,
-            Opcode.SUB_reg2reg,
-            Opcode.MUL_reg2reg,
-            Opcode.DIV_reg2reg,
-            Opcode.AND_reg2reg,
-            Opcode.OR_reg2reg,
-            Opcode.XOR_reg2reg,
-            Opcode.RMD_reg2reg,
-        )
-        ALU_mem2reg_operations = (
-            Opcode.ADD_mem2reg,
-            Opcode.SUB_mem2reg,
-            Opcode.MUL_mem2reg,
-            Opcode.DIV_mem2reg,
-            Opcode.AND_mem2reg,
-            Opcode.OR_mem2reg,
-            Opcode.XOR_mem2reg,
-            Opcode.RMD_mem2reg,
-        )
-        ALU_mix2reg1_operations = (
-            Opcode.ADD_mix2reg1,
-            Opcode.SUB_mix2reg1,
-            Opcode.MUL_mix2reg1,
-            Opcode.DIV_mix2reg1,
-            Opcode.AND_mix2reg1,
-            Opcode.OR_mix2reg1,
-            Opcode.XOR_mix2reg1,
-            Opcode.RMD_mix2reg1,
-        )
-        ALU_mix2reg2_operations = (
-            Opcode.ADD_mix2reg1,
-            Opcode.SUB_mix2reg2,
-            Opcode.MUL_mix2reg1,
-            Opcode.DIV_mix2reg2,
-            Opcode.AND_mix2reg1,
-            Opcode.OR_mix2reg1,
-            Opcode.XOR_mix2reg1,
-            Opcode.RMD_mix2reg2,
-        )
-        ALU_mem2mem_operations = (
-            Opcode.ADD_mem2mem,
-            Opcode.SUB_mem2mem,
-            Opcode.MUL_mem2mem,
-            Opcode.DIV_mem2mem,
-            Opcode.AND_mem2mem,
-            Opcode.OR_mem2mem,
-            Opcode.XOR_mem2mem,
-            Opcode.RMD_mem2mem,
-        )
-
-        MOV_codes = (
-            Opcode.MOV_r2r,
-            Opcode.MOV_rd2r,
-            Opcode.MOV_imm2r,
-            Opcode.MOV_da2r,
-            Opcode.MOV_ia2r,
-            Opcode.MOV_mem2mem,
-        )
-        INC_DEC_codes = (Opcode.INC_mem, Opcode.INC_r, Opcode.DEC_mem, Opcode.DEC_r)
-        STORE_codes = (
-            Opcode.STORE_r2rd,
-            Opcode.STORE_r2ri,
-            Opcode.STORE_r2ia,
-            Opcode.STORE_r2da,
-        )
+    def decode(self, instruction: Instruction) -> None:
         print(instruction)
         self.opcode: Opcode = instruction.opcode
         self.terms: list[Term] = instruction.terms
@@ -268,10 +270,12 @@ class ControlUnit:
             self.datapath.select_dst_register(self.terms[1].value)
             self.datapath.select_left_register(self.terms[1].value)
 
-        elif self.opcode in (Opcode.BEQZ, Opcode.BNEZ, Opcode.BGZ, Opcode.BLZ):
-            self.datapath.select_left_register(self.terms[0].value)
-
-        elif self.opcode in (Opcode.PUSH, Opcode.JMP_r):
+        elif self.opcode in (
+            Opcode.BEQZ,
+            Opcode.BNEZ,
+            Opcode.BGZ,
+            Opcode.BLZ,
+        ) or self.opcode in (Opcode.PUSH, Opcode.JMP_r):
             self.datapath.select_left_register(self.terms[0].value)
         elif self.opcode in (Opcode.JMP_imm, Opcode.CALL, Opcode.RET):
             pass
@@ -288,15 +292,15 @@ class ControlUnit:
         elif self.opcode in ALU_mix2reg2_operations:
             self.datapath.select_dst_register(self.terms[0].value)
             self.datapath.select_right_register(
-                self.terms[1].value
+                self.terms[1].value,
             )  # set right register
         elif self.opcode in ALU_mem2mem_operations:
             pass
 
         else:
-            raise RuntimeError()
+            raise RuntimeError
 
-    def latch_mprogram_counter(self, sel: Sel.MProgramCounter):
+    def latch_mprogram_counter(self, sel: Sel.MProgramCounter) -> None:
         assert isinstance(sel, Sel.MProgramCounter), (
             "selector must be MProgramCounter selector"
         )
@@ -313,10 +317,10 @@ class ControlUnit:
             else:
                 self.mprogram_counter = self.opcode.value
 
-    def latch_instruction(self):
+    def latch_instruction(self) -> None:
         self.decode(self.datapath.data_register)
 
-    def latch_n(self, sel: Sel.N):
+    def latch_n(self, sel: Sel.N) -> None:
         assert isinstance(sel, Sel.N), "selector must be N selector"
 
         if sel == Sel.N.DECODER:
@@ -326,10 +330,10 @@ class ControlUnit:
         if sel == Sel.N.ZERO:
             self.n = 0
 
-    def execute_signal(self, signal: Signal, *arg):
+    def execute_signal(self, signal: Signal, *arg: tuple[Signal, None | Sel]) -> None:
         self.signals[signal](*arg)
 
-    def run_single_micro(self):
+    def run_single_micro(self) -> None:
         mpc_now = self.mprogram_counter
         signal, *maybe_sel = self.mprogram[mpc_now]
         print(mpc_now, signal, maybe_sel[0])
@@ -343,7 +347,7 @@ class ControlUnit:
 
 
 class DataPath:
-    def __init__(self, input_address, output_address):
+    def __init__(self, input_address: int, output_address: int):
         self.alu: ALU = ALU(self)
         self.registers: Registers = Registers()
         self.control_unit: ControlUnit = ControlUnit(self)
@@ -368,19 +372,19 @@ class DataPath:
         self.input_address: int = input_address
         self.output_address: int = output_address
 
-    def select_left_register(self, register: Registers.Registers):
+    def select_left_register(self, register: Registers.Registers) -> None:
         self.src_left_register = register
 
-    def select_right_register(self, register: Registers.Registers):
+    def select_right_register(self, register: Registers.Registers) -> None:
         self.src_right_register = register
 
-    def select_dst_register(self, register: Registers.Registers):
+    def select_dst_register(self, register: Registers.Registers) -> None:
         self.dst_register = register
 
-    def latch_jump(self, sel: Sel.Jump):
+    def latch_jump(self) -> None:
         self.jump_register = self.alu.result
 
-    def latch_flag(self, sel: Sel.Flag):
+    def latch_flag(self, sel: Sel.Flag) -> None:
         if sel == Sel.Flag.CARRY:
             self.selected_flag = ALU.Flags.CARRY
         if sel == Sel.Flag.OVERFLOW:
@@ -392,19 +396,19 @@ class DataPath:
         if sel == Sel.Flag.NONE:
             self.selected_flag = None
 
-    def latch_inverse(self, sel: Sel.Inverse):
+    def latch_inverse(self, sel: Sel.Inverse) -> None:
         if sel == Sel.Inverse.IDENTITY:
             self.inverse_flag = False
         if sel == Sel.Inverse.INVERSE:
             self.inverse_flag = True
 
-    def latch_program_counter(self, sel: Sel.ProgramCounter):
+    def latch_program_counter(self, sel: Sel.ProgramCounter) -> None:
         assert isinstance(sel, Sel.ProgramCounter), (
             "selector must be ProgramCounter selector"
         )
         print("latch_program_counter")
         if sel == Sel.ProgramCounter.CONDITION:
-            if self.selected_flag == None:
+            if self.selected_flag is None:
                 print(self.alu.result)
                 self.program_counter = self.jump_register
             else:
@@ -420,7 +424,7 @@ class DataPath:
         if sel == Sel.ProgramCounter.NEXT:
             self.program_counter += 1
 
-    def latch_data_register(self, sel: Sel.DataRegister):
+    def latch_data_register(self, sel: Sel.DataRegister) -> None:
         assert isinstance(sel, Sel.DataRegister), (
             "selector must be DataRegister selector"
         )
@@ -430,7 +434,7 @@ class DataPath:
         elif sel == Sel.DataRegister.MEMORY:
             self.data_register = self.memory[Address(self.address_register)]
 
-    def latch_address_register(self, sel: Sel.AddressRegister):
+    def latch_address_register(self, sel: Sel.AddressRegister) -> None:
         assert isinstance(sel, Sel.AddressRegister), (
             "selector must be AddressRegister selector"
         )
@@ -444,7 +448,7 @@ class DataPath:
         elif sel == Sel.AddressRegister.DR:
             self.address_register = self.data_register
 
-    def latch_register(self, sel: Sel.Register):
+    def latch_register(self, sel: Sel.Register) -> None:
         assert isinstance(sel, Sel.Register), "selector must be Register selector"
 
         if sel == Sel.Register.ALU:
@@ -452,7 +456,7 @@ class DataPath:
         elif sel == Sel.Register.DR:
             self.registers[self.dst_register] = self.data_register
         elif sel == Sel.Register.REGISTER:
-            self.registers[self.dst_register] == self.registers[self.src_left_register]
+            self.registers[self.dst_register] = self.registers[self.src_left_register]
 
-    def latch_memory(self):
+    def latch_memory(self) -> None:
         self.memory[Address(self.address_register)] = self.data_register

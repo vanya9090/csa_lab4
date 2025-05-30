@@ -1,8 +1,10 @@
-from enum import Enum, auto
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Union, Callable
+from enum import Enum, auto
+from typing import Union
+
 from isa import Instruction, Opcode, Term
-from machine.machine import Registers, Memory, Address, DataPath
+from machine.machine import Address, DataPath, Memory, Registers
 
 
 @dataclass
@@ -17,7 +19,7 @@ class Symbol:
 
 @dataclass
 class Atom:
-    value: Union[Number, Symbol]
+    value: Number | Symbol
 
 
 class Operation(Enum):
@@ -45,7 +47,7 @@ class AddressingType(Enum):
 
 @dataclass
 class Exp:
-    operation: Union[Operation, Atom]
+    operation: Operation | Atom
     operands: list[Union[Atom, "Exp"]]
 
 
@@ -124,15 +126,17 @@ class Tokenizer:
 
 # создание AST
 class Parser:
-    def parse(self, tokens: list[str]) -> Union[Exp, Atom]:
+    def parse(self, tokens: list[str]) -> Exp | Atom:
         if not tokens:
-            raise SyntaxError("unexpected EOF")
+            err_message = "unexpected EOF"
+            raise SyntaxError(err_message)
 
         token = tokens.pop(0)
 
         if token == "(":
             if not tokens:
-                raise SyntaxError('missing operation after "("')
+                err_message = 'missing operation after "("'
+                raise SyntaxError(err_message)
             op_token = tokens.pop(0)
             try:
                 op = Operation(op_token)
@@ -145,10 +149,10 @@ class Parser:
             tokens.pop(0)  # remove ')'
             return Exp(operation=op, operands=args)
 
-        elif token == ")":
-            raise SyntaxError("unexpected ')'")
-        else:
-            return self.atom(token)
+        if token == ")":
+            err_message = "unexpected ')'"
+            raise SyntaxError(err_message)
+        return self.atom(token)
 
     def atom(self, token: str) -> Atom:
         try:
@@ -184,51 +188,41 @@ class Generator:
         self.program = program
         self.PC = 0
 
-    def generate(
-        self,
-        expression: Union[Exp, Atom],
-        dst_type: Union[Address, Registers.Registers, Number, None],
-    ):
+    def generate(self, expression: Exp | Atom) -> Address | Registers.Registers | None:
         if isinstance(expression, Atom):
             return self.handle_atom(expression)
-        elif isinstance(expression, Exp):
+        if isinstance(expression, Exp):
             op = expression.operation
             if isinstance(op, Operation):
-                return self.handlers_map["binop"](op, expression.operands, dst_type)
-            elif isinstance(op, Atom):
-                if isinstance(op.value, Symbol):
-                    if op.value.value in self.handlers_map:
-                        return self.handlers_map[op.value.value](
-                            expression.operands, dst_type
-                        )
-                    else:
-                        raise NotImplementedError(
-                            f"function {op.value.value} not handled"
-                        )
-                else:
-                    raise RuntimeError(f"operation: f{op}")
+                return self.handlers_map["binop"](op, expression.operands)
+            if isinstance(op, Atom):
+                return self.handlers_map[op.value.value](expression.operands)
+        err_message = f"operation: f{op}"
+        raise RuntimeError(err_message)
 
-    def handle_begin(self, operands: list[Exp], dst_type) -> None:
-        [self.generate(operand, dst_type=Address) for operand in operands]
+    def handle_begin(self, operands: list[Exp]) -> None:
+        [self.generate(operand) for operand in operands]
 
-    def handle_atom(self, atom: Atom) -> Union[Address, Registers.Registers]:
+    def handle_atom(self, atom: Atom) -> Address | Registers.Registers:
         if isinstance(atom.value, Symbol):
-            address = self.var_allocator.allocate(atom.value.value)
-            return address
-        elif isinstance(atom.value, Number):
+            return self.var_allocator.allocate(atom.value.value)
+        if isinstance(atom.value, Number):
             reg = self.reg_controller.alloc()
             self.program.memory[Address(self.PC)] = Instruction(
-                Opcode.MOV_imm2r, [Term(reg)]
+                Opcode.MOV_imm2r,
+                [Term(reg)],
             )
             self.program.memory[Address(self.PC + 1)] = atom.value.value
             self.PC += 2
             return reg
-        else:
-            raise RuntimeError(f"{atom} isn't atom")
+        err_message = f"Atom {atom} isn't atom"
+        raise RuntimeError(err_message)
 
-    def handle_binop(self, operation: Operation, operands: list[Exp], dst_type):
-        first = self.generate(operands[0], dst_type=Registers.Registers)
-        second = self.generate(operands[1], dst_type=Registers.Registers)
+    def handle_binop(
+        self, operation: Operation, operands: list[Exp],
+    ) -> Registers.Registers:
+        first = self.generate(operands[0])
+        second = self.generate(operands[1])
         dst_reg = self.reg_controller.alloc()
 
         if operation in (Operation.LT, Operation.GT, Operation.EQ, Operation.NEQ):
@@ -259,7 +253,8 @@ class Generator:
         elif isinstance(first, Address):
             if isinstance(second, Address):
                 self.program.memory[Address(self.PC)] = Instruction(
-                    BINOP_OPCODE[operation][AddressingType.MEM2REG], [Term(dst_reg)]
+                    BINOP_OPCODE[operation][AddressingType.MEM2REG],
+                    [Term(dst_reg)],
                 )
                 self.program.memory[Address(self.PC + 1)] = first.value
                 self.program.memory[Address(self.PC + 2)] = second.value
@@ -277,11 +272,9 @@ class Generator:
 
         return dst_reg
 
-    def handle_setq(self, operands: list[Exp], dst_type) -> Address:
-        var_address: Address = self.generate(operands[0], dst_type=Address)
-        var_value: Union[Registers.Registers, Address] = self.generate(
-            operands[1], dst_type=Registers.Registers
-        )
+    def handle_setq(self, operands: list[Exp]) -> Address:
+        var_address: Address = self.generate(operands[0])
+        var_value: Registers.Registers | Address = self.generate(operands[1])
 
         if isinstance(var_value, Address):
             self.program.memory[Address(self.PC)] = Instruction(Opcode.MOV_mem2mem, [])
@@ -291,7 +284,8 @@ class Generator:
 
         elif isinstance(var_value, Registers.Registers):
             self.program.memory[Address(self.PC)] = Instruction(
-                Opcode.STORE_r2da, [Term(var_value)]
+                Opcode.STORE_r2da,
+                [Term(var_value)],
             )
             self.program.memory[Address(self.PC + 1)] = var_address.value
 
@@ -302,53 +296,53 @@ class Generator:
 
     # def _extract_cmp_op() ->
 
-    def handle_while(self, operands: list[Exp], dst_type) -> None:
-        start_PC = self.PC
-        cond_reg = self.generate(operands[0], dst_type=Registers.Registers)
+    def handle_while(self, operands: list[Exp]) -> None:
+        start_pc = self.PC
+        cond_reg = self.generate(operands[0])
         self.program.memory[Address(self.PC)] = Instruction(
-            COMPARE_OPCODE[operands[0].operation], [Term(cond_reg)]
+            COMPARE_OPCODE[operands[0].operation],
+            [Term(cond_reg)],
         )
         self.program.memory[Address(self.PC + 1)] = None  # placeholder
-        jmp_PC = self.PC + 1
+        jmp_pc = self.PC + 1
         self.PC += 2
 
         # generate loop body
-        [self.generate(operand, dst_type=Address) for operand in operands[1:]]
+        [self.generate(operand) for operand in operands[1:]]
 
         self.program.memory[Address(self.PC)] = Instruction(Opcode.JMP_imm, [])
-        self.program.memory[Address(self.PC + 1)] = start_PC
+        self.program.memory[Address(self.PC + 1)] = start_pc
 
         self.PC += 2
-        self.program.memory[Address(jmp_PC)] = self.PC
+        self.program.memory[Address(jmp_pc)] = self.PC
 
-    def handle_cond(self, operands: list[Exp], dst_type) -> None:
+    def handle_cond(self, operands: list[Exp]) -> None:
         for i, op in enumerate(operands):
             if i % 2 == 0:
-                cond_reg = self.generate(op, dst_type=Registers.Registers)
+                cond_reg = self.generate(op)
                 self.program.memory[Address(self.PC)] = Instruction(
-                    COMPARE_OPCODE[op.operation], [Term(cond_reg)]
+                    COMPARE_OPCODE[op.operation],
+                    [Term(cond_reg)],
                 )
                 self.program.memory[Address(self.PC + 1)] = None  # placeholder
-                jmp_PC = self.PC + 1
+                jmp_pc = self.PC + 1
                 self.PC += 2
             else:
-                self.generate(op, dst_type=Registers.Registers)
-                self.program.memory[Address(jmp_PC)] = self.PC
+                self.generate(op)
+                self.program.memory[Address(jmp_pc)] = self.PC
 
-    # def handle_defun(self, operands : list[Exp], dst_type) -> None:
+    # def handle_defun(self, operands : list[Exp]) -> None:
 
 
-# RegisterController - хранить в себе стек свободных регистров регистров, аллоцирует регистры и освобождает их
-# в регистрах могут лежать переменные (TODO частоиспользуемые) и какие-то промежуточные значения
 class RegisterController:
     def __init__(self):
         self.available = [3, 4, 5, 6, 7, 8, 9, 10]
 
-    def alloc(self):
+    def alloc(self) -> Registers.Registers:
         print(self.available)
         return Registers.Registers(self.available.pop())
 
-    def release(self, reg: Registers.Registers):
+    def release(self, reg: Registers.Registers) -> None:
         self.available.append(reg.value)
 
 
@@ -368,7 +362,7 @@ class VariableAllocator:
     def __getitem__(self, varname: str) -> int:
         return self.var_map[varname]
 
-    def __setitem__(self, varname: str, address: int):
+    def __setitem__(self, varname: str, address: int) -> None:
         self.var_map[varname] = address
 
 
@@ -427,15 +421,15 @@ if __name__ == "__main__":
     print()
     print(
         generator.generate(
-            parser.parse(tokenizer.tokenize(expression)), dst_type=Address
-        )
+            parser.parse(tokenizer.tokenize(expression)),
+        ),
     )
     print()
     inv_var_map = {v.value: k for k, v in var_allocator.var_map.items()}
-    for i in range(0, 40):
+    for i in range(40):
         if isinstance(memory[Address(i)], Instruction):
             print(f"{i}: {memory[Address(i)]}")
-        elif memory[Address(i)] in inv_var_map.keys():
+        elif memory[Address(i)] in inv_var_map:
             print(f"{i}({inv_var_map[memory[Address(i)]]}): {memory[Address(i)]}")
         else:
             print(f"{i}: {memory[Address(i)]}")
@@ -460,24 +454,8 @@ if __name__ == "__main__":
     for i in range(1000, 1010):
         if isinstance(memory[Address(i)], Instruction):
             print(f"{i}: {memory[Address(i)]}")
-        elif memory[Address(i)] in inv_var_map.keys():
+        elif memory[Address(i)] in inv_var_map:
             print(f"{i}({inv_var_map[memory[Address(i)]]}): {memory[Address(i)]}")
         else:
             print(f"{i}: {memory[Address(i)]}")
     print("\n")
-
-# доступ к immeadiate есть напрямую, потому что они хранятся отдельным словом в памяти и мы знаем их адрес
-
-# TODO
-# на данный момент все переменные хранятся в регистрах
-# минусы: ограниченное количество
-# плюсы: быстрый доступ
-
-# можно сохранять все переменные в память
-# минусы: долгий доступ, а что тогда вообще хранить в регистрах???
-# плюсы: неограниченное количество, (уже есть реализованные команды ADD, MUL, SUB, ... )
-# вероятно, immediate значения придется тоже складывать в память в к коммандах ADD, MUL, ...
-
-# хранить переменные и там и там
-# минусы: сложная реализация
-# плюсы: хайпово звучит

@@ -1,4 +1,4 @@
-from machine.enums import Signal, Sel, ALUOperations
+from machine.enums import ALUOperations, Sel, Signal
 
 mprogram = [
     # instruction fetch (0)
