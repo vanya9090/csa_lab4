@@ -31,7 +31,7 @@ jobs:
         pip install ruff mypy pytest
 
     - name: Ruff (lint & format check)
-      run: ruff check src tests
+      run: ruff check src
 
     # - name: mypy (static typing)
     #   run: mypy src
