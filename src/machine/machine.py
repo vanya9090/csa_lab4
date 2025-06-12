@@ -252,7 +252,6 @@ class ControlUnit:
         values = self.datapath.registers.registers_value.values()
         print(" ".join(f"{r.name:>4}" for r in keys))
         print(" ".join(f"{v:>4}" for v in values))
-        print()
 
 
         print('---------------------------------')

@@ -123,13 +123,11 @@ COMPARE_OPCODE: dict[Operation, Opcode] = {
 }
 
 
-# первоначальный этап обработки программы на LISP
 class Tokenizer:
     def tokenize(self, s: str) -> list[str]:
         return s.replace("(", " ( ").replace(")", " ) ").split()
 
 
-# создание AST
 class Parser:
     def parse(self, tokens: list[str]) -> Exp | Atom:
         if not tokens:
@@ -173,7 +171,6 @@ class Program:
         self.idx = 0
 
 
-# генерация asm кода из AST
 class Generator:
     def __init__(
         self,
@@ -184,7 +181,6 @@ class Generator:
         self.handlers_map: dict[str, Callable[[list[Exp]], Optional[Address]]] = {
             "begin": self.handle_begin,
             "setq": self.handle_setq,
-            # "binop": self.handle_binop,
             "defun": self.handle_defun,
             "while": self.handle_while,
             "cond": self.handle_cond,
@@ -271,6 +267,8 @@ class Generator:
         var_value = self.generate(operands[1])
         assert var_value is not None and isinstance(var_value, (Registers.Registers, Address))
 
+        print(var_address, var_value)
+
         if isinstance(var_value, Address):
             self.emit(Opcode.MOV_mem2mem, [], [var_value.value, var_address.value])
 
@@ -312,66 +310,40 @@ class Generator:
 
         return ret_reg
     
-    # def handle_defun(self, operands: list[Exp]) -> None:
-    #     # save funciton (name, args amount) in symbol table
-    #     # may be add information about local variables (amount)
-
-    #     self.program.memory[Address(self.PC)] = Instruction(Opcode.JMP_imm, [])
-    #     self.program.memory[Address(self.PC + 1)] = None  # placeholder
-    #     jmp_pc = self.PC + 1
-    #     self.PC += 2
-
-    #     fn_atom, params_exp, body_exprs = operands
-    #     fn_name = fn_atom.value.value
-    #     params = [a.value.value for a in params_exp.operands]
-
-    #     self.label_map[fn_name] = {
-    #         'address': self.PC,
-    #         'args_amount': None,
-    #         'locals_amount': None,
-    #     }
-
-
-
-    #     pass
-
-    # def handle_call(self, op: Operation, operands: list[Exp]) -> None:
-
-    #     pass
-
-    
-
     def handle_defun(self, operands: list[Exp]) -> None:
+        self.program.memory[Address(self.PC)] = Instruction(Opcode.JMP_imm, [])
+        self.program.memory[Address(self.PC + 1)] = None  # placeholder
         jmp_pc = self.PC + 1
-        self.emit(Opcode.JMP_imm, [], [None])
+        self.PC += 2
 
-        fn_atom, params_exp, body_exprs = operands
+        fn_atom, args_exp, body_exprs = operands
         fn_name = fn_atom.value.value
-        params = [a.value.value for a in params_exp.operands]
+        args = [a.value.value for a in args_exp.operands]
 
-        self.var_allocator.push_fn_scope(fn_name, params)
-        param_slots = [self.var_allocator[p] for p in params]
-        self.label_map[fn_name] = Address(self.PC)
+        self.var_allocator.push_fn_scope(fn_name, args)
+        args_slots = [self.var_allocator[p] for p in args]
+
+        self.label_map[fn_name] = {
+            'address': Address(self.PC),
+            'args_amount': len(args),
+            'locals_amount': None,
+        }
 
         tmp_ret = self.reg_controller.alloc()
         self.emit(Opcode.POP, [Term(tmp_ret)])
 
-        for slot in param_slots:
+        for slot in args_slots:
             tmp = self.reg_controller.alloc()
             self.emit(Opcode.POP, [Term(tmp)])
             self.emit(Opcode.STORE_r2da, [Term(tmp)], [slot.value])
             self.reg_controller.release(tmp)
-
-        add_reg = self.reg_controller.alloc()
-        self.emit(Opcode.MOV_imm2r, [Term(add_reg)], [len(param_slots)])
-        self.emit(Opcode.SUB_reg2reg, [Term(Registers.Registers.RSP), Term(Registers.Registers.RSP), Term(add_reg)])
-        self.reg_controller.release(add_reg)
 
         self.emit(Opcode.PUSH, [Term(tmp_ret)])
         self.reg_controller.release(tmp_ret)
 
         [self.generate(exp) for exp in body_exprs.operands[:-1]]
         ret_reg = self.generate(body_exprs.operands[-1])
+
 
         if isinstance(ret_reg, Address):
             self.emit(Opcode.MOV_da2r, [Term(Registers.Registers.R0)], [ret_reg.value])
@@ -388,8 +360,15 @@ class Generator:
 
         self.program.memory[Address(jmp_pc)] = self.PC
 
+
     def handle_call(self, op: Operation, operands: list[Exp | Atom]) -> Registers.Registers:
         fn_name = op.value.value
+
+        for param in self.var_allocator.scopes[-1]:
+            temp = reg_controller.alloc()
+            self.emit(Opcode.MOV_da2r, [Term(temp)], [self.var_allocator[param].value])
+            self.emit(Opcode.PUSH, [Term(temp)])
+            reg_controller.release(temp)
 
         for arg_expr in reversed(operands):
             value = self.generate(arg_expr)
@@ -403,27 +382,13 @@ class Generator:
                 self.emit(Opcode.PUSH, [Term(tmp)])
                 self.reg_controller.release(tmp)
 
-        self.emit(Opcode.CALL, [], [self.label_map[fn_name].value])
+        self.emit(Opcode.CALL, [], [self.label_map[fn_name]['address'].value])
 
-        for param in self.var_allocator.scopes[-1]:
+        for param in reversed(self.var_allocator.scopes[-1]):
             param_reg = self.reg_controller.alloc()
             self.emit(Opcode.POP, [Term(param_reg)])
             self.emit(Opcode.STORE_r2da, [Term(param_reg)], [self.var_allocator[param].value])
             self.reg_controller.release(param_reg)
-
-
-        # argc = len(operands)
-        # if argc:
-        #     tmp = self.reg_controller.alloc()
-        #     self.program.memory[Address(self.PC)] = Instruction(Opcode.MOV_imm2r, [Term(tmp)])
-        #     self.program.memory[Address(self.PC + 1)] = argc
-        #     self.program.memory[Address(self.PC + 2)] = Instruction(Opcode.ADD_reg2reg,
-        #                                                             [Term(Registers.Registers.RSP),
-        #                                                              Term(Registers.Registers.RSP),
-        #                                                              Term(tmp)])
-        #     self.PC += 3
-        #     self.reg_controller.release(tmp)
-
 
         return Registers.Registers.R0
 
@@ -445,7 +410,6 @@ class VariableAllocator:
     def __init__(self, base_address: int = 1000) -> None:
         self.next_free = base_address
         self.scopes: list[dict[str, Address]] = [{}]
-        self.fn_param_count: dict[str, int] = {}
 
     def _new_addr(self) -> Address:
         addr = Address(self.next_free)
@@ -470,7 +434,6 @@ class VariableAllocator:
             if p in frame:
                 raise SyntaxError(f"parameter {p!r} repeated")
             frame[p] = self._new_addr()
-        self.fn_param_count[fn_name] = len(params)
         self.scopes.append(frame)
 
     def pop_fn_scope(self) -> None:
@@ -481,14 +444,6 @@ class VariableAllocator:
 
     def __getitem__(self, name: str) -> Address:
         return self.get(name)
-
-    def __contains__(self, name: str) -> bool:
-        try:
-            self.get(name)
-        except KeyError:
-            return False
-        else:
-            return True
 
 
 # TODO fix scopes parser: if (( or )) work incorrect
@@ -505,9 +460,10 @@ if __name__ == "__main__":
     # """
     expression = """
     (begin
-        (setq a 4)
+        (setq a 5)
         (defun factorial (begin x)
             (begin
+                (setq b (+ x 1))
                 (cond
                     (<= x 1) (begin 1)
                     (> x 1) (begin (* x (factorial (- x 1))))
@@ -563,9 +519,6 @@ if __name__ == "__main__":
     tokenizer = Tokenizer()
     parser = Parser()
     generator = Generator(var_allocator, reg_controller, program)
-    print(tokenizer.tokenize(expression))
-    print(parser.parse(tokenizer.tokenize(expression)))
-    print()
     print(
         generator.generate(
             parser.parse(tokenizer.tokenize(expression)),
@@ -583,7 +536,7 @@ if __name__ == "__main__":
             print(f"{i}: {memory[Address(i)]}")
 
     dp.program_counter = 0
-    MAX_CYCLES = 200000
+    MAX_CYCLES = 100_000
     for cycle in range(MAX_CYCLES):
         dp.control_unit.run_single_micro()  
         # for r, v in dp.registers.registers_value.items():
