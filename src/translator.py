@@ -193,7 +193,7 @@ class Generator:
         self.reg_controller = reg_controller
         self.program = program
         self.PC = 0
-        self.label_map: dict[str, Address] = {}
+        self.label_map: dict[str, dict[str: Address | int]] = {}
 
     def generate(self, expression: Exp | Atom) -> Address | Registers.Registers | None:
         if isinstance(expression, Atom):
@@ -209,6 +209,13 @@ class Generator:
 
         err_message = f"operation: f{op}"
         raise RuntimeError(err_message)
+    
+    def emit(self, opcode: Opcode, terms: list[Term] = [], imm_terms: list[int | None] = []) -> None:
+        self.program.memory[Address(self.PC)] = Instruction(opcode, terms)
+        self.PC += 1
+        for imm in imm_terms:
+            self.program.memory[Address(self.PC)] = imm
+            self.PC += 1
 
     def handle_begin(self, operands: list[Exp]) -> None:
         [self.generate(operand) for operand in operands[:-1]]
@@ -219,12 +226,7 @@ class Generator:
             return self.var_allocator.allocate(atom.value.value)
         if isinstance(atom.value, Number):
             reg = self.reg_controller.alloc()
-            self.program.memory[Address(self.PC)] = Instruction(
-                Opcode.MOV_imm2r,
-                [Term(reg)],
-            )
-            self.program.memory[Address(self.PC + 1)] = atom.value.value
-            self.PC += 2
+            self.emit(Opcode.MOV_imm2r, [Term(reg)], [atom.value.value])
             return reg
         err_message = f"Atom {atom} isn't atom"
         raise RuntimeError(err_message)
@@ -244,43 +246,20 @@ class Generator:
 
         if isinstance(first, Registers.Registers):
             if isinstance(second, Registers.Registers):
-                self.program.memory[Address(self.PC)] = Instruction(
-                    BINOP_OPCODE[operation][AddressingType.REG2REG],
-                    [Term(dst_reg), Term(first), Term(second)],
-                )
-                self.PC += 1
-
+                self.emit(BINOP_OPCODE[operation][AddressingType.REG2REG], [Term(dst_reg), Term(first), Term(second)])
                 self.reg_controller.release(first)
                 self.reg_controller.release(second)
 
             elif isinstance(second, Address):
-                self.program.memory[Address(self.PC)] = Instruction(
-                    BINOP_OPCODE[operation][AddressingType.MIX2REG1],
-                    [Term(dst_reg), Term(first)],
-                )
-                self.program.memory[Address(self.PC + 1)] = second.value
-                self.PC += 2
-
+                self.emit(BINOP_OPCODE[operation][AddressingType.MIX2REG1], [Term(dst_reg), Term(first)], [second.value])
                 self.reg_controller.release(first)
 
         elif isinstance(first, Address):
             if isinstance(second, Address):
-                self.program.memory[Address(self.PC)] = Instruction(
-                    BINOP_OPCODE[operation][AddressingType.MEM2REG],
-                    [Term(dst_reg)],
-                )
-                self.program.memory[Address(self.PC + 1)] = first.value
-                self.program.memory[Address(self.PC + 2)] = second.value
-                self.PC += 3
+                self.emit(BINOP_OPCODE[operation][AddressingType.MEM2REG], [Term(dst_reg)], [first.value, second.value])
 
             elif isinstance(second, Registers.Registers):
-                self.program.memory[Address(self.PC)] = Instruction(
-                    BINOP_OPCODE[operation][AddressingType.MIX2REG2],
-                    [Term(dst_reg), Term(second)],
-                )
-                self.program.memory[Address(self.PC + 1)] = first.value
-                self.PC += 2
-
+                self.emit(BINOP_OPCODE[operation][AddressingType.MIX2REG2], [Term(dst_reg), Term(second)], [first.value])
                 self.reg_controller.release(second)
 
         return dst_reg
@@ -293,19 +272,10 @@ class Generator:
         assert var_value is not None and isinstance(var_value, (Registers.Registers, Address))
 
         if isinstance(var_value, Address):
-            self.program.memory[Address(self.PC)] = Instruction(Opcode.MOV_mem2mem, [])
-            self.program.memory[Address(self.PC + 1)] = var_value.value
-            self.program.memory[Address(self.PC + 2)] = var_address.value
-            self.PC += 3
+            self.emit(Opcode.MOV_mem2mem, [], [var_value.value, var_address.value])
 
         elif isinstance(var_value, Registers.Registers):
-            self.program.memory[Address(self.PC)] = Instruction(
-                Opcode.STORE_r2da,
-                [Term(var_value)],
-            )
-            self.program.memory[Address(self.PC + 1)] = var_address.value
-
-            self.PC += 2
+            self.emit(Opcode.STORE_r2da, [Term(var_value)], [var_address.value])
             self.reg_controller.release(var_value)
 
         return var_address
@@ -315,21 +285,13 @@ class Generator:
 
         start_pc = self.PC
         cond_reg = self.generate(operands[0])
-        self.program.memory[Address(self.PC)] = Instruction(
-            COMPARE_OPCODE[operands[0].operation],
-            [Term(cond_reg)],
-        )
-        self.program.memory[Address(self.PC + 1)] = None  # placeholder
         jmp_pc = self.PC + 1
-        self.PC += 2
+        self.emit(COMPARE_OPCODE[operands[0].operation], [Term(cond_reg)], [None])
 
         # generate loop body
         [self.generate(operand) for operand in operands[1:]]
 
-        self.program.memory[Address(self.PC)] = Instruction(Opcode.JMP_imm, [])
-        self.program.memory[Address(self.PC + 1)] = start_pc
-
-        self.PC += 2
+        self.emit(Opcode.JMP_imm, [], [start_pc])
         self.program.memory[Address(jmp_pc)] = self.PC
 
     def handle_cond(self, operands: list[Exp]) -> Registers.Registers:
@@ -337,36 +299,51 @@ class Generator:
         for i, op in enumerate(operands):
             if i % 2 == 0:
                 cond_reg = self.generate(op)
-                self.program.memory[Address(self.PC)] = Instruction(
-                    COMPARE_OPCODE[op.operation],
-                    [Term(cond_reg)],
-                )
-                self.program.memory[Address(self.PC + 1)] = None  # placeholder
                 jmp_pc = self.PC + 1
-                self.PC += 2
+                self.emit(COMPARE_OPCODE[op.operation], [Term(cond_reg)], [None])
             else:
                 tmp = self.generate(op)
                 if isinstance(tmp, Registers.Registers):
-                    self.program.memory[Address(self.PC)] = Instruction(Opcode.MOV_r2r,
-                                                                        [Term(ret_reg),
-                                                                        Term(tmp)])
-                    self.PC += 1
+                    self.emit(Opcode.MOV_r2r, [Term(ret_reg), Term(tmp)])
                     self.reg_controller.release(tmp)
                 elif isinstance(tmp, Address):
-                    self.program.memory[Address(self.PC)] = Instruction(Opcode.MOV_da2r,
-                                                                        [Term(ret_reg)])
-                    self.program.memory[Address(self.PC + 1)] = tmp.value
-                    self.PC += 2
+                    self.emit(Opcode.MOV_da2r, [Term(ret_reg)], [tmp.value])
                 self.program.memory[Address(jmp_pc)] = self.PC
 
         return ret_reg
     
+    # def handle_defun(self, operands: list[Exp]) -> None:
+    #     # save funciton (name, args amount) in symbol table
+    #     # may be add information about local variables (amount)
+
+    #     self.program.memory[Address(self.PC)] = Instruction(Opcode.JMP_imm, [])
+    #     self.program.memory[Address(self.PC + 1)] = None  # placeholder
+    #     jmp_pc = self.PC + 1
+    #     self.PC += 2
+
+    #     fn_atom, params_exp, body_exprs = operands
+    #     fn_name = fn_atom.value.value
+    #     params = [a.value.value for a in params_exp.operands]
+
+    #     self.label_map[fn_name] = {
+    #         'address': self.PC,
+    #         'args_amount': None,
+    #         'locals_amount': None,
+    #     }
+
+
+
+    #     pass
+
+    # def handle_call(self, op: Operation, operands: list[Exp]) -> None:
+
+    #     pass
+
+    
 
     def handle_defun(self, operands: list[Exp]) -> None:
-        self.program.memory[Address(self.PC)] = Instruction(Opcode.JMP_imm, [])
-        self.program.memory[Address(self.PC + 1)] = None  # placeholder
         jmp_pc = self.PC + 1
-        self.PC += 2
+        self.emit(Opcode.JMP_imm, [], [None])
 
         fn_atom, params_exp, body_exprs = operands
         fn_name = fn_atom.value.value
@@ -377,52 +354,35 @@ class Generator:
         self.label_map[fn_name] = Address(self.PC)
 
         tmp_ret = self.reg_controller.alloc()
-        self.program.memory[Address(self.PC)] = Instruction(Opcode.POP, [Term(tmp_ret)])
-        self.PC += 1
+        self.emit(Opcode.POP, [Term(tmp_ret)])
 
         for slot in param_slots:
             tmp = self.reg_controller.alloc()
-            self.program.memory[Address(self.PC)] = Instruction(Opcode.POP, [Term(tmp)])
-            self.program.memory[Address(self.PC + 1)] = Instruction(Opcode.STORE_r2da, [Term(tmp)])
-            self.program.memory[Address(self.PC + 2)] = slot.value
-            self.PC += 3
+            self.emit(Opcode.POP, [Term(tmp)])
+            self.emit(Opcode.STORE_r2da, [Term(tmp)], [slot.value])
             self.reg_controller.release(tmp)
 
         add_reg = self.reg_controller.alloc()
-        self.program.memory[Address(self.PC)] = Instruction(Opcode.MOV_imm2r, [Term(add_reg)])
-        self.program.memory[Address(self.PC + 1)] = len(param_slots)
-        self.program.memory[Address(self.PC + 2)] = Instruction(Opcode.SUB_reg2reg,
-                                                            [Term(Registers.Registers.RSP),
-                                                             Term(Registers.Registers.RSP),
-                                                             Term(add_reg)])
-        self.PC += 3
+        self.emit(Opcode.MOV_imm2r, [Term(add_reg)], [len(param_slots)])
+        self.emit(Opcode.SUB_reg2reg, [Term(Registers.Registers.RSP), Term(Registers.Registers.RSP), Term(add_reg)])
         self.reg_controller.release(add_reg)
 
-        self.program.memory[Address(self.PC)] = Instruction(Opcode.PUSH, [Term(tmp_ret)])
-        self.PC += 1
+        self.emit(Opcode.PUSH, [Term(tmp_ret)])
         self.reg_controller.release(tmp_ret)
 
         [self.generate(exp) for exp in body_exprs.operands[:-1]]
         ret_reg = self.generate(body_exprs.operands[-1])
 
         if isinstance(ret_reg, Address):
-            self.program.memory[Address(self.PC)] = Instruction(
-                Opcode.MOV_da2r, [Term(Registers.Registers.R0)],
-            )
-            self.program.memory[Address(self.PC + 1)] = ret_reg.value
-            self.PC += 2
+            self.emit(Opcode.MOV_da2r, [Term(Registers.Registers.R0)], [ret_reg.value])
         elif isinstance(ret_reg, Registers.Registers):
-            self.program.memory[Address(self.PC)] = Instruction(
-                Opcode.MOV_r2r, [Term(Registers.Registers.R0), Term(ret_reg)],
-            )
-            self.PC += 1
+            self.emit(Opcode.MOV_r2r, [Term(Registers.Registers.R0), Term(ret_reg)])
             self.reg_controller.release(ret_reg)
         else:
             err_message = f'incorrect operand type: {ret_reg}'
             raise RuntimeError(err_message)
 
-        self.program.memory[Address(self.PC)] = Instruction(Opcode.RET, [])
-        self.PC += 1
+        self.emit(Opcode.RET)
 
         self.var_allocator.pop_fn_scope()
 
@@ -435,28 +395,20 @@ class Generator:
             value = self.generate(arg_expr)
 
             if isinstance(value, Registers.Registers):
-                self.program.memory[Address(self.PC)] = Instruction(Opcode.PUSH, [Term(value)])
-                self.PC += 1
+                self.emit(Opcode.PUSH, [Term(value)])
                 self.reg_controller.release(value)
             else:
                 tmp = self.reg_controller.alloc()
-                self.program.memory[Address(self.PC)] = Instruction(Opcode.MOV_da2r, [Term(tmp)])
-                self.program.memory[Address(self.PC + 1)] = value.value
-                self.program.memory[Address(self.PC + 2)] = Instruction(Opcode.PUSH, [Term(tmp)])
-                self.PC += 3
+                self.emit(Opcode.MOV_da2r, [Term(tmp)], [value.value])
+                self.emit(Opcode.PUSH, [Term(tmp)])
                 self.reg_controller.release(tmp)
 
-        self.program.memory[Address(self.PC)] = Instruction(Opcode.CALL, [])
-        self.program.memory[Address(self.PC + 1)] = self.label_map[fn_name].value
-        self.PC += 2
-
+        self.emit(Opcode.CALL, [], [self.label_map[fn_name].value])
 
         for param in self.var_allocator.scopes[-1]:
             param_reg = self.reg_controller.alloc()
-            self.program.memory[Address(self.PC)] = Instruction(Opcode.POP, [Term(param_reg)])
-            self.program.memory[Address(self.PC + 1)] = Instruction(Opcode.STORE_r2da, [Term(param_reg)])
-            self.program.memory[Address(self.PC + 2)] = self.var_allocator[param].value
-            self.PC += 3
+            self.emit(Opcode.POP, [Term(param_reg)])
+            self.emit(Opcode.STORE_r2da, [Term(param_reg)], [self.var_allocator[param].value])
             self.reg_controller.release(param_reg)
 
 
@@ -577,10 +529,10 @@ if __name__ == "__main__":
     # expression = """
     # (begin
     #     (setq i 0)
-    #     (setq n 3)
+    #     (setq n 10)
     #     (setq sum 0)
     #     (setq sum2 0)
-    #     (while (< i n)
+    #     (while (<= i n)
     #         (setq sum (+ sum i))
     #         (setq sum2 (+ sum2 (* i i)))
     #         (setq i (+ i 1))
