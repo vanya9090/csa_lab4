@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Any, Union, Optional
+from typing import Union
 
 from isa import Instruction, Opcode, Term
 from machine.machine import Address, DataPath, Memory, Registers
@@ -24,7 +24,8 @@ class Atom:
     def as_symbol(self) -> str:
         if isinstance(self.value, Symbol):
             return self.value.value
-        raise TypeError("expected Symbol, got Number")
+        err_message = "expected Symbol, got Number"
+        raise TypeError(err_message)
 
 
 class Operation(Enum):
@@ -178,7 +179,7 @@ class Generator:
         reg_controller: "RegisterController",
         program: Program,
     ):
-        self.handlers_map: dict[str, Callable[[list[Exp]], Optional[Address]]] = {
+        self.handlers_map: dict[str, Callable[[list[Exp]], Address | None]] = {
             "begin": self.handle_begin,
             "setq": self.handle_setq,
             "defun": self.handle_defun,
@@ -205,8 +206,8 @@ class Generator:
 
         err_message = f"operation: f{op}"
         raise RuntimeError(err_message)
-    
-    def emit(self, opcode: Opcode, terms: list[Term] = [], imm_terms: list[int | None] = []) -> None:
+
+    def emit(self, opcode: Opcode, terms: list[Term], imm_terms: list[int | None]) -> None:
         self.program.memory[Address(self.PC)] = Instruction(opcode, terms)
         self.PC += 1
         for imm in imm_terms:
@@ -242,7 +243,7 @@ class Generator:
 
         if isinstance(first, Registers.Registers):
             if isinstance(second, Registers.Registers):
-                self.emit(BINOP_OPCODE[operation][AddressingType.REG2REG], [Term(dst_reg), Term(first), Term(second)])
+                self.emit(BINOP_OPCODE[operation][AddressingType.REG2REG], [Term(dst_reg), Term(first), Term(second)], [])
                 self.reg_controller.release(first)
                 self.reg_controller.release(second)
 
@@ -262,10 +263,12 @@ class Generator:
 
     def handle_setq(self, operands: list[Exp]) -> Address:
         var_address = self.generate(operands[0])
-        assert var_address is not None and isinstance(var_address, Address)
+        assert var_address is not None
+        assert isinstance(var_address, Address)
 
         var_value = self.generate(operands[1])
-        assert var_value is not None and isinstance(var_value, (Registers.Registers, Address))
+        assert var_value is not None
+        assert isinstance(var_value, Registers.Registers | Address)
 
         print(var_address, var_value)
 
@@ -302,14 +305,14 @@ class Generator:
             else:
                 tmp = self.generate(op)
                 if isinstance(tmp, Registers.Registers):
-                    self.emit(Opcode.MOV_r2r, [Term(ret_reg), Term(tmp)])
+                    self.emit(Opcode.MOV_r2r, [Term(ret_reg), Term(tmp)], [])
                     self.reg_controller.release(tmp)
                 elif isinstance(tmp, Address):
                     self.emit(Opcode.MOV_da2r, [Term(ret_reg)], [tmp.value])
                 self.program.memory[Address(jmp_pc)] = self.PC
 
         return ret_reg
-    
+
     def handle_defun(self, operands: list[Exp]) -> None:
         self.program.memory[Address(self.PC)] = Instruction(Opcode.JMP_imm, [])
         self.program.memory[Address(self.PC + 1)] = None  # placeholder
@@ -324,21 +327,21 @@ class Generator:
         args_slots = [self.var_allocator[p] for p in args]
 
         self.label_map[fn_name] = {
-            'address': Address(self.PC),
-            'args_amount': len(args),
-            'locals_amount': None,
+            "address": Address(self.PC),
+            "args_amount": len(args),
+            "locals_amount": None,
         }
 
         tmp_ret = self.reg_controller.alloc()
-        self.emit(Opcode.POP, [Term(tmp_ret)])
+        self.emit(Opcode.POP, [Term(tmp_ret)], [])
 
         for slot in args_slots:
             tmp = self.reg_controller.alloc()
-            self.emit(Opcode.POP, [Term(tmp)])
+            self.emit(Opcode.POP, [Term(tmp)], [])
             self.emit(Opcode.STORE_r2da, [Term(tmp)], [slot.value])
             self.reg_controller.release(tmp)
 
-        self.emit(Opcode.PUSH, [Term(tmp_ret)])
+        self.emit(Opcode.PUSH, [Term(tmp_ret)], [])
         self.reg_controller.release(tmp_ret)
 
         [self.generate(exp) for exp in body_exprs.operands[:-1]]
@@ -348,13 +351,13 @@ class Generator:
         if isinstance(ret_reg, Address):
             self.emit(Opcode.MOV_da2r, [Term(Registers.Registers.R0)], [ret_reg.value])
         elif isinstance(ret_reg, Registers.Registers):
-            self.emit(Opcode.MOV_r2r, [Term(Registers.Registers.R0), Term(ret_reg)])
+            self.emit(Opcode.MOV_r2r, [Term(Registers.Registers.R0), Term(ret_reg)], [])
             self.reg_controller.release(ret_reg)
         else:
-            err_message = f'incorrect operand type: {ret_reg}'
-            raise RuntimeError(err_message)
+            err_message = f"incorrect operand type: {ret_reg}"
+            raise TypeError(err_message)
 
-        self.emit(Opcode.RET)
+        self.emit(Opcode.RET, [], [])
 
         self.var_allocator.pop_fn_scope()
 
@@ -367,33 +370,36 @@ class Generator:
         for param in self.var_allocator.scopes[-1]:
             temp = reg_controller.alloc()
             self.emit(Opcode.MOV_da2r, [Term(temp)], [self.var_allocator[param].value])
-            self.emit(Opcode.PUSH, [Term(temp)])
+            self.emit(Opcode.PUSH, [Term(temp)], [])
             reg_controller.release(temp)
 
         for arg_expr in reversed(operands):
             value = self.generate(arg_expr)
 
             if isinstance(value, Registers.Registers):
-                self.emit(Opcode.PUSH, [Term(value)])
+                self.emit(Opcode.PUSH, [Term(value)], [])
                 self.reg_controller.release(value)
             else:
                 tmp = self.reg_controller.alloc()
                 self.emit(Opcode.MOV_da2r, [Term(tmp)], [value.value])
-                self.emit(Opcode.PUSH, [Term(tmp)])
+                self.emit(Opcode.PUSH, [Term(tmp)], [])
                 self.reg_controller.release(tmp)
 
-        self.emit(Opcode.CALL, [], [self.label_map[fn_name]['address'].value])
+        self.emit(Opcode.CALL, [], [self.label_map[fn_name]["address"].value])
 
         for param in reversed(self.var_allocator.scopes[-1]):
             param_reg = self.reg_controller.alloc()
-            self.emit(Opcode.POP, [Term(param_reg)])
-            self.emit(Opcode.STORE_r2da, [Term(param_reg)], [self.var_allocator[param].value])
+            self.emit(Opcode.POP, [Term(param_reg)], [])
+            self.emit(Opcode.STORE_r2da, [Term(param_reg)],[self.var_allocator[param].value])
             self.reg_controller.release(param_reg)
 
         return Registers.Registers.R0
 
-
+MAX_REGISTER = 10
+MIN_REGISTER = 4
 class RegisterController:
+    REGISTER_MIN = 4
+    REGISTER_MAX = 10
     def __init__(self):
         self.available = [4, 5, 6, 7, 8, 9, 10]
 
@@ -402,12 +408,12 @@ class RegisterController:
         return Registers.Registers(self.available.pop())
 
     def release(self, reg: Registers.Registers) -> None:
-        if 4 <= reg.value <= 10:
+        if MIN_REGISTER <= reg.value <= MAX_REGISTER:
             self.available.append(reg.value)
 
 
 class VariableAllocator:
-    def __init__(self, base_address: int = 1000) -> None:
+    def __init__(self, base_address: int = 900) -> None:
         self.next_free = base_address
         self.scopes: list[dict[str, Address]] = [{}]
 
@@ -432,7 +438,8 @@ class VariableAllocator:
         frame: dict[str, Address] = {}
         for p in params:
             if p in frame:
-                raise SyntaxError(f"parameter {p!r} repeated")
+                err_message = f"parameter {p!r} repeated"
+                raise SyntaxError(err_message)
             frame[p] = self._new_addr()
         self.scopes.append(frame)
 
@@ -453,7 +460,7 @@ if __name__ == "__main__":
 
 
     # expression = """
-    # (begin 
+    # (begin
     #     (defun square (begin x) (begin (* x x)))
     #     (setq a (square 12))
     # )
@@ -461,9 +468,10 @@ if __name__ == "__main__":
     expression = """
     (begin
         (setq a 5)
+        (defun square (begin x) (begin (* x x)))
         (defun factorial (begin x)
             (begin
-                (setq b (+ x 1))
+                (setq b (square x))
                 (cond
                     (<= x 1) (begin 1)
                     (> x 1) (begin (* x (factorial (- x 1))))
@@ -538,7 +546,7 @@ if __name__ == "__main__":
     dp.program_counter = 0
     MAX_CYCLES = 100_000
     for cycle in range(MAX_CYCLES):
-        dp.control_unit.run_single_micro()  
+        dp.control_unit.run_single_micro()
         # for r, v in dp.registers.registers_value.items():
             # print(f"  {r.name} = {v}", end="")
         # print(f" PC = {dp.program_counter}")
@@ -555,7 +563,7 @@ if __name__ == "__main__":
     print()
     # inv_var_map = {v.value: k for k, v in var_allocator.var_map.items()}
     inv_var_map = {}
-    for i in range(1000, 1010):
+    for i in range(900, 910):
         if isinstance(memory[Address(i)], Instruction):
             print(f"{i}: {memory[Address(i)]}")
         elif memory[Address(i)] in inv_var_map:

@@ -9,17 +9,16 @@ requires-python = ">=3.10"
 dependencies = ["pytest", "ruff", "mypy"]
 
 [tool.ruff]
+line-length = 130
 ignore = [
-    "RUF003",
-    "T201",
-    "ERA001",
-    "FIX002",
+    "T201", # prints
+    "ERA001", # commented code
+    "FIX002", # TODO
     "TD", # TODO
     "D", # docstrings
     "ANN204", # type annotation for special method
-    "EM", # error messages
-    "TC003", # always type annotation
-    "S101", # assert on
+    "TC003", # type checking block
+    "S101", # assertions
     "S105", # token isn't password
     "INP001", # init file
     "C901", # complex
