@@ -80,7 +80,7 @@ def assemble_line(src: str) -> list[Instruction | int]:
         if dst_k == "direct":
             return [Instruction(Opcode.STORE_r2da, [Term(src_v)]), dst_v]
         if dst_k == "indirect":
-            return [Instruction(Opcode.STORE_r2imm, [Term(src_v)]), dst_v]
+            return [Instruction(Opcode.STORE_r2ia, [Term(src_v)]), dst_v]
 
         raise SyntaxError("invalid destination in STORE")
 
@@ -127,7 +127,7 @@ def assemble_line(src: str) -> list[Instruction | int]:
         if len(addresses) != n:
             raise SyntaxError(f"ADD expects {n} addresses, but got {len(addresses)}")
 
-        return [Instruction(Opcode.ADD_mem, [Term(n), Term(dst_v)])] + addresses
+        return [Instruction(Opcode.NADD_mem, [Term(n), Term(dst_v)])] + addresses
 
     if mnem == "JMP":
         if len(ops) != 1:

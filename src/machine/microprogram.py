@@ -323,20 +323,20 @@ mprogram = [
     (Signal.LATCH_JUMP, Sel.Jump.ALU),
     (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
     (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER),
-    (Signal.EXECUTE_ALU, ALUOperations.ADD),  # set_flags(src_reg)
+    (Signal.EXECUTE_ALU, ALUOperations.ADD),
     (Signal.LATCH_FLAG, Sel.Flag.NEGATIVE),
     (Signal.LATCH_INVERSE, Sel.Inverse.IDENTITY),
     (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.CONDITION),
     (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
     # CALL immediate (297)
     # store ret address
+    (Signal.LATCH_RSP, Sel.RSP.MINUS_1),  # RSP --
     (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.RSP),  # rsp -> AR
     (Signal.LATCH_LEFT_ALU, Sel.LeftALU.PC),
-    (Signal.LATCH_RIGHT_ALU, Sel.RightALU.PLUS_1),
+    (Signal.LATCH_RIGHT_ALU, Sel.RightALU.PLUS_2),
     (Signal.EXECUTE_ALU, ALUOperations.ADD),
     (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.ALU),
     (Signal.LATCH_MEMORY, None),  # PC + 1 -> mem[RSP]
-    (Signal.LATCH_RSP, Sel.RSP.MINUS_1),  # RSP --
     # jump
     (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
     (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.CONTROL_UNIT),
@@ -349,7 +349,6 @@ mprogram = [
     (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.CONDITION),
     (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
     # RET (314)
-    (Signal.LATCH_RSP, Sel.RSP.PLUS_1),  # RSP ++
     (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.RSP),
     (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
     (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
@@ -357,8 +356,9 @@ mprogram = [
     (Signal.EXECUTE_ALU, ALUOperations.ADD),
     (Signal.LATCH_JUMP, Sel.Jump.ALU),
     (Signal.LATCH_FLAG, Sel.Flag.NONE),
+    (Signal.LATCH_RSP, Sel.RSP.PLUS_1),  # RSP ++
     (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.CONDITION),  # mem[RSP+1] -> PC
-    (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),  # PC + 1 -> PC
+    # (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),  # PC + 1 -> PC
     (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
     # NMUL direct address (321)
     (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
@@ -955,14 +955,14 @@ mprogram = [
     (Signal.LATCH_RSP, Sel.RSP.MINUS_1),
     (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.RSP),
     (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER),
-    (Signal.LATCH_LEFT_ALU, Sel.RightALU.ZERO),
+    (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
     (Signal.EXECUTE_ALU, ALUOperations.ADD),
     (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.ALU),
     (Signal.LATCH_MEMORY, None),
     (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
     (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
     # POP register + 9
-    (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.RSP)
+    (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.RSP),
     (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
     (Signal.LATCH_REGISTER, Sel.Register.DR),
     (Signal.LATCH_RSP, Sel.RSP.PLUS_1),

@@ -145,6 +145,8 @@ class ALU:
             self.__right_term = self.datapath.data_register
         if sel == Sel.RightALU.PLUS_1:
             self.__right_term = 1
+        if sel == Sel.RightALU.PLUS_2:
+            self.__right_term = 2
         if sel == Sel.RightALU.MINUS_1:
             self.__right_term = -1
         if sel == Sel.RightALU.ZERO:
@@ -152,8 +154,9 @@ class ALU:
 
     def perform(self, operation: ALUOperations) -> None:
         self.result = self.__operations[operation](self.__left_term, self.__right_term)
-        print("ALU result:", self.result, "ALU left:", self.__left_term, "ALU right:", self.__right_term)
         self.__set_flags()
+        print("ALU result:", self.result, "ALU left:", self.__left_term, "ALU right:", self.__right_term)
+        print("ALU flags: Z", self.flags[self.Flags.ZERO], "N", self.flags[self.Flags.NEGATIVE])
 
 
 class Registers:
@@ -241,8 +244,19 @@ class ControlUnit:
         self.mprogram = mprogram
 
     def decode(self, instruction: Instruction) -> None:
+        for i in range(1000, 1024):
+            print(self.datapath.memory[Address(i)], end=" ")
+
+        print()
+        keys = self.datapath.registers.registers_value.keys()
+        values = self.datapath.registers.registers_value.values()
+        print(" ".join(f"{r.name:>4}" for r in keys))
+        print(" ".join(f"{v:>4}" for v in values))
+        print()
+
+
         print('---------------------------------')
-        print(instruction)
+        print(f"PC: {self.datapath.program_counter} {instruction}")
         self.opcode: Opcode = instruction.opcode
         self.terms: list[Term] = instruction.terms
         if self.opcode in MOV_codes:
@@ -299,9 +313,9 @@ class ControlUnit:
             pass
         
         elif self.opcode == Opcode.PUSH:
-            self.datapath.select_left_register(self.terms[0])
+            self.datapath.select_left_register(self.terms[0].value)
         elif self.opcode == Opcode.POP:
-            self.datapath.select_dst_register(self.terms[0])
+            self.datapath.select_dst_register(self.terms[0].value)
 
         else:
             raise RuntimeError
@@ -419,6 +433,7 @@ class DataPath:
             elif self.alu.flags[self.selected_flag] ^ self.inverse_flag:
                 self.program_counter = self.jump_register
             else:
+                print(self.alu.flags[self.selected_flag], self.inverse_flag)
                 self.program_counter += 1
         if sel == Sel.ProgramCounter.NEXT:
             self.program_counter += 1

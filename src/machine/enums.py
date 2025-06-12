@@ -69,6 +69,7 @@ class Sel:
         PLUS_1: int = 3
         MINUS_1: int = 4
         ZERO: int = 5
+        PLUS_2: int = 3
 
     class Register(Enum):
         REGISTER: int = 0
@@ -97,7 +98,7 @@ class Sel:
 
     class RSP(Enum):
         PLUS_1: int = 0
-        MINUS_1: int = 0
+        MINUS_1: int = 1
 
 
 class ALUOperations(Enum):
