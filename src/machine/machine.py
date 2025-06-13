@@ -2,9 +2,11 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 
-from isa import Instruction, Opcode, Term
+from isa import Instruction, Opcode, Term, to_bytes
 from machine.enums import ALUOperations, Sel, Signal
 from machine.microprogram import mprogram
+
+import logging
 
 N_ALU_mem_operations = (
     Opcode.NADD_mem,
@@ -154,24 +156,19 @@ class ALU:
     def perform(self, operation: ALUOperations) -> None:
         self.result = self.__operations[operation](self.__left_term, self.__right_term)
         self.__set_flags()
-        print("ALU result:", self.result,
-              "ALU left:", self.__left_term,
-              "ALU right:", self.__right_term)
-        print("ALU flags: Z", self.flags[self.Flags.ZERO],
-              "N", self.flags[self.Flags.NEGATIVE])
 
 
 class Registers:
     class Registers(Enum):
-        RSP: int = 0
-        R0: int = 3
-        R1: int = 4
-        R2: int = 5
-        R3: int = 6
-        R4: int = 7
-        R5: int = 8
-        R6: int = 9
-        R7: int = 10
+        RSP: int = 8
+        R0: int = 0
+        R1: int = 1
+        R2: int = 2
+        R3: int = 3
+        R4: int = 4
+        R5: int = 5
+        R6: int = 6
+        R7: int = 7
 
     def __init__(self) -> None:
         self.registers_value: dict[Registers.Registers, int] = {
@@ -197,7 +194,6 @@ class Registers:
             self.registers_value[Registers.Registers.RSP] += 1
         if sel == Sel.RSP.MINUS_1:
             self.registers_value[Registers.Registers.RSP] -= 1
-        print("RSP:", self.registers_value[Registers.Registers.RSP], sel)
 
 
 @dataclass
@@ -355,18 +351,18 @@ class ControlUnit:
     def run_single_micro(self) -> None:
         mpc_now = self.mprogram_counter
         signal, *maybe_sel = self.mprogram[mpc_now]
-        # print(mpc_now, signal, maybe_sel[0])
         if maybe_sel and maybe_sel[0] is not None:
             self.execute_signal(signal, maybe_sel[0])
         else:
             self.execute_signal(signal)
-
+        self.datapath._tick += 1
         if self.mprogram_counter == mpc_now:
-            self.mprogram_counter += 1
+            self.mprogram_counter += 1        
 
 
 class DataPath:
     def __init__(self, input_address: int, output_address: int):
+        self._tick = 0
         self.alu: ALU = ALU(self)
         self.registers: Registers = Registers()
         self.control_unit: ControlUnit = ControlUnit(self)
@@ -380,10 +376,7 @@ class DataPath:
 
         self.data_register: int = 0
         self.address_register: int = 0
-        # TODO make list of chosen registers logic
-        self.chosen_registers: list[Registers.Registers] | None = None
-        # self.left_register : Registers.Registers = None
-        # self.right_register : Registers.Registers = None
+
         self.src_left_register: Registers.Registers = Registers.Registers.R7
         self.src_right_register: Registers.Registers = Registers.Registers.R6
         self.dst_register: Registers.Registers = Registers.Registers.R5
@@ -401,7 +394,6 @@ class DataPath:
         self.dst_register = register
 
     def latch_jump(self, sel : Sel.Jump) -> None:
-        print(self.alu.result)
         self.jump_register = self.alu.result
 
     def latch_flag(self, sel: Sel.Flag) -> None:
@@ -430,7 +422,6 @@ class DataPath:
             if self.selected_flag is None or self.alu.flags[self.selected_flag] ^ self.inverse_flag:
                 self.program_counter = self.jump_register
             else:
-                print(self.alu.flags[self.selected_flag], self.inverse_flag)
                 self.program_counter += 1
         if sel == Sel.ProgramCounter.NEXT:
             self.program_counter += 1
@@ -469,3 +460,50 @@ class DataPath:
 
     def latch_memory(self) -> None:
         self.memory[Address(self.address_register)] = self.data_register
+
+    def __repr__(self):
+        """Вернуть строковое представление состояния процессора."""
+
+        value = self.memory[Address(self.program_counter)]
+        if isinstance(value, Instruction):
+            opcode = value.opcode
+            instr_repr = str(opcode.name)
+
+            for term in value.terms:
+                instr_repr += f" {term.value.name}"
+            
+            i = 1
+            while isinstance(self.memory[Address(self.program_counter + i)], int):
+                instr_repr += f" {self.memory[Address(self.program_counter + i)]}"
+                i += 1
+                if i > 2: break
+
+            state_repr = "TICK: {:4} PC: {:3} SP: {:4} INSTR: {:3}".format(
+                self._tick,
+                self.program_counter,
+                self.registers[Registers.Registers.RSP],
+                instr_repr
+            )
+        else:
+            state_repr = "TICK: {:4} PC: {:3} SP: {:4} VALUE: {:3}".format(
+                self._tick,
+                self.program_counter,
+                self.registers[Registers.Registers.RSP],
+                value
+            )
+
+        return state_repr
+
+
+def simulation(input_address, output_address):
+    datapath = DataPath(input_address, output_address)
+    logging.debug
+
+
+
+def main():
+    pass
+
+
+if __name__ == '__main__':
+    pass
