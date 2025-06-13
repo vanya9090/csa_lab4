@@ -13,7 +13,7 @@ import machine
 import pytest
 import translator
 
-MAX_LOG = 4000
+MAX_LOG = 200000
 
 
 @pytest.mark.golden_test("golden/*.yml")

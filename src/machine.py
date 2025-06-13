@@ -8,7 +8,6 @@ from isa import OPCODE_TO_TERMS_AMOUNT, Instruction, Opcode, Term
 from microprogram import mprogram
 
 MAX_CYCLES = 1_000_000
-MAX_TERMS = 2
 
 class HltError(Exception):
     pass
@@ -485,11 +484,9 @@ class DataPath:
                 instr_repr += f" {term.value.name}"
 
             i = 1
-            while isinstance(self.memory[Address(self.program_counter + i)], int):
+            while isinstance(self.memory[Address(self.program_counter + i)], int) and opcode != Opcode.HLT:
                 instr_repr += f" {self.memory[Address(self.program_counter + i)]}"
                 i += 1
-                if i > MAX_TERMS:
-                    break
 
             state_repr = f"TICK: {self.tick:4} PC: {self.program_counter:3} SP: {rsp:4} INSTR: {instr_repr:3}"
         else:
@@ -554,8 +551,6 @@ def main(code_file, input_address, output_address) -> None:
 
     simulation(input_address, output_address, code)
 
-
-
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.DEBUG)
-    main("src/out.bin", 400, 401)
+    main("trash/out.bin", 400, 401)

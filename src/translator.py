@@ -553,7 +553,7 @@ def main(source, target) -> None:
         f.write(program_info)
 
 if __name__ == "__main__":
-    main("src/file.lisp", "src/out.bin")
+    main("trash/factorial.lisp", "trash/out.bin")
 
     # with open('out.bin', 'rb') as f:
     #     bin_code = f.read()

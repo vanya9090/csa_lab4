@@ -9,7 +9,7 @@ requires-python = ">=3.10"
 dependencies = ["pytest", "pytest-golden", "ruff", "mypy"]
 
 [pytest]
-enable_assertion_pass_hook = true
+enable_assertion_pass_hook=true
 
 [tool.ruff]
 line-length = 130
