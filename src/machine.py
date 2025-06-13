@@ -207,6 +207,7 @@ class Address:
 
 class Memory:
     def __init__(self, memory_size: int):
+        self.memory_size = memory_size
         self.memory: list[int | Instruction | None] = [0] * memory_size
 
     def __getitem__(self, key: Address) -> int | Instruction | None:
@@ -391,6 +392,9 @@ class DataPath:
         self.input_address: int = input_address
         self.output_address: int = output_address
 
+        self.input_buffer: list[str] = []
+        self.output_buffer: list[str] = []
+
     def select_left_register(self, register: Registers.Registers) -> None:
         self.src_left_register = register
 
@@ -439,7 +443,14 @@ class DataPath:
         if sel == Sel.DataRegister.ALU:
             self.data_register = self.alu.result
         elif sel == Sel.DataRegister.MEMORY:
-            self.data_register = self.memory[Address(self.address_register)]
+            if 0 > self.address_register > self.memory.memory_size:
+                raise ValueError('Memory cell number out of bounds')
+            elif self.address_register == self.output_address:
+                raise ValueError("Can't read from output port")
+            elif self.address_register == self.input_address:
+                self.data_register = self.input_buffer.pop(0)
+            else:
+                self.data_register = self.memory[Address(self.address_register)]
 
     def latch_address_register(self, sel: Sel.AddressRegister) -> None:
         assert isinstance(sel, Sel.AddressRegister), (
@@ -466,7 +477,14 @@ class DataPath:
             self.registers[self.dst_register] = self.registers[self.src_left_register]
 
     def latch_memory(self) -> None:
-        self.memory[Address(self.address_register)] = self.data_register
+        if 0 > self.address_register > self.memory.memory_size:
+            raise ValueError('Memory cell number out of bounds')
+        elif self.address_register == self.input_address:
+            raise ValueError("Can't write to input port")
+        elif self.address_register == self.output_address:
+            self.output_buffer += [self.data_register]
+        else:
+            self.memory[Address(self.address_register)] = self.data_register
 
     def hlt(self) -> None:
         raise HltError
@@ -529,7 +547,7 @@ def from_bytes(binary_code) -> list[Instruction | int]:
     return structured_code
 
 
-def simulation(input_address, output_address, code) -> None:
+def simulation(input_address, output_address, code) -> str:
     datapath = DataPath(input_address, output_address)
     for i, instr in enumerate(code):
         datapath.memory[Address(i)] = instr
@@ -544,12 +562,15 @@ def simulation(input_address, output_address, code) -> None:
     else:
         logging.error("Cycle limit hit")
 
+    return "".join(str(val) for val in datapath.output_buffer)
+
 def main(code_file, input_address, output_address) -> None:
     with open(code_file, "rb") as f:
         bin_code = f.read()
     code = from_bytes(bin_code)
 
-    simulation(input_address, output_address, code)
+    output = simulation(input_address, output_address, code)
+    print(output)
 
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.DEBUG)

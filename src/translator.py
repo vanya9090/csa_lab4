@@ -185,6 +185,8 @@ class Generator:
             "defun": self.handle_defun,
             "while": self.handle_while,
             "cond": self.handle_cond,
+            "print": self.handle_print,
+            "input": self.handle_input,
         }
         self.var_allocator = var_allocator
         self.reg_controller = reg_controller
@@ -237,6 +239,16 @@ class Generator:
             return dst_reg
         err_message = f"Atom {atom} isn't atom"
         raise RuntimeError(err_message)
+
+    def handle_print(self, operands: list[Exp]) -> None:
+        value = self.generate(operands[0])
+        if isinstance(value, Registers.Registers):
+            self.emit(Opcode.STORE_r2da, [Term(value)], [401])
+        elif isinstance(value, Address):
+            self.emit(Opcode.MOV_mem2mem, [], [value.value, 401])
+
+    def handle_input(self) -> None:
+        pass
 
     def handle_binop(
         self,
