@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
+
 class Opcode(Enum):
     MOV_r2r: int = 4
     MOV_rd2r: int = 10
@@ -88,23 +89,23 @@ class Opcode(Enum):
 
 
 OPCODE_TO_TERMS_AMOUNT: dict[Opcode, list[int]] = {
-    Opcode.MOV_r2r        : [2, 0],   
-    Opcode.MOV_rd2r       : [1, 1],   
-    Opcode.MOV_imm2r      : [1, 1],   
-    Opcode.MOV_da2r       : [1, 1],   
-    Opcode.MOV_ia2r       : [1, 0],   
+    Opcode.MOV_r2r        : [2, 0],
+    Opcode.MOV_rd2r       : [1, 1],
+    Opcode.MOV_imm2r      : [1, 1],
+    Opcode.MOV_da2r       : [1, 1],
+    Opcode.MOV_ia2r       : [1, 0],
 
     Opcode.INC_r          : [1, 0],
-    Opcode.INC_mem        : [0, 1],   
+    Opcode.INC_mem        : [0, 1],
     Opcode.DEC_r          : [1, 0],
     Opcode.DEC_mem        : [0, 1],
 
-    Opcode.STORE_r2rd     : [2, 1],   
-    Opcode.STORE_r2ri     : [2, 1],   
-    Opcode.STORE_r2da     : [1, 1],   
-    Opcode.STORE_r2ia     : [1, 1],   
+    Opcode.STORE_r2rd     : [2, 1],
+    Opcode.STORE_r2ri     : [2, 1],
+    Opcode.STORE_r2da     : [1, 1],
+    Opcode.STORE_r2ia     : [1, 1],
 
-    Opcode.NADD_mem       : [1, 2], 
+    Opcode.NADD_mem       : [1, 2],
     Opcode.NSUB_mem       : [1, 2],
     Opcode.NMUL_mem       : [1, 2],
     Opcode.NAND_mem       : [1, 2],
@@ -201,7 +202,7 @@ class Instruction:
 #         else:
 #             binary_bytes.extend(
 #                 ((instr >> 24) & 0xFF, (instr >> 16) & 0xFF, (instr >> 8) & 0xFF, instr & 0xFF)
-#             )            
+#             )
 
 #     return bytes(binary_bytes)
 
@@ -212,15 +213,15 @@ class Instruction:
 #     # Обрабатываем байты по 4 за раз для получения 32-битных инструкций
 #     i = 0
 #     while i + 3 < len(binary_code):
-        
+
 #         # Формируем 32-битное слово из 4 байтов
 #         binary_instr = (
 #             (binary_code[i] << 24) | (binary_code[i + 1] << 16) | (binary_code[i + 2] << 8) | binary_code[i + 3]
 #         )
 #         # Извлекаем опкод (старшие 10 бит)
-#         opcode_bin = (binary_instr >> 22) 
+#         opcode_bin = (binary_instr >> 22)
 #         opcode = Opcode(opcode_bin)
-        
+
 #         terms = []
 #         for j in range(OPCODE_TO_TERMS_AMOUNT[opcode][0]):
 #             value = binary_instr >> (19  - (j * 3)) & 0b111

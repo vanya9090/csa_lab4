@@ -3,8 +3,8 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Union
 
-from isa import Instruction, Opcode, Term, OPCODE_TO_TERMS_AMOUNT
-from machine import Address, DataPath, Memory, Registers, from_bytes
+from isa import OPCODE_TO_TERMS_AMOUNT, Instruction, Opcode, Term
+from machine import Address, Memory, Registers
 
 
 @dataclass
@@ -461,7 +461,7 @@ class VariableAllocator:
         return self.get(name)
 
 
-def to_bytes(code):
+def to_bytes(code) -> bytes:
     """Преобразует инструкции в бинарное представление"""
     binary_bytes = bytearray()
     for instr in code:
@@ -472,12 +472,12 @@ def to_bytes(code):
                 binary_instr = binary_instr | (term.value.value << (19 - i * 3))
             # Преобразуем 32-битное целое число в 4 байта (big-endian)
             binary_bytes.extend(
-                ((binary_instr >> 24) & 0xFF, (binary_instr >> 16) & 0xFF, (binary_instr >> 8) & 0xFF, binary_instr & 0xFF)
+                ((binary_instr >> 24) & 0xFF, (binary_instr >> 16) & 0xFF, (binary_instr >> 8) & 0xFF, binary_instr & 0xFF),
             )
         else:
             binary_bytes.extend(
-                ((instr >> 24) & 0xFF, (instr >> 16) & 0xFF, (instr >> 8) & 0xFF, instr & 0xFF)
-            )            
+                ((instr >> 24) & 0xFF, (instr >> 16) & 0xFF, (instr >> 8) & 0xFF, instr & 0xFF),
+            )
 
     return bytes(binary_bytes)
 
@@ -487,44 +487,47 @@ def to_hex(code: list[Instruction | int]) -> list[str]:
     binary_code = to_bytes(code)
     i = 0
     while i + 3 < len(binary_code):
-        instr_repr = ''
+        instr_repr = ""
         binary_instr = (
             (binary_code[i] << 24) | (binary_code[i + 1] << 16) | (binary_code[i + 2] << 8) | binary_code[i + 3]
         )
         opcode = Opcode(binary_instr >> 22)
-        instr_repr += f'{binary_instr:08X}'
+        instr_repr += f"{binary_instr:08X}"
 
-        for j in range(OPCODE_TO_TERMS_AMOUNT[opcode][1]):
+        for _ in range(OPCODE_TO_TERMS_AMOUNT[opcode][1]):
             i += 4
             binary_instr = (
                 (binary_code[i] << 24) | (binary_code[i + 1] << 16) | (binary_code[i + 2] << 8) | binary_code[i + 3]
             )
-            instr_repr += f'{binary_instr:08X}'
+            instr_repr += f"{binary_instr:08X}"
         code_repr += [instr_repr]
         i += 4
     return code_repr
 
 
 
-def program_debug_info(code: list[Instruction | int]):
+def program_debug_info(code: list[Instruction | int]) -> str:
     hex_repr = to_hex(code)
     program_repr = []
-    PCs = []
+    pcs = []
     for i, instr in enumerate(code):
-        instr_repr = ''
+        instr_repr = ""
         if isinstance(instr, Instruction):
-            PCs += [i]
+            pcs += [i]
             opcode = instr.opcode.name
-            instr_repr += f'{opcode} '
-            for i, term in enumerate(instr.terms):
-                instr_repr += f'{term.value.name} '
+            instr_repr += f"{opcode} "
+            for term in instr.terms:
+                instr_repr += f"{term.value.name} "
             program_repr += [instr_repr]
         else:
-            program_repr[-1] += f'{instr} ' 
-    return '\n'.join('{:4}: {:25} {}'.format(i, mnemonic, hex_repr) for i, mnemonic, hex_repr in zip(PCs, program_repr, hex_repr))
+            program_repr[-1] += f"{instr} "
+    return "\n".join(f"{i:4}: {mnemonic:25} {hex_repr}" for i, mnemonic, hex_repr in zip(pcs,
+                                                                                         program_repr,
+                                                                                         hex_repr,
+                                                                                         strict=False))
 
 
-def main(source, target):
+def main(source, target) -> None:
     """Функция запуска транслятора. Параметры -- исходный и целевой файлы."""
     reg_controller = RegisterController()
     var_allocator = VariableAllocator()
@@ -543,14 +546,14 @@ def main(source, target):
 
     program_info = program_debug_info(program[:generator.PC])
 
-    with open(target, 'wb') as f:
+    with open(target, "wb") as f:
         f.write(to_bytes(program[:generator.PC]))
 
-    with open(target + '.hex', 'w') as f:
+    with open(target + ".hex", "w") as f:
         f.write(program_info)
 
-if __name__ == '__main__':
-    main('src/file.lisp', 'src/out.bin')
+if __name__ == "__main__":
+    main("src/file.lisp", "src/out.bin")
 
     # with open('out.bin', 'rb') as f:
     #     bin_code = f.read()
@@ -561,7 +564,7 @@ if __name__ == '__main__':
 # if __name__ == "__main__":
 #     reg_controller = RegisterController()
 #     var_allocator = VariableAllocator()
-    
+
 
 #     # expression = """
 #     # (begin
@@ -634,7 +637,7 @@ if __name__ == '__main__':
 #         generator.generate(
 #             parser.parse(tokenizer.tokenize(expression)),
 #         ),
-#     )   
+#     )
 #     print(memory[Address(2)])
 #     print(to_bytes([memory[Address(2)]]))
 #     # inv_var_map = {v.value: k for k, v in var_allocator.var_map.items()}

@@ -1,12 +1,14 @@
+import logging
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 
-from isa import Instruction, Opcode, Term, OPCODE_TO_TERMS_AMOUNT
 from enums import ALUOperations, Sel, Signal
+from isa import OPCODE_TO_TERMS_AMOUNT, Instruction, Opcode, Term
 from microprogram import mprogram
 
-import logging
+MAX_CYCLES = 1_000_000
+MAX_TERMS = 2
 
 class HltError(Exception):
     pass
@@ -240,7 +242,7 @@ class ControlUnit:
             Signal.LATCH_REGISTER: self.datapath.latch_register,
             Signal.LATCH_MEMORY: self.datapath.latch_memory,
             Signal.LATCH_RSP: self.datapath.registers.latch_rsp,
-            Signal.HLT: self.datapath.hlt
+            Signal.HLT: self.datapath.hlt,
         }
 
         self.mprogram = mprogram
@@ -361,14 +363,14 @@ class ControlUnit:
             self.execute_signal(signal, maybe_sel[0])
         else:
             self.execute_signal(signal)
-        self.datapath._tick += 1
+        self.datapath.tick += 1
         if self.mprogram_counter == mpc_now:
-            self.mprogram_counter += 1        
+            self.mprogram_counter += 1
 
 
 class DataPath:
     def __init__(self, input_address: int, output_address: int):
-        self._tick = 0
+        self.tick = 0
         self.alu: ALU = ALU(self)
         self.registers: Registers = Registers()
         self.control_unit: ControlUnit = ControlUnit(self)
@@ -468,57 +470,49 @@ class DataPath:
         self.memory[Address(self.address_register)] = self.data_register
 
     def hlt(self) -> None:
-        raise HltError()
+        raise HltError
 
     def __repr__(self):
         """Вернуть строковое представление состояния процессора."""
 
         value = self.memory[Address(self.program_counter)]
+        rsp = self.registers[Registers.Registers.RSP]
         if isinstance(value, Instruction):
             opcode = value.opcode
             instr_repr = str(opcode.name)
 
             for term in value.terms:
                 instr_repr += f" {term.value.name}"
-            
+
             i = 1
             while isinstance(self.memory[Address(self.program_counter + i)], int):
                 instr_repr += f" {self.memory[Address(self.program_counter + i)]}"
                 i += 1
-                if i > 2: break
+                if i > MAX_TERMS:
+                    break
 
-            state_repr = "TICK: {:4} PC: {:3} SP: {:4} INSTR: {:3}".format(
-                self._tick,
-                self.program_counter,
-                self.registers[Registers.Registers.RSP],
-                instr_repr
-            )
+            state_repr = f"TICK: {self.tick:4} PC: {self.program_counter:3} SP: {rsp:4} INSTR: {instr_repr:3}"
         else:
-            state_repr = "TICK: {:4} PC: {:3} SP: {:4} VALUE: {:3}".format(
-                self._tick,
-                self.program_counter,
-                self.registers[Registers.Registers.RSP],
-                value
-            )
+            state_repr = f"TICK: {self.tick:4} PC: {self.program_counter:3} SP: {rsp:4} VALUE: {value:3}"
 
         return state_repr
-    
 
-def from_bytes(binary_code):
+
+def from_bytes(binary_code) -> list[Instruction | int]:
     """Преобразует бинарное представление машинного кода в структурированный формат."""
     structured_code = []
     # Обрабатываем байты по 4 за раз для получения 32-битных инструкций
     i = 0
     while i + 3 < len(binary_code):
-        
+
         # Формируем 32-битное слово из 4 байтов
         binary_instr = (
             (binary_code[i] << 24) | (binary_code[i + 1] << 16) | (binary_code[i + 2] << 8) | binary_code[i + 3]
         )
         # Извлекаем опкод (старшие 10 бит)
-        opcode_bin = (binary_instr >> 22) 
+        opcode_bin = (binary_instr >> 22)
         opcode = Opcode(opcode_bin)
-        
+
         terms = []
         for j in range(OPCODE_TO_TERMS_AMOUNT[opcode][0]):
             value = binary_instr >> (19  - (j * 3)) & 0b111
@@ -526,7 +520,7 @@ def from_bytes(binary_code):
 
         structured_code.append(Instruction(opcode, terms))
 
-        for j in range(OPCODE_TO_TERMS_AMOUNT[opcode][1]):
+        for _ in range(OPCODE_TO_TERMS_AMOUNT[opcode][1]):
             i += 4
             binary_instr = (
                 (binary_code[i] << 24) | (binary_code[i + 1] << 16) | (binary_code[i + 2] << 8) | binary_code[i + 3]
@@ -538,13 +532,12 @@ def from_bytes(binary_code):
     return structured_code
 
 
-def simulation(input_address, output_address, code):
-    MAX_CYCLES = 1_000_000
+def simulation(input_address, output_address, code) -> None:
     datapath = DataPath(input_address, output_address)
     for i, instr in enumerate(code):
         datapath.memory[Address(i)] = instr
-    
-    while datapath._tick < MAX_CYCLES:
+
+    while datapath.tick < MAX_CYCLES:
         try:
             datapath.control_unit.run_single_micro()
         except HltError:
@@ -554,8 +547,8 @@ def simulation(input_address, output_address, code):
     else:
         logging.error("Cycle limit hit")
 
-def main(code_file, input_address, output_address):
-    with open(code_file, 'rb') as f:
+def main(code_file, input_address, output_address) -> None:
+    with open(code_file, "rb") as f:
         bin_code = f.read()
     code = from_bytes(bin_code)
 
@@ -563,6 +556,6 @@ def main(code_file, input_address, output_address):
 
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     logging.getLogger().setLevel(logging.DEBUG)
-    main('src/out.bin', 400, 401)
+    main("src/out.bin", 400, 401)

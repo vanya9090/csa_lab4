@@ -969,5 +969,5 @@ mprogram = [
     (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
     (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
     # HLT
-    (Signal.HLT, None)
+    (Signal.HLT, None),
 ]

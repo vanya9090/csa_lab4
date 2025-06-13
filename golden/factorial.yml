@@ -25,62 +25,62 @@ out_code: !!binary |
   6AAAAAADh8+oAAAf6AAAAAADhoGoAAAAAAOGAT0AAAEHAABOgAAABrgAAAAAA4TNeAAABrgAAAAA
   A4TNeAAASkAAAAAAABLPuAAAH/gAAAAAA4QfwAAAAAADhNEAAAA=
 out_log: |-
-  DEBUG    root:machine.py:553 TICK:    1 PC:   0 SP: 1023 INSTR: MOV_imm2r R7 5
-  DEBUG    root:machine.py:553 TICK:    2 PC:   0 SP: 1023 INSTR: MOV_imm2r R7 5
-  DEBUG    root:machine.py:553 TICK:    3 PC:   0 SP: 1023 INSTR: MOV_imm2r R7 5
-  DEBUG    root:machine.py:553 TICK:    4 PC:   0 SP: 1023 INSTR: MOV_imm2r R7 5
-  DEBUG    root:machine.py:553 TICK:    5 PC:   1 SP: 1023 VALUE:   5
-  DEBUG    root:machine.py:553 TICK:    6 PC:   1 SP: 1023 VALUE:   5
-  DEBUG    root:machine.py:553 TICK:    7 PC:   1 SP: 1023 VALUE:   5
-  DEBUG    root:machine.py:553 TICK:    8 PC:   1 SP: 1023 VALUE:   5
-  DEBUG    root:machine.py:553 TICK:    9 PC:   2 SP: 1023 INSTR: STORE_r2da R7 900
-  DEBUG    root:machine.py:553 TICK:   10 PC:   2 SP: 1023 INSTR: STORE_r2da R7 900
-  DEBUG    root:machine.py:553 TICK:   11 PC:   2 SP: 1023 INSTR: STORE_r2da R7 900
-  DEBUG    root:machine.py:553 TICK:   12 PC:   2 SP: 1023 INSTR: STORE_r2da R7 900
-  DEBUG    root:machine.py:553 TICK:   13 PC:   2 SP: 1023 INSTR: STORE_r2da R7 900
-  DEBUG    root:machine.py:553 TICK:   14 PC:   2 SP: 1023 INSTR: STORE_r2da R7 900
-  DEBUG    root:machine.py:553 TICK:   15 PC:   3 SP: 1023 VALUE: 900
-  DEBUG    root:machine.py:553 TICK:   16 PC:   3 SP: 1023 VALUE: 900
-  DEBUG    root:machine.py:553 TICK:   17 PC:   3 SP: 1023 VALUE: 900
-  DEBUG    root:machine.py:553 TICK:   18 PC:   3 SP: 1023 VALUE: 900
-  DEBUG    root:machine.py:553 TICK:   19 PC:   3 SP: 1023 VALUE: 900
-  DEBUG    root:machine.py:553 TICK:   20 PC:   3 SP: 1023 VALUE: 900
-  DEBUG    root:machine.py:553 TICK:   21 PC:   3 SP: 1023 VALUE: 900
-  DEBUG    root:machine.py:553 TICK:   22 PC:   3 SP: 1023 VALUE: 900
-  DEBUG    root:machine.py:553 TICK:   23 PC:   3 SP: 1023 VALUE: 900
-  DEBUG    root:machine.py:553 TICK:   24 PC:   3 SP: 1023 VALUE: 900
-  DEBUG    root:machine.py:553 TICK:   25 PC:   3 SP: 1023 VALUE: 900
-  DEBUG    root:machine.py:553 TICK:   26 PC:   3 SP: 1023 VALUE: 900
-  DEBUG    root:machine.py:553 TICK:   27 PC:   4 SP: 1023 INSTR: JMP_imm 16
-  DEBUG    root:machine.py:553 TICK:   28 PC:   4 SP: 1023 INSTR: JMP_imm 16
-  DEBUG    root:machine.py:553 TICK:   29 PC:   4 SP: 1023 INSTR: JMP_imm 16
-  DEBUG    root:machine.py:553 TICK:   30 PC:   4 SP: 1023 INSTR: JMP_imm 16
-  DEBUG    root:machine.py:553 TICK:   31 PC:   4 SP: 1023 INSTR: JMP_imm 16
-  DEBUG    root:machine.py:553 TICK:   32 PC:   4 SP: 1023 INSTR: JMP_imm 16
-  DEBUG    root:machine.py:553 TICK:   33 PC:   5 SP: 1023 VALUE:  16
-  DEBUG    root:machine.py:553 TICK:   34 PC:   5 SP: 1023 VALUE:  16
-  DEBUG    root:machine.py:553 TICK:   35 PC:   5 SP: 1023 VALUE:  16
-  DEBUG    root:machine.py:553 TICK:   36 PC:   5 SP: 1023 VALUE:  16
-  DEBUG    root:machine.py:553 TICK:   37 PC:   5 SP: 1023 VALUE:  16
-  DEBUG    root:machine.py:553 TICK:   38 PC:   5 SP: 1023 VALUE:  16
-  DEBUG    root:machine.py:553 TICK:   39 PC:   5 SP: 1023 VALUE:  16
-  DEBUG    root:machine.py:553 TICK:   40 PC:   5 SP: 1023 VALUE:  16
-  DEBUG    root:machine.py:553 TICK:   41 PC:  16 SP: 1023 INSTR: JMP_imm 81
-  DEBUG    root:machine.py:553 TICK:   42 PC:  16 SP: 1023 INSTR: JMP_imm 81
-  DEBUG    root:machine.py:553 TICK:   43 PC:  16 SP: 1023 INSTR: JMP_imm 81
-  DEBUG    root:machine.py:553 TICK:   44 PC:  16 SP: 1023 INSTR: JMP_imm 81
-  DEBUG    root:machine.py:553 TICK:   45 PC:  16 SP: 1023 INSTR: JMP_imm 81
-  DEBUG    root:machine.py:553 TICK:   46 PC:  16 SP: 1023 INSTR: JMP_imm 81
-  DEBUG    root:machine.py:553 TICK:   47 PC:  17 SP: 1023 VALUE:  81
-  DEBUG    root:machine.py:553 TICK:   48 PC:  17 SP: 1023 VALUE:  81
-  DEBUG    root:machine.py:553 TICK:   49 PC:  17 SP: 1023 VALUE:  81
-  DEBUG    root:machine.py:553 TICK:   50 PC:  17 SP: 1023 VALUE:  81
-  DEBUG    root:machine.py:553 TICK:   51 PC:  17 SP: 1023 VALUE:  81
-  DEBUG    root:machine.py:553 TICK:   52 PC:  17 SP: 1023 VALUE:  81
-  DEBUG    root:machine.py:553 TICK:   53 PC:  17 SP: 1023 VALUE:  81
-  DEBUG    root:machine.py:553 TICK:   54 PC:  17 SP: 1023 VALUE:  81
-  DEBUG    root:machine.py:553 TICK:   55 PC:  81 SP: 1023 INSTR: MOV_da2r R7 900
-  DEBUG    root:machine.py:553 TICK:  EOF
+  DEBUG    root:machine.py:546 TICK:    1 PC:   0 SP: 1023 INSTR: MOV_imm2r R7 5
+  DEBUG    root:machine.py:546 TICK:    2 PC:   0 SP: 1023 INSTR: MOV_imm2r R7 5
+  DEBUG    root:machine.py:546 TICK:    3 PC:   0 SP: 1023 INSTR: MOV_imm2r R7 5
+  DEBUG    root:machine.py:546 TICK:    4 PC:   0 SP: 1023 INSTR: MOV_imm2r R7 5
+  DEBUG    root:machine.py:546 TICK:    5 PC:   1 SP: 1023 VALUE:   5
+  DEBUG    root:machine.py:546 TICK:    6 PC:   1 SP: 1023 VALUE:   5
+  DEBUG    root:machine.py:546 TICK:    7 PC:   1 SP: 1023 VALUE:   5
+  DEBUG    root:machine.py:546 TICK:    8 PC:   1 SP: 1023 VALUE:   5
+  DEBUG    root:machine.py:546 TICK:    9 PC:   2 SP: 1023 INSTR: STORE_r2da R7 900
+  DEBUG    root:machine.py:546 TICK:   10 PC:   2 SP: 1023 INSTR: STORE_r2da R7 900
+  DEBUG    root:machine.py:546 TICK:   11 PC:   2 SP: 1023 INSTR: STORE_r2da R7 900
+  DEBUG    root:machine.py:546 TICK:   12 PC:   2 SP: 1023 INSTR: STORE_r2da R7 900
+  DEBUG    root:machine.py:546 TICK:   13 PC:   2 SP: 1023 INSTR: STORE_r2da R7 900
+  DEBUG    root:machine.py:546 TICK:   14 PC:   2 SP: 1023 INSTR: STORE_r2da R7 900
+  DEBUG    root:machine.py:546 TICK:   15 PC:   3 SP: 1023 VALUE: 900
+  DEBUG    root:machine.py:546 TICK:   16 PC:   3 SP: 1023 VALUE: 900
+  DEBUG    root:machine.py:546 TICK:   17 PC:   3 SP: 1023 VALUE: 900
+  DEBUG    root:machine.py:546 TICK:   18 PC:   3 SP: 1023 VALUE: 900
+  DEBUG    root:machine.py:546 TICK:   19 PC:   3 SP: 1023 VALUE: 900
+  DEBUG    root:machine.py:546 TICK:   20 PC:   3 SP: 1023 VALUE: 900
+  DEBUG    root:machine.py:546 TICK:   21 PC:   3 SP: 1023 VALUE: 900
+  DEBUG    root:machine.py:546 TICK:   22 PC:   3 SP: 1023 VALUE: 900
+  DEBUG    root:machine.py:546 TICK:   23 PC:   3 SP: 1023 VALUE: 900
+  DEBUG    root:machine.py:546 TICK:   24 PC:   3 SP: 1023 VALUE: 900
+  DEBUG    root:machine.py:546 TICK:   25 PC:   3 SP: 1023 VALUE: 900
+  DEBUG    root:machine.py:546 TICK:   26 PC:   3 SP: 1023 VALUE: 900
+  DEBUG    root:machine.py:546 TICK:   27 PC:   4 SP: 1023 INSTR: JMP_imm 16
+  DEBUG    root:machine.py:546 TICK:   28 PC:   4 SP: 1023 INSTR: JMP_imm 16
+  DEBUG    root:machine.py:546 TICK:   29 PC:   4 SP: 1023 INSTR: JMP_imm 16
+  DEBUG    root:machine.py:546 TICK:   30 PC:   4 SP: 1023 INSTR: JMP_imm 16
+  DEBUG    root:machine.py:546 TICK:   31 PC:   4 SP: 1023 INSTR: JMP_imm 16
+  DEBUG    root:machine.py:546 TICK:   32 PC:   4 SP: 1023 INSTR: JMP_imm 16
+  DEBUG    root:machine.py:546 TICK:   33 PC:   5 SP: 1023 VALUE:  16
+  DEBUG    root:machine.py:546 TICK:   34 PC:   5 SP: 1023 VALUE:  16
+  DEBUG    root:machine.py:546 TICK:   35 PC:   5 SP: 1023 VALUE:  16
+  DEBUG    root:machine.py:546 TICK:   36 PC:   5 SP: 1023 VALUE:  16
+  DEBUG    root:machine.py:546 TICK:   37 PC:   5 SP: 1023 VALUE:  16
+  DEBUG    root:machine.py:546 TICK:   38 PC:   5 SP: 1023 VALUE:  16
+  DEBUG    root:machine.py:546 TICK:   39 PC:   5 SP: 1023 VALUE:  16
+  DEBUG    root:machine.py:546 TICK:   40 PC:   5 SP: 1023 VALUE:  16
+  DEBUG    root:machine.py:546 TICK:   41 PC:  16 SP: 1023 INSTR: JMP_imm 81
+  DEBUG    root:machine.py:546 TICK:   42 PC:  16 SP: 1023 INSTR: JMP_imm 81
+  DEBUG    root:machine.py:546 TICK:   43 PC:  16 SP: 1023 INSTR: JMP_imm 81
+  DEBUG    root:machine.py:546 TICK:   44 PC:  16 SP: 1023 INSTR: JMP_imm 81
+  DEBUG    root:machine.py:546 TICK:   45 PC:  16 SP: 1023 INSTR: JMP_imm 81
+  DEBUG    root:machine.py:546 TICK:   46 PC:  16 SP: 1023 INSTR: JMP_imm 81
+  DEBUG    root:machine.py:546 TICK:   47 PC:  17 SP: 1023 VALUE:  81
+  DEBUG    root:machine.py:546 TICK:   48 PC:  17 SP: 1023 VALUE:  81
+  DEBUG    root:machine.py:546 TICK:   49 PC:  17 SP: 1023 VALUE:  81
+  DEBUG    root:machine.py:546 TICK:   50 PC:  17 SP: 1023 VALUE:  81
+  DEBUG    root:machine.py:546 TICK:   51 PC:  17 SP: 1023 VALUE:  81
+  DEBUG    root:machine.py:546 TICK:   52 PC:  17 SP: 1023 VALUE:  81
+  DEBUG    root:machine.py:546 TICK:   53 PC:  17 SP: 1023 VALUE:  81
+  DEBUG    root:machine.py:546 TICK:   54 PC:  17 SP: 1023 VALUE:  81
+  DEBUG    root:machine.py:546 TICK:   55 PC:  81 SP: 1023 INSTR: MOV_da2r R7 900
+  DEBUG    root:machine.py:546 TICK:  EOF
 out_code_hex: |2-
      0: MOV_imm2r R7 5            0538000000000005
      2: STORE_r2da R7 900         1FF8000000000384
