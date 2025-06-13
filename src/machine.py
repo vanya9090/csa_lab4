@@ -444,10 +444,10 @@ class DataPath:
             self.data_register = self.alu.result
         elif sel == Sel.DataRegister.MEMORY:
             if 0 > self.address_register > self.memory.memory_size:
-                raise ValueError('Memory cell number out of bounds')
-            elif self.address_register == self.output_address:
+                raise ValueError("Memory cell number out of bounds")
+            if self.address_register == self.output_address:
                 raise ValueError("Can't read from output port")
-            elif self.address_register == self.input_address:
+            if self.address_register == self.input_address:
                 self.data_register = self.input_buffer.pop(0)
             else:
                 self.data_register = self.memory[Address(self.address_register)]
@@ -478,10 +478,10 @@ class DataPath:
 
     def latch_memory(self) -> None:
         if 0 > self.address_register > self.memory.memory_size:
-            raise ValueError('Memory cell number out of bounds')
-        elif self.address_register == self.input_address:
+            raise ValueError("Memory cell number out of bounds")
+        if self.address_register == self.input_address:
             raise ValueError("Can't write to input port")
-        elif self.address_register == self.output_address:
+        if self.address_register == self.output_address:
             self.output_buffer += [self.data_register]
         else:
             self.memory[Address(self.address_register)] = self.data_register
