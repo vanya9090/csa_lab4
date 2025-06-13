@@ -28,7 +28,8 @@ ignore = [
     "PLR0912", # many branches
     "ANN001",
     "ARG002",
-    "PTH123" # path open
+    "PTH123", # path open
+    "LOG015"
     ]
 select = ["ALL"]
 target-version = "py310"
