@@ -4,7 +4,7 @@ from enum import Enum, auto
 from typing import Union
 
 from isa import Instruction, Opcode, Term
-from machine.machine import Address, DataPath, Memory, Registers
+from machine.machine import Address, DataPath, Memory, Registers, from_bytes
 
 
 @dataclass
@@ -177,7 +177,7 @@ class Generator:
         self,
         var_allocator: "VariableAllocator",
         reg_controller: "RegisterController",
-        program: Program,
+        program: list[Instruction | int],
     ):
         self.handlers_map: dict[str, Callable[[list[Exp]], Address | None]] = {
             "begin": self.handle_begin,
@@ -207,24 +207,34 @@ class Generator:
         err_message = f"operation: f{op}"
         raise RuntimeError(err_message)
 
+    # def emit(self, opcode: Opcode, terms: list[Term], imm_terms: list[int | None]) -> None:
+    #     self.program.memory[Address(self.PC)] = Instruction(opcode, terms)
+    #     self.PC += 1
+    #     for imm in imm_terms:
+    #         self.program.memory[Address(self.PC)] = imm
+    #         self.PC += 1
+
     def emit(self, opcode: Opcode, terms: list[Term], imm_terms: list[int | None]) -> None:
-        self.program.memory[Address(self.PC)] = Instruction(opcode, terms)
+        self.program[self.PC] = Instruction(opcode, terms)
         self.PC += 1
         for imm in imm_terms:
-            self.program.memory[Address(self.PC)] = imm
+            self.program[self.PC] = imm
             self.PC += 1
 
     def handle_begin(self, operands: list[Exp]) -> None:
-        [self.generate(operand) for operand in operands[:-1]]
+        for operand in operands[:-1]:
+            value = self.generate(operand)
+            if isinstance(value, Registers.Registers):
+                self.reg_controller.release(value)
         return self.generate(operands[-1])
 
     def handle_atom(self, atom: Atom) -> Address | Registers.Registers:
         if isinstance(atom.value, Symbol):
             return self.var_allocator.allocate(atom.value.value)
         if isinstance(atom.value, Number):
-            reg = self.reg_controller.alloc()
-            self.emit(Opcode.MOV_imm2r, [Term(reg)], [atom.value.value])
-            return reg
+            dst_reg = self.reg_controller.alloc()
+            self.emit(Opcode.MOV_imm2r, [Term(dst_reg)], [atom.value.value])
+            return dst_reg
         err_message = f"Atom {atom} isn't atom"
         raise RuntimeError(err_message)
 
@@ -270,8 +280,6 @@ class Generator:
         assert var_value is not None
         assert isinstance(var_value, Registers.Registers | Address)
 
-        print(var_address, var_value)
-
         if isinstance(var_value, Address):
             self.emit(Opcode.MOV_mem2mem, [], [var_value.value, var_address.value])
 
@@ -288,36 +296,39 @@ class Generator:
         cond_reg = self.generate(operands[0])
         jmp_pc = self.PC + 1
         self.emit(COMPARE_OPCODE[operands[0].operation], [Term(cond_reg)], [None])
+        self.reg_controller.release(cond_reg)
 
         # generate loop body
-        [self.generate(operand) for operand in operands[1:]]
+        for operand in operands[1:]:
+            value = self.generate(operand)
+            if isinstance(value, Registers.Registers):
+                self.reg_controller.release(value)
 
         self.emit(Opcode.JMP_imm, [], [start_pc])
-        self.program.memory[Address(jmp_pc)] = self.PC
+        self.program.memory[jmp_pc] = self.PC
 
     def handle_cond(self, operands: list[Exp]) -> Registers.Registers:
-        ret_reg = self.reg_controller.alloc()
+        dst_reg = self.reg_controller.alloc()
         for i, op in enumerate(operands):
             if i % 2 == 0:
                 cond_reg = self.generate(op)
                 jmp_pc = self.PC + 1
                 self.emit(COMPARE_OPCODE[op.operation], [Term(cond_reg)], [None])
+                self.reg_controller.release(cond_reg)
             else:
                 tmp = self.generate(op)
                 if isinstance(tmp, Registers.Registers):
-                    self.emit(Opcode.MOV_r2r, [Term(ret_reg), Term(tmp)], [])
+                    self.emit(Opcode.MOV_r2r, [Term(dst_reg), Term(tmp)], [])
                     self.reg_controller.release(tmp)
                 elif isinstance(tmp, Address):
-                    self.emit(Opcode.MOV_da2r, [Term(ret_reg)], [tmp.value])
-                self.program.memory[Address(jmp_pc)] = self.PC
+                    self.emit(Opcode.MOV_da2r, [Term(dst_reg)], [tmp.value])
+                self.program[jmp_pc] = self.PC
 
-        return ret_reg
+        return dst_reg
 
     def handle_defun(self, operands: list[Exp]) -> None:
-        self.program.memory[Address(self.PC)] = Instruction(Opcode.JMP_imm, [])
-        self.program.memory[Address(self.PC + 1)] = None  # placeholder
         jmp_pc = self.PC + 1
-        self.PC += 2
+        self.emit(Opcode.JMP_imm, [], [None])
 
         fn_atom, args_exp, body_exprs = operands
         fn_name = fn_atom.value.value
@@ -361,17 +372,17 @@ class Generator:
 
         self.var_allocator.pop_fn_scope()
 
-        self.program.memory[Address(jmp_pc)] = self.PC
+        self.program[jmp_pc] = self.PC
 
 
     def handle_call(self, op: Operation, operands: list[Exp | Atom]) -> Registers.Registers:
         fn_name = op.value.value
 
         for param in self.var_allocator.scopes[-1]:
-            temp = reg_controller.alloc()
+            temp = self.reg_controller.alloc()
             self.emit(Opcode.MOV_da2r, [Term(temp)], [self.var_allocator[param].value])
             self.emit(Opcode.PUSH, [Term(temp)], [])
-            reg_controller.release(temp)
+            self.reg_controller.release(temp)
 
         for arg_expr in reversed(operands):
             value = self.generate(arg_expr)
@@ -395,16 +406,13 @@ class Generator:
 
         return Registers.Registers.R0
 
-MAX_REGISTER = 10
-MIN_REGISTER = 4
+MAX_REGISTER = 7
+MIN_REGISTER = 1
 class RegisterController:
-    REGISTER_MIN = 4
-    REGISTER_MAX = 10
     def __init__(self):
-        self.available = [4, 5, 6, 7, 8, 9, 10]
+        self.available = [1, 2, 3, 4, 5, 6, 7]
 
     def alloc(self) -> Registers.Registers:
-        print(self.available)
         return Registers.Registers(self.available.pop())
 
     def release(self, reg: Registers.Registers) -> None:
@@ -453,121 +461,166 @@ class VariableAllocator:
         return self.get(name)
 
 
-# TODO fix scopes parser: if (( or )) work incorrect
-if __name__ == "__main__":
+def to_bytes(code):
+    """Преобразует инструкции в бинарное представление"""
+    binary_bytes = bytearray()
+    for instr in code:
+        if isinstance(instr, Instruction):
+            # Получаем бинарный код операции
+            binary_instr = instr.opcode.value << 22
+            for i, term in enumerate(instr.terms):
+                binary_instr = binary_instr | (term.value.value << (19 - i * 3))
+            # Преобразуем 32-битное целое число в 4 байта (big-endian)
+            binary_bytes.extend(
+                ((binary_instr >> 24) & 0xFF, (binary_instr >> 16) & 0xFF, (binary_instr >> 8) & 0xFF, binary_instr & 0xFF)
+            )
+        else:
+            binary_bytes.extend(
+                ((instr >> 24) & 0xFF, (instr >> 16) & 0xFF, (instr >> 8) & 0xFF, instr & 0xFF)
+            )            
+
+    return bytes(binary_bytes)
+
+
+def main(source, target):
+    """Функция запуска транслятора. Параметры -- исходный и целевой файлы."""
     reg_controller = RegisterController()
     var_allocator = VariableAllocator()
-
-
-    # expression = """
-    # (begin
-    #     (defun square (begin x) (begin (* x x)))
-    #     (setq a (square 12))
-    # )
-    # """
-    expression = """
-    (begin
-        (setq a 5)
-        (defun square (begin x) (begin (* x x)))
-        (defun factorial (begin x)
-            (begin
-                (setq b (square x))
-                (cond
-                    (<= x 1) (begin 1)
-                    (> x 1) (begin (* x (factorial (- x 1))))
-                )
-            )
-        )
-        (setq a (factorial a))
-    )
-    """
-
-    # expression = """
-    #     (begin
-    #         (setq a (cond (> 5 3) (begin (setq i 1))
-    #                       (> 1 3) (begin (setq j 1))
-    #         ))
-    #     )
-    # """
-    # expression = """(+ 1 (* 2 3))"""
-    # expression = """
-    # (begin
-    #     (setq i 0)
-    #     (setq n 10)
-    #     (setq sum 0)
-    #     (setq sum2 0)
-    #     (while (<= i n)
-    #         (setq sum (+ sum i))
-    #         (setq sum2 (+ sum2 (* i i)))
-    #         (setq i (+ i 1))
-    #     )
-    #     (setq sum (* sum sum))
-    #     (setq res (- sum sum2))
-    # )
-    # """
-    #     expression = """
-    # (begin
-    #     (setq n 10)
-    #     (setq sum 0)
-    #     (setq sum2 0)
-    #     (setq i 0)
-    #     (while (< i n)
-    #         (setq sum (+ sum i))
-    #         (setq sum2 (+ sum2 (* i i)))
-    #         (setq i (+ i 1))
-    #     )
-    #     (setq num (+ 1 2))
-    # )
-    #     """
-    dp = DataPath(input_address=0, output_address=0)
-
-    memory = dp.memory
-    program = Program(memory)
+    program = [0] * 1024
 
     tokenizer = Tokenizer()
     parser = Parser()
     generator = Generator(var_allocator, reg_controller, program)
-    print(
-        generator.generate(
-            parser.parse(tokenizer.tokenize(expression)),
-        ),
-    )
-    print()
-    # inv_var_map = {v.value: k for k, v in var_allocator.var_map.items()}
-    inv_var_map: dict[int, str] = {}
-    for i in range(generator.PC + 2):
-        if isinstance(memory[Address(i)], Instruction):
-            print(f"{i}: {memory[Address(i)]}")
-        elif memory[Address(i)] in inv_var_map:
-            print(f"{i}({inv_var_map[memory[Address(i)]]}): {memory[Address(i)]}")
-        else:
-            print(f"{i}: {memory[Address(i)]}")
 
-    dp.program_counter = 0
-    MAX_CYCLES = 100_000
-    for cycle in range(MAX_CYCLES):
-        dp.control_unit.run_single_micro()
-        # for r, v in dp.registers.registers_value.items():
-            # print(f"  {r.name} = {v}", end="")
-        # print(f" PC = {dp.program_counter}")
-        if dp.program_counter >= generator.PC:
-            print(f"\nProgram finished after {cycle + 1} micro-cycles.")
-            break
-    else:
-        print("cycle limit hit")
+    with open(source, encoding="utf-8") as f:
+        source = f.read()
 
-    print("\nRegister file:")
-    for r, v in dp.registers.registers_value.items():
-        print(f"  {r.name:3} = {v}")
+    generator.generate(parser.parse(tokenizer.tokenize(source)))
 
-    print()
-    # inv_var_map = {v.value: k for k, v in var_allocator.var_map.items()}
-    inv_var_map = {}
-    for i in range(900, 910):
-        if isinstance(memory[Address(i)], Instruction):
-            print(f"{i}: {memory[Address(i)]}")
-        elif memory[Address(i)] in inv_var_map:
-            print(f"{i}({inv_var_map[memory[Address(i)]]}): {memory[Address(i)]}")
-        else:
-            print(f"{i}: {memory[Address(i)]}")
-    print("\n")
+    with open(target, 'wb') as f:
+        f.write(to_bytes(program[:generator.PC]))
+
+if __name__ == '__main__':
+    main('src/file.lisp', 'out.bin')
+
+    # with open('out.bin', 'rb') as f:
+    #     bin_code = f.read()
+
+    # print(from_bytes(bin_code))
+
+# # TODO fix scopes parser: if (( or )) work incorrect
+# if __name__ == "__main__":
+#     reg_controller = RegisterController()
+#     var_allocator = VariableAllocator()
+    
+
+#     # expression = """
+#     # (begin
+#     #     (defun square (begin x) (begin (* x x)))
+#     #     (setq a (square 12))
+#     # )
+#     # """
+#     expression = """
+#     (begin
+#         (setq a 3)
+#         (defun square (begin x) (begin (* x x)))
+#         (defun factorial (begin x)
+#             (begin
+#                 (setq b (square x))
+#                 (cond
+#                     (<= x 1) (begin 1)
+#                     (> x 1) (begin (* x (factorial (- x 1))))
+#                 )
+#             )
+#         )
+#         (setq a (factorial a))
+#     )
+#     """
+#     # expression = """
+#     #     (begin
+#     #         (setq a (cond (> 5 3) (begin (setq i 1))
+#     #                       (> 1 3) (begin (setq j 1))
+#     #         ))
+#     #     )
+#     # """
+#     # expression = """(+ 1 (* 2 3))"""
+#     # expression = """
+#     # (begin
+#     #     (setq i 0)
+#     #     (setq n 10)
+#     #     (setq sum 0)
+#     #     (setq sum2 0)
+#     #     (while (<= i n)
+#     #         (setq sum (+ sum i))
+#     #         (setq sum2 (+ sum2 (* i i)))
+#     #         (setq i (+ i 1))
+#     #     )
+#     #     (setq sum (* sum sum))
+#     #     (setq res (- sum sum2))
+#     # )
+#     # """
+#     #     expression = """
+#     # (begin
+#     #     (setq n 10)
+#     #     (setq sum 0)
+#     #     (setq sum2 0)
+#     #     (setq i 0)
+#     #     (while (< i n)
+#     #         (setq sum (+ sum i))
+#     #         (setq sum2 (+ sum2 (* i i)))
+#     #         (setq i (+ i 1))
+#     #     )
+#     #     (setq num (+ 1 2))
+#     # )
+#     #     """
+#     dp = DataPath(input_address=0, output_address=0)
+
+#     memory = dp.memory
+#     program = Program(memory)
+
+#     tokenizer = Tokenizer()
+#     parser = Parser()
+#     generator = Generator(var_allocator, reg_controller, program)
+#     print(
+#         generator.generate(
+#             parser.parse(tokenizer.tokenize(expression)),
+#         ),
+#     )   
+#     print(memory[Address(2)])
+#     print(to_bytes([memory[Address(2)]]))
+#     # inv_var_map = {v.value: k for k, v in var_allocator.var_map.items()}
+#     inv_var_map: dict[int, str] = {}
+#     for i in range(generator.PC + 2):
+#         if isinstance(memory[Address(i)], Instruction):
+#             print(f"{i}: {memory[Address(i)]}")
+#         elif memory[Address(i)] in inv_var_map:
+#             print(f"{i}({inv_var_map[memory[Address(i)]]}): {memory[Address(i)]}")
+#         else:
+#             print(f"{i}: {memory[Address(i)]}")
+
+#     dp.program_counter = 0
+#     MAX_CYCLES = 1_000_000
+#     for cycle in range(MAX_CYCLES):
+#         dp.control_unit.run_single_micro()
+#         print(dp)
+#         if dp.program_counter >= generator.PC:
+#             print(f"\nProgram finished after {cycle + 1} micro-cycles.")
+#             break
+#     else:
+#         print("cycle limit hit")
+
+#     print("\nRegister file:")
+#     for r, v in dp.registers.registers_value.items():
+#         print(f"  {r.name:3} = {v}")
+
+#     print()
+#     # inv_var_map = {v.value: k for k, v in var_allocator.var_map.items()}
+#     inv_var_map = {}
+#     for i in range(900, 910):
+#         if isinstance(memory[Address(i)], Instruction):
+#             print(f"{i}: {memory[Address(i)]}")
+#         elif memory[Address(i)] in inv_var_map:
+#             print(f"{i}({inv_var_map[memory[Address(i)]]}): {memory[Address(i)]}")
+#         else:
+#             print(f"{i}: {memory[Address(i)]}")
+#     print("\n")

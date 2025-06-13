@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
-
 class Opcode(Enum):
     MOV_r2r: int = 4
     MOV_rd2r: int = 10
@@ -87,12 +86,91 @@ class Opcode(Enum):
     PUSH: int = XOR_mix2reg2 + 11
     POP: int = PUSH + 9
 
-# class TermType(Enum):
-#     REGISTER : int = 0
-#     REGISTER_INDIRECT : int = 1
-#     IMMEDIATE : int = 2
-#     DIRECT : int = 3
-#     INDIRECT : int = 4
+
+OPCODE_TO_TERMS_AMOUNT: dict[Opcode, list[int]] = {
+    Opcode.MOV_r2r        : [2, 0],   
+    Opcode.MOV_rd2r       : [1, 1],   
+    Opcode.MOV_imm2r      : [1, 1],   
+    Opcode.MOV_da2r       : [1, 1],   
+    Opcode.MOV_ia2r       : [1, 0],   
+
+    Opcode.INC_r          : [1, 0],
+    Opcode.INC_mem        : [0, 1],   
+    Opcode.DEC_r          : [1, 0],
+    Opcode.DEC_mem        : [0, 1],
+
+    Opcode.STORE_r2rd     : [2, 1],   
+    Opcode.STORE_r2ri     : [2, 1],   
+    Opcode.STORE_r2da     : [1, 1],   
+    Opcode.STORE_r2ia     : [1, 1],   
+
+    Opcode.NADD_mem       : [1, 2], 
+    Opcode.NSUB_mem       : [1, 2],
+    Opcode.NMUL_mem       : [1, 2],
+    Opcode.NAND_mem       : [1, 2],
+    Opcode.NOR_mem        : [1, 2],
+
+    Opcode.BEQZ           : [1, 1],
+    Opcode.BNEZ           : [1, 1],
+    Opcode.BGZ            : [1, 1],
+    Opcode.BLZ            : [1, 1],
+    Opcode.JMP_r          : [1, 0],
+    Opcode.JMP_imm        : [0, 1],
+
+    Opcode.CALL           : [0, 1],
+    Opcode.RET            : [0, 0],
+    Opcode.PUSH           : [1, 0],
+    Opcode.POP            : [1, 0],
+
+    Opcode.ADD_reg2reg    : [3, 0],
+    Opcode.SUB_reg2reg    : [3, 0],
+    Opcode.MUL_reg2reg    : [3, 0],
+    Opcode.DIV_reg2reg    : [3, 0],
+    Opcode.RMD_reg2reg    : [3, 0],
+    Opcode.AND_reg2reg    : [3, 0],
+    Opcode.OR_reg2reg     : [3, 0],
+    Opcode.XOR_reg2reg    : [3, 0],
+
+    Opcode.ADD_mem2reg    : [1, 2],
+    Opcode.SUB_mem2reg    : [1, 2],
+    Opcode.MUL_mem2reg    : [1, 2],
+    Opcode.DIV_mem2reg    : [1, 2],
+    Opcode.RMD_mem2reg    : [1, 2],
+    Opcode.AND_mem2reg    : [1, 2],
+    Opcode.OR_mem2reg     : [1, 2],
+    Opcode.XOR_mem2reg    : [1, 2],
+
+    Opcode.ADD_mem2mem    : [0, 3],
+    Opcode.SUB_mem2mem    : [0, 3],
+    Opcode.MUL_mem2mem    : [0, 3],
+    Opcode.DIV_mem2mem    : [0, 3],
+    Opcode.RMD_mem2mem    : [0, 3],
+    Opcode.AND_mem2mem    : [0, 3],
+    Opcode.OR_mem2mem     : [0, 3],
+    Opcode.XOR_mem2mem    : [0, 3],
+
+    Opcode.ADD_mix2reg1   : [2, 1],
+    Opcode.SUB_mix2reg1   : [2, 1],
+    Opcode.MUL_mix2reg1   : [2, 1],
+    Opcode.DIV_mix2reg1   : [2, 1],
+    Opcode.RMD_mix2reg1   : [2, 1],
+    Opcode.AND_mix2reg1   : [2, 1],
+    Opcode.OR_mix2reg1    : [2, 1],
+    Opcode.XOR_mix2reg1   : [2, 1],
+
+    Opcode.ADD_mix2reg2   : [2, 1],
+    Opcode.SUB_mix2reg2   : [2, 1],
+    Opcode.MUL_mix2reg2   : [2, 1],
+    Opcode.DIV_mix2reg2   : [2, 1],
+    Opcode.RMD_mix2reg2   : [2, 1],
+    Opcode.AND_mix2reg2   : [2, 1],
+    Opcode.OR_mix2reg2    : [2, 1],
+    Opcode.XOR_mix2reg2   : [2, 1],
+
+    Opcode.MOV_mem2mem    : [0, 2],
+    Opcode.HLT            : [0, 0],
+}
+
 
 
 @dataclass
@@ -105,3 +183,58 @@ class Term:
 class Instruction:
     opcode: Opcode
     terms: list[Term]
+
+
+# def to_bytes(code):
+#     """Преобразует инструкции в бинарное представление"""
+#     binary_bytes = bytearray()
+#     for instr in code:
+#         if isinstance(instr, Instruction):
+#             # Получаем бинарный код операции
+#             binary_instr = instr.opcode.value << 22
+#             for i, term in enumerate(instr.terms):
+#                 binary_instr = binary_instr | (term.value.value << (19 - i * 3))
+#             # Преобразуем 32-битное целое число в 4 байта (big-endian)
+#             binary_bytes.extend(
+#                 ((binary_instr >> 24) & 0xFF, (binary_instr >> 16) & 0xFF, (binary_instr >> 8) & 0xFF, binary_instr & 0xFF)
+#             )
+#         else:
+#             binary_bytes.extend(
+#                 ((instr >> 24) & 0xFF, (instr >> 16) & 0xFF, (instr >> 8) & 0xFF, instr & 0xFF)
+#             )            
+
+#     return bytes(binary_bytes)
+
+
+# def from_bytes(binary_code):
+#     """Преобразует бинарное представление машинного кода в структурированный формат."""
+#     structured_code = []
+#     # Обрабатываем байты по 4 за раз для получения 32-битных инструкций
+#     i = 0
+#     while i + 3 < len(binary_code):
+        
+#         # Формируем 32-битное слово из 4 байтов
+#         binary_instr = (
+#             (binary_code[i] << 24) | (binary_code[i + 1] << 16) | (binary_code[i + 2] << 8) | binary_code[i + 3]
+#         )
+#         # Извлекаем опкод (старшие 10 бит)
+#         opcode_bin = (binary_instr >> 22) 
+#         opcode = Opcode(opcode_bin)
+        
+#         terms = []
+#         for j in range(OPCODE_TO_TERMS_AMOUNT[opcode][0]):
+#             value = binary_instr >> (19  - (j * 3)) & 0b111
+#             terms += [Term(value)]
+
+#         structured_code.append(Instruction(opcode, terms))
+
+#         for j in range(OPCODE_TO_TERMS_AMOUNT[opcode][1]):
+#             i += 4
+#             binary_instr = (
+#                 (binary_code[i] << 24) | (binary_code[i + 1] << 16) | (binary_code[i + 2] << 8) | binary_code[i + 3]
+#             )
+#             structured_code.append(binary_instr)
+
+#         i += 4
+
+#     return structured_code

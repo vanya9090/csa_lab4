@@ -2,7 +2,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 
-from isa import Instruction, Opcode, Term, to_bytes
+from isa import Instruction, Opcode, Term, OPCODE_TO_TERMS_AMOUNT
 from machine.enums import ALUOperations, Sel, Signal
 from machine.microprogram import mprogram
 
@@ -493,17 +493,56 @@ class DataPath:
             )
 
         return state_repr
+    
+
+def from_bytes(binary_code):
+    """Преобразует бинарное представление машинного кода в структурированный формат."""
+    structured_code = []
+    # Обрабатываем байты по 4 за раз для получения 32-битных инструкций
+    i = 0
+    while i + 3 < len(binary_code):
+        
+        # Формируем 32-битное слово из 4 байтов
+        binary_instr = (
+            (binary_code[i] << 24) | (binary_code[i + 1] << 16) | (binary_code[i + 2] << 8) | binary_code[i + 3]
+        )
+        # Извлекаем опкод (старшие 10 бит)
+        opcode_bin = (binary_instr >> 22) 
+        opcode = Opcode(opcode_bin)
+        
+        terms = []
+        for j in range(OPCODE_TO_TERMS_AMOUNT[opcode][0]):
+            value = binary_instr >> (19  - (j * 3)) & 0b111
+            terms += [Term(Registers.Registers(value))]
+
+        structured_code.append(Instruction(opcode, terms))
+
+        for j in range(OPCODE_TO_TERMS_AMOUNT[opcode][1]):
+            i += 4
+            binary_instr = (
+                (binary_code[i] << 24) | (binary_code[i + 1] << 16) | (binary_code[i + 2] << 8) | binary_code[i + 3]
+            )
+            structured_code.append(binary_instr)
+
+        i += 4
+
+    return structured_code
 
 
 def simulation(input_address, output_address):
+    MAX_CYCLES = 1_000_000
     datapath = DataPath(input_address, output_address)
-    logging.debug
+    
+    while datapath._tick < MAX_CYCLES:
+        datapath.control_unit.run_single_micro()
+        logging.debug("%s", datapath.control_unit)
+    else:
+        logging.error("Cycle limit hit")
 
-
-
-def main():
+def main(code_file):
     pass
+    
 
 
 if __name__ == '__main__':
-    pass
+    logging.setLogger().setLevel(logging.DEBUG)
