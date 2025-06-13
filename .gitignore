@@ -2,3 +2,4 @@ trash
 .DS_Store
 __pycache__
 src/assembler.py
+src/csa_lab4.egg-info

@@ -565,4 +565,4 @@ def main(code_file, input_address, output_address):
 
 if __name__ == '__main__':
     logging.getLogger().setLevel(logging.DEBUG)
-    main('out.bin', 400, 401)
+    main('src/out.bin', 400, 401)

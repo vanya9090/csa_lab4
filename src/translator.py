@@ -541,13 +541,16 @@ def main(source, target):
     program[generator.PC] = Instruction(Opcode.HLT, [])
     generator.PC += 1
 
-    print(program_debug_info(program[:generator.PC]))
+    program_info = program_debug_info(program[:generator.PC])
 
     with open(target, 'wb') as f:
         f.write(to_bytes(program[:generator.PC]))
 
+    with open(target + '.hex', 'w') as f:
+        f.write(program_info)
+
 if __name__ == '__main__':
-    main('src/file.lisp', 'out.bin')
+    main('src/file.lisp', 'src/out.bin')
 
     # with open('out.bin', 'rb') as f:
     #     bin_code = f.read()

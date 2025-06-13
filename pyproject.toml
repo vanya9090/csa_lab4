@@ -6,7 +6,10 @@ build-backend = "setuptools.build_meta"
 name = "csa-lab4"
 version = "0.1"
 requires-python = ">=3.10"
-dependencies = ["pytest", "ruff", "mypy"]
+dependencies = ["pytest", "pytest-golden", "ruff", "mypy"]
+
+[pytest]
+enable_assertion_pass_hook = true
 
 [tool.ruff]
 line-length = 130
