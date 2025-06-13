@@ -36,5 +36,5 @@ jobs:
     # - name: mypy (static typing)
     #   run: mypy src
 
-    # - name: Run pytest
-    #   run: pytest -q
+    - name: Run pytest
+      run: pytest
