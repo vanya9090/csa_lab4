@@ -4,7 +4,7 @@ from enum import Enum, auto
 from typing import Union
 
 from isa import Instruction, Opcode, Term
-from machine.machine import Address, DataPath, Memory, Registers, from_bytes
+from machine import Address, DataPath, Memory, Registers, from_bytes
 
 
 @dataclass

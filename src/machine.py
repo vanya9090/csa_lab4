@@ -3,8 +3,8 @@ from dataclasses import dataclass
 from enum import Enum
 
 from isa import Instruction, Opcode, Term, OPCODE_TO_TERMS_AMOUNT
-from machine.enums import ALUOperations, Sel, Signal
-from machine.microprogram import mprogram
+from enums import ALUOperations, Sel, Signal
+from microprogram import mprogram
 
 import logging
 
@@ -529,20 +529,27 @@ def from_bytes(binary_code):
     return structured_code
 
 
-def simulation(input_address, output_address):
+def simulation(input_address, output_address, code):
     MAX_CYCLES = 1_000_000
     datapath = DataPath(input_address, output_address)
+    for i, instr in enumerate(code):
+        datapath.memory[Address(i)] = instr
     
     while datapath._tick < MAX_CYCLES:
         datapath.control_unit.run_single_micro()
-        logging.debug("%s", datapath.control_unit)
+        logging.debug(str(datapath))
     else:
         logging.error("Cycle limit hit")
 
-def main(code_file):
-    pass
-    
+def main(code_file, input_address, output_address):
+    with open(code_file, 'rb') as f:
+        bin_code = f.read()
+    code = from_bytes(bin_code)
+
+    simulation(input_address, output_address, code)
+
 
 
 if __name__ == '__main__':
-    logging.setLogger().setLevel(logging.DEBUG)
+    logging.getLogger().setLevel(logging.DEBUG)
+    main('out.bin', 400, 401)
