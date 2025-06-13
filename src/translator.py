@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Union
 
-from isa import Instruction, Opcode, Term
+from isa import Instruction, Opcode, Term, OPCODE_TO_TERMS_AMOUNT
 from machine import Address, DataPath, Memory, Registers, from_bytes
 
 
@@ -482,6 +482,48 @@ def to_bytes(code):
     return bytes(binary_bytes)
 
 
+def to_hex(code: list[Instruction | int]) -> list[str]:
+    code_repr = []
+    binary_code = to_bytes(code)
+    i = 0
+    while i + 3 < len(binary_code):
+        instr_repr = ''
+        binary_instr = (
+            (binary_code[i] << 24) | (binary_code[i + 1] << 16) | (binary_code[i + 2] << 8) | binary_code[i + 3]
+        )
+        opcode = Opcode(binary_instr >> 22)
+        instr_repr += f'{binary_instr:08X}'
+
+        for j in range(OPCODE_TO_TERMS_AMOUNT[opcode][1]):
+            i += 4
+            binary_instr = (
+                (binary_code[i] << 24) | (binary_code[i + 1] << 16) | (binary_code[i + 2] << 8) | binary_code[i + 3]
+            )
+            instr_repr += f'{binary_instr:08X}'
+        code_repr += [instr_repr]
+        i += 4
+    return code_repr
+
+
+
+def program_debug_info(code: list[Instruction | int]):
+    hex_repr = to_hex(code)
+    program_repr = []
+    PCs = []
+    for i, instr in enumerate(code):
+        instr_repr = ''
+        if isinstance(instr, Instruction):
+            PCs += [i]
+            opcode = instr.opcode.name
+            instr_repr += f'{opcode} '
+            for i, term in enumerate(instr.terms):
+                instr_repr += f'{term.value.name} '
+            program_repr += [instr_repr]
+        else:
+            program_repr[-1] += f'{instr} ' 
+    return '\n'.join('{:4}: {:25} {}'.format(i, mnemonic, hex_repr) for i, mnemonic, hex_repr in zip(PCs, program_repr, hex_repr))
+
+
 def main(source, target):
     """Функция запуска транслятора. Параметры -- исходный и целевой файлы."""
     reg_controller = RegisterController()
@@ -498,6 +540,8 @@ def main(source, target):
     generator.generate(parser.parse(tokenizer.tokenize(source)))
     program[generator.PC] = Instruction(Opcode.HLT, [])
     generator.PC += 1
+
+    print(program_debug_info(program[:generator.PC]))
 
     with open(target, 'wb') as f:
         f.write(to_bytes(program[:generator.PC]))

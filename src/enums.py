@@ -31,6 +31,8 @@ class Signal(Enum):
 
     LATCH_RSP: int = 19
 
+    HLT: int = 20
+
 
 class Sel:
     class DataRegister(Enum):
