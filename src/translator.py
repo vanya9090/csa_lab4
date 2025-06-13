@@ -496,6 +496,8 @@ def main(source, target):
         source = f.read()
 
     generator.generate(parser.parse(tokenizer.tokenize(source)))
+    program[generator.PC] = Instruction(Opcode.HLT, [])
+    generator.PC += 1
 
     with open(target, 'wb') as f:
         f.write(to_bytes(program[:generator.PC]))

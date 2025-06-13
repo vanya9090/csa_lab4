@@ -27,7 +27,6 @@ class Opcode(Enum):
     BLZ: int = 283
     JMP_r: int = 224
     JMP_imm: int = 231
-    HLT: int = 23
     CALL: int = 297
     RET: int = 314
     LT: int = 0
@@ -85,6 +84,7 @@ class Opcode(Enum):
 
     PUSH: int = XOR_mix2reg2 + 11
     POP: int = PUSH + 9
+    HLT: int = POP + 6
 
 
 OPCODE_TO_TERMS_AMOUNT: dict[Opcode, list[int]] = {

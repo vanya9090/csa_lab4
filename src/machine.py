@@ -8,6 +8,9 @@ from microprogram import mprogram
 
 import logging
 
+class HltError(Exception):
+    pass
+
 N_ALU_mem_operations = (
     Opcode.NADD_mem,
     Opcode.NSUB_mem,
@@ -237,6 +240,7 @@ class ControlUnit:
             Signal.LATCH_REGISTER: self.datapath.latch_register,
             Signal.LATCH_MEMORY: self.datapath.latch_memory,
             Signal.LATCH_RSP: self.datapath.registers.latch_rsp,
+            Signal.HLT: self.datapath.hlt
         }
 
         self.mprogram = mprogram
@@ -311,6 +315,8 @@ class ControlUnit:
             self.datapath.select_left_register(self.terms[0].value)
         elif self.opcode == Opcode.POP:
             self.datapath.select_dst_register(self.terms[0].value)
+        elif self.opcode == Opcode.HLT:
+            pass
         else:
             raise RuntimeError
 
@@ -461,6 +467,9 @@ class DataPath:
     def latch_memory(self) -> None:
         self.memory[Address(self.address_register)] = self.data_register
 
+    def hlt(self) -> None:
+        raise HltError()
+
     def __repr__(self):
         """Вернуть строковое представление состояния процессора."""
 
@@ -536,7 +545,11 @@ def simulation(input_address, output_address, code):
         datapath.memory[Address(i)] = instr
     
     while datapath._tick < MAX_CYCLES:
-        datapath.control_unit.run_single_micro()
+        try:
+            datapath.control_unit.run_single_micro()
+        except HltError:
+            logging.debug("HLT")
+            break
         logging.debug(str(datapath))
     else:
         logging.error("Cycle limit hit")
