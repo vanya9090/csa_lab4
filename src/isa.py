@@ -9,37 +9,37 @@ class Opcode(Enum):
     MOV_imm2r: int = 20
     MOV_da2r: int = 26
     MOV_ia2r: int = 40
-    INC_r: int = 58
-    INC_mem: int = 64
-    DEC_r: int = 79
-    DEC_mem: int = 85
-    STORE_r2rd: int = 100
-    STORE_r2ri: int = 111
-    STORE_r2da: int = 127
-    STORE_r2ia: int = 141
-    NADD_mem: int = 160
-    NSUB_mem: int = 176
-    NMUL_mem: int = 321 + 3
-    NAND_mem: int = 208
-    NOR_mem: int = 192
-    BEQZ: int = 241
-    BNEZ: int = 255
-    BGZ: int = 269
-    BLZ: int = 283
-    JMP_r: int = 224
-    JMP_imm: int = 231
-    CALL: int = 297
-    RET: int = 314
+    INC_r: int = 59
+    INC_mem: int = 65
+    DEC_r: int = 80
+    DEC_mem: int = 86
+    STORE_r2rd: int = 101
+    STORE_r2ri: int = 112
+    STORE_r2da: int = 128
+    STORE_r2ia: int = 142
+    NADD_mem: int = 161
+    NSUB_mem: int = 177
+    NMUL_mem: int = 325
+    NAND_mem: int = 209
+    NOR_mem: int = 193
+    BEQZ: int = 242
+    BNEZ: int = 256
+    BGZ: int = 270
+    BLZ: int = 284
+    JMP_r: int = 225
+    JMP_imm: int = 232
+    CALL: int = 298
+    RET: int = 315
     LT: int = 0
     GT: int = 1
     EQ: int = 2
-    ADD_reg2reg: int = 337 + 3
+    ADD_reg2reg: int = 337 + 4
     ADD_mem2reg: int = ADD_reg2reg + 6
     ADD_mem2mem: int = ADD_mem2reg + 16
     ADD_mix2reg1: int = ADD_mem2mem + 21
     ADD_mix2reg2: int = ADD_mem2mem + 21
 
-    SUB_reg2reg: int = 407 + 3
+    SUB_reg2reg: int = 407 + 4
     SUB_mem2reg: int = SUB_reg2reg + 6
     SUB_mem2mem: int = SUB_mem2reg + 16
     SUB_mix2reg1: int = SUB_mem2mem + 21
@@ -81,7 +81,7 @@ class Opcode(Enum):
     XOR_mix2reg1: int = XOR_mem2mem + 21
     XOR_mix2reg2: int = XOR_mem2mem + 21
 
-    MOV_mem2mem: int = 391 + 3
+    MOV_mem2mem: int = 391 + 4
 
     PUSH: int = XOR_mix2reg2 + 11
     POP: int = PUSH + 9
@@ -93,7 +93,7 @@ OPCODE_TO_TERMS_AMOUNT: dict[Opcode, list[int]] = {
     Opcode.MOV_rd2r       : [1, 1],
     Opcode.MOV_imm2r      : [1, 1],
     Opcode.MOV_da2r       : [1, 1],
-    Opcode.MOV_ia2r       : [1, 0],
+    Opcode.MOV_ia2r       : [1, 1],
 
     Opcode.INC_r          : [1, 0],
     Opcode.INC_mem        : [0, 1],

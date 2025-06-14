@@ -40,6 +40,7 @@ mprogram = [
     (Signal.EXECUTE_ALU, ALUOperations.ADD),
     (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU),
     (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+
     (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DR),
     (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
     (Signal.EXECUTE_ALU, ALUOperations.ADD),
@@ -55,10 +56,13 @@ mprogram = [
     (Signal.EXECUTE_ALU, ALUOperations.ADD),
     (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU),
     (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+
     (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
     (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DR),
     (Signal.EXECUTE_ALU, ALUOperations.ADD),
+    (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU),
     (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+
     (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DR),
     (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
     (Signal.EXECUTE_ALU, ALUOperations.ADD),
