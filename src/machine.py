@@ -7,7 +7,7 @@ from enums import ALUOperations, Sel, Signal
 from isa import OPCODE_TO_TERMS_AMOUNT, Instruction, Opcode, Term
 from microprogram import mprogram
 
-MAX_CYCLES = 1_000_000
+MAX_CYCLES = 10000
 
 class HltError(Exception):
     pass
@@ -494,6 +494,8 @@ class DataPath:
 
         value = self.memory[Address(self.program_counter)]
         rsp = self.registers[Registers.Registers.RSP]
+        memory_slice = str([str(self.memory[Address(i)]) for i in range(900, 910)])
+        registers = ' '.join(f'{r.name}={v}' for r, v in self.registers.registers_value.items())
         if isinstance(value, Instruction):
             opcode = value.opcode
             instr_repr = str(opcode.name)
@@ -506,9 +508,9 @@ class DataPath:
                 instr_repr += f" {self.memory[Address(self.program_counter + i)]}"
                 i += 1
 
-            state_repr = f"TICK: {self.tick:4} PC: {self.program_counter:3} SP: {rsp:4} INSTR: {instr_repr:3}"
+            state_repr = f"TICK: {self.tick:4} PC: {self.program_counter:3} SP: {rsp:4} INSTR: {instr_repr:3} MEMORY: {memory_slice:10} REGS: {registers}"
         else:
-            state_repr = f"TICK: {self.tick:4} PC: {self.program_counter:3} SP: {rsp:4} VALUE: {value:3}"
+            state_repr = f"TICK: {self.tick:4} PC: {self.program_counter:3} SP: {rsp:4} VALUE: {value:3} MEMORY: {memory_slice:10} REGS: {registers} DR: {self.data_register}"
 
         return state_repr
 
@@ -546,11 +548,25 @@ def from_bytes(binary_code) -> list[Instruction | int]:
 
     return structured_code
 
+def from_bytes_data(binary_data) -> list[int]:
+    res = []
+    i = 0
+    while i + 3 < len(binary_data):
+        binary_value = (
+            (binary_data[i] << 24) | (binary_data[i + 1] << 16) | (binary_data[i + 2] << 8) | binary_data[i + 3]
+        )
+        res += [binary_value]
+        i += 4
+    return res
 
-def simulation(input_address, output_address, code) -> str:
+
+
+def simulation(input_address, output_address, code, data) -> str:
     datapath = DataPath(input_address, output_address)
     for i, instr in enumerate(code):
         datapath.memory[Address(i)] = instr
+    for i, value in enumerate(data):
+        datapath.memory[Address(i + 900)] = value
 
     while datapath.tick < MAX_CYCLES:
         try:
@@ -564,14 +580,19 @@ def simulation(input_address, output_address, code) -> str:
 
     return "".join(str(val) for val in datapath.output_buffer)
 
-def main(code_file, input_address, output_address) -> None:
-    with open(code_file, "rb") as f:
+def main(code_file, data_file, input_address, output_address) -> None:
+    with open(code_file, 'rb') as f:
         bin_code = f.read()
+    with open(data_file, 'rb') as f:
+        bin_data = f.read()
     code = from_bytes(bin_code)
+    data = from_bytes_data(bin_data)
+    print(code)
+    print(data)
 
-    output = simulation(input_address, output_address, code)
+    output = simulation(input_address, output_address, code, data)
     print(output)
 
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.DEBUG)
-    main("trash/out.bin", 400, 401)
+    main("trash/out.bin", "trash/out.bin_data.bin", 400, 401)

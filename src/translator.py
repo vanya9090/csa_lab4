@@ -56,6 +56,10 @@ class Exp:
     operation: Operation | Atom
     operands: list[Union[Atom, "Exp"]]
 
+@dataclass
+class String:
+    value: str
+
 
 BINOP_OPCODE: dict[Operation, dict[AddressingType, Opcode]] = {
     Operation.ADD: {
@@ -160,6 +164,8 @@ class Parser:
         return self.atom(token)
 
     def atom(self, token: str) -> Atom:
+        if token.startswith('"') and token.endswith('"'):
+            return Atom(String(token[1:-1]))
         try:
             return Atom(Number(int(token)))
         except ValueError:
@@ -187,12 +193,14 @@ class Generator:
             "cond": self.handle_cond,
             "print": self.handle_print,
             "input": self.handle_input,
+            "deref": self.handle_dereferencing,
         }
         self.var_allocator = var_allocator
         self.reg_controller = reg_controller
         self.program = program
         self.PC = 0
         self.label_map: dict[str, dict[str: Address | int]] = {}
+        self.string_pool: dict[str, Address] = {}
 
     def generate(self, expression: Exp | Atom) -> Address | Registers.Registers | None:
         if isinstance(expression, Atom):
@@ -209,19 +217,20 @@ class Generator:
         err_message = f"operation: f{op}"
         raise RuntimeError(err_message)
 
-    # def emit(self, opcode: Opcode, terms: list[Term], imm_terms: list[int | None]) -> None:
-    #     self.program.memory[Address(self.PC)] = Instruction(opcode, terms)
-    #     self.PC += 1
-    #     for imm in imm_terms:
-    #         self.program.memory[Address(self.PC)] = imm
-    #         self.PC += 1
-
     def emit(self, opcode: Opcode, terms: list[Term], imm_terms: list[int | None]) -> None:
         self.program[self.PC] = Instruction(opcode, terms)
         self.PC += 1
         for imm in imm_terms:
             self.program[self.PC] = imm
             self.PC += 1
+
+    def _store_string(self, text: str) -> Address:
+        addr = self.var_allocator._new_addr()
+        for i, ch in enumerate(text.encode() + b'\0'):
+            self.program[addr.value + i] = ch
+            self.var_allocator._new_addr()
+        return addr
+
 
     def handle_begin(self, operands: list[Exp]) -> None:
         for operand in operands[:-1]:
@@ -237,18 +246,47 @@ class Generator:
             dst_reg = self.reg_controller.alloc()
             self.emit(Opcode.MOV_imm2r, [Term(dst_reg)], [atom.value.value])
             return dst_reg
-        err_message = f"Atom {atom} isn't atom"
-        raise RuntimeError(err_message)
+        if isinstance(atom.value, String):
+            dst_reg = self.reg_controller.alloc()
+            addr = self._store_string(atom.value.value)
+            self.emit(Opcode.MOV_imm2r, [Term(dst_reg)], [addr.value])
+            return dst_reg
+        
+        raise RuntimeError(f"Atom {atom} isn't atom")
 
     def handle_print(self, operands: list[Exp]) -> None:
         value = self.generate(operands[0])
         if isinstance(value, Registers.Registers):
             self.emit(Opcode.STORE_r2da, [Term(value)], [401])
+            return value
+        
         elif isinstance(value, Address):
             self.emit(Opcode.MOV_mem2mem, [], [value.value, 401])
 
+    def handle_dereferencing(self, operands: list[Exp]) -> Registers.Registers:
+        value = self.generate(operands[0])
+        dst_reg = self.reg_controller.alloc()
+        self.emit(Opcode.MOV_ia2r, [Term(dst_reg)], [value.value])
+        return dst_reg
+
     def handle_input(self) -> None:
         pass
+
+    def handle_setq(self, operands: list[Exp]) -> Address:
+        var_address = self.generate(operands[0])
+        assert isinstance(var_address, Address)
+
+        var_value = self.generate(operands[1])
+        assert isinstance(var_value, Registers.Registers | Address)
+
+        if isinstance(var_value, Address):
+            self.emit(Opcode.MOV_mem2mem, [], [var_value.value, var_address.value])
+
+        elif isinstance(var_value, Registers.Registers):
+            self.emit(Opcode.STORE_r2da, [Term(var_value)], [var_address.value])
+            self.reg_controller.release(var_value)
+
+        return var_address
 
     def handle_binop(
         self,
@@ -283,24 +321,6 @@ class Generator:
 
         return dst_reg
 
-    def handle_setq(self, operands: list[Exp]) -> Address:
-        var_address = self.generate(operands[0])
-        assert var_address is not None
-        assert isinstance(var_address, Address)
-
-        var_value = self.generate(operands[1])
-        assert var_value is not None
-        assert isinstance(var_value, Registers.Registers | Address)
-
-        if isinstance(var_value, Address):
-            self.emit(Opcode.MOV_mem2mem, [], [var_value.value, var_address.value])
-
-        elif isinstance(var_value, Registers.Registers):
-            self.emit(Opcode.STORE_r2da, [Term(var_value)], [var_address.value])
-            self.reg_controller.release(var_value)
-
-        return var_address
-
     def handle_while(self, operands: list[Exp]) -> None:
         assert isinstance(operands[0].operation, Operation)
 
@@ -317,7 +337,7 @@ class Generator:
                 self.reg_controller.release(value)
 
         self.emit(Opcode.JMP_imm, [], [start_pc])
-        self.program.memory[jmp_pc] = self.PC
+        self.program[jmp_pc] = self.PC
 
     def handle_cond(self, operands: list[Exp]) -> Registers.Registers:
         dst_reg = self.reg_controller.alloc()
@@ -434,6 +454,7 @@ class RegisterController:
 
 class VariableAllocator:
     def __init__(self, base_address: int = 900) -> None:
+        self.base_address = base_address
         self.next_free = base_address
         self.scopes: list[dict[str, Address]] = [{}]
 
@@ -505,7 +526,8 @@ def to_hex(code: list[Instruction | int]) -> list[str]:
         )
         opcode = Opcode(binary_instr >> 22)
         instr_repr += f"{binary_instr:08X}"
-
+        
+        print(opcode)
         for _ in range(OPCODE_TO_TERMS_AMOUNT[opcode][1]):
             i += 4
             binary_instr = (
@@ -519,6 +541,7 @@ def to_hex(code: list[Instruction | int]) -> list[str]:
 
 
 def program_debug_info(code: list[Instruction | int]) -> str:
+    print(code)
     hex_repr = to_hex(code)
     program_repr = []
     pcs = []
@@ -551,7 +574,10 @@ def main(source, target) -> None:
 
     with open(source, encoding="utf-8") as f:
         source = f.read()
-
+    print(tokenizer.tokenize(source))
+    print()
+    print(parser.parse(tokenizer.tokenize(source)))
+    print()
     generator.generate(parser.parse(tokenizer.tokenize(source)))
     program[generator.PC] = Instruction(Opcode.HLT, [])
     generator.PC += 1
@@ -564,8 +590,13 @@ def main(source, target) -> None:
     with open(target + ".hex", "w") as f:
         f.write(program_info)
 
+    with open(target + '_data.bin', "wb") as f:
+        f.write(to_bytes(program[var_allocator.base_address:var_allocator.next_free]))
+
+
 if __name__ == "__main__":
-    main("trash/factorial.lisp", "trash/out.bin")
+    main("trash/hello.lisp", "trash/out.bin")
+
 
     # with open('out.bin', 'rb') as f:
     #     bin_code = f.read()
