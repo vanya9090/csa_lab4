@@ -484,7 +484,7 @@ class DataPath:
 
         value = self.memory[Address(self.program_counter)]
         rsp = self.registers[Registers.Registers.RSP]
-        memory_slice = str([str(self.memory[Address(i)]) for i in range(200, 210)])
+        memory_slice = str([str(self.memory[Address(i)]) for i in range(1014, 1024)])
         registers = ' '.join(f'{r.name}={v}' for r, v in self.registers.registers_value.items())
         if isinstance(value, Instruction):
             opcode = value.opcode
@@ -586,7 +586,10 @@ def main(code_file, data_file, input_file, input_address, output_address, is_cha
     if is_char_io:
         input_tokens = [ord(ch) for ch in input_text + '\0']
     else:
-        input_tokens = [int(str(ch)) for ch in input_text]
+        if input_text != '':
+            input_tokens = [int(input_text)]
+        else:
+            input_tokens = []
 
     code = from_bytes(bin_code)
     data = from_bytes_data(bin_data)
@@ -596,4 +599,4 @@ def main(code_file, data_file, input_file, input_address, output_address, is_cha
 
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.DEBUG)
-    main("trash/out.bin", "trash/out.bin_data.bin", "trash/input.txt", 400, 401, is_char_io=True)
+    main("trash/out.bin", "trash/out.bin_data.bin", "trash/input.txt", 400, 401, is_char_io=False)

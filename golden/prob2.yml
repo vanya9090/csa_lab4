@@ -1,0 +1,65 @@
+in_source: |-
+  (begin
+      (setq n input)
+      (setq i 0)
+      (setq sum 0)
+      (setq sum2 0)
+      (while (<= i n)
+          (setq sum (+ sum i))
+          (setq sum2 (+ sum2 (* i i)))
+          (setq i (+ i 1))
+      )
+      (setq sum (* sum sum))
+      (setq res (- sum sum2))
+      (print res)
+  )
+in_stdin: |
+is_char_io: 0
+out_log: |-
+  DEBUG    root:machine.py:569 TICK:    1 PC:   0 SP: 1023 INSTR: MOV_da2r R5 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:569 TICK:    2 PC:   0 SP: 1023 INSTR: MOV_da2r R5 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:569 TICK:    3 PC:   0 SP: 1023 INSTR: MOV_da2r R5 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:569 TICK:    4 PC:   0 SP: 1023 INSTR: MOV_da2r R5 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:569 TICK:    5 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:569 TICK:    6 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:569 TICK:    7 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:569 TICK:    8 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:569 TICK:    9 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:569 TICK:   10 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:569 TICK:   11 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:567 HLT
+  EOF
+out_stdout: |+
+  ============================================================
+
+out_code_hex: |2-
+     0: MOV_da2r R5 400           06A8000000000190
+     2: STORE_r2da R5 200         20280000000000C8
+     4: MOV_imm2r R5 0            0528000000000000
+     6: STORE_r2da R5 201         20280000000000C9
+     8: MOV_imm2r R5 0            0528000000000000
+    10: STORE_r2da R5 202         20280000000000CA
+    12: MOV_imm2r R5 0            0528000000000000
+    14: STORE_r2da R5 203         20280000000000CB
+    16: SUB_mem2reg R5 200 201    68680000000000C8000000C9
+    19: BLZ R5 41                 4728000000000029
+    21: ADD_mem2reg R5 202 201    56E80000000000CA000000C9
+    24: STORE_r2da R5 202         20280000000000CA
+    26: MUL_mem2reg R5 201 201    78A80000000000C9000000C9
+    29: ADD_mix2reg1 R4 R5 203    60250000000000CB
+    31: STORE_r2da R4 203         20200000000000CB
+    33: MOV_imm2r R4 1            0520000000000001
+    35: ADD_mix2reg1 R5 R4 201    602C0000000000C9
+    37: STORE_r2da R5 201         20280000000000C9
+    39: JMP_imm 16                3A00000000000010
+    41: MUL_mem2reg R5 202 202    78A80000000000CA000000CA
+    44: STORE_r2da R5 202         20280000000000CA
+    46: SUB_mem2reg R5 202 203    68680000000000CA000000CB
+    49: STORE_r2da R5 204         20280000000000CC
+    51: MOV_mem2mem 204 401       62C00000000000CC00000191
+    54: HLT                       D1400000
+out_code: !!binary |
+  BqgAAAAAAZAgKAAAAAAAyAUoAAAAAAAAICgAAAAAAMkFKAAAAAAAACAoAAAAAADKBSgAAAAAAAAg
+  KAAAAAAAy2hoAAAAAADIAAAAyUcoAAAAAAApVugAAAAAAMoAAADJICgAAAAAAMp4qAAAAAAAyQAA
+  AMlgJQAAAAAAyyAgAAAAAADLBSAAAAAAAAFgLAAAAAAAySAoAAAAAADJOgAAAAAAABB4qAAAAAAA
+  ygAAAMogKAAAAAAAymhoAAAAAADKAAAAyyAoAAAAAADMYsAAAAAAAMwAAAGR0UAAAA==

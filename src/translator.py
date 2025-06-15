@@ -648,7 +648,7 @@ def main(source, target) -> None:
 
 
 if __name__ == "__main__":
-    main("trash/hello_user_name.lisp", "trash/out.bin")
+    main("trash/prob2.lisp", "trash/out.bin")
 
 
     # with open('out.bin', 'rb') as f:
