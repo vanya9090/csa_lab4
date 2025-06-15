@@ -158,6 +158,7 @@ class ALU:
             self.__right_term = 0
 
     def perform(self, operation: ALUOperations) -> None:
+        print(operation, self.__left_term, self.__right_term)
         self.result = self.__operations[operation](self.__left_term, self.__right_term)
         self.__set_flags()
 
@@ -561,7 +562,7 @@ def from_bytes_data(binary_data) -> list[int]:
 
 
 
-def simulation(input_address, output_address, code, data) -> str:
+def simulation(input_address, output_address, code, data, is_char_io: bool) -> str:
     datapath = DataPath(input_address, output_address)
     for i, instr in enumerate(code):
         datapath.memory[Address(i)] = instr
@@ -577,10 +578,13 @@ def simulation(input_address, output_address, code, data) -> str:
         logging.debug(str(datapath))
     else:
         logging.error("Cycle limit hit")
+    
+    if is_char_io:
+        return "".join(chr(val) for val in datapath.output_buffer)
+    else:
+        return "".join(str(val) for val in datapath.output_buffer)
 
-    return "".join(str(val) for val in datapath.output_buffer)
-
-def main(code_file, data_file, input_address, output_address) -> None:
+def main(code_file, data_file, input_address, output_address, is_char_io: bool) -> None:
     with open(code_file, 'rb') as f:
         bin_code = f.read()
     with open(data_file, 'rb') as f:
@@ -590,9 +594,9 @@ def main(code_file, data_file, input_address, output_address) -> None:
     print(code)
     print(data)
 
-    output = simulation(input_address, output_address, code, data)
+    output = simulation(input_address, output_address, code, data, is_char_io)
     print(output)
 
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.DEBUG)
-    main("trash/out.bin", "trash/out.bin_data.bin", 400, 401)
+    main("trash/out.bin", "trash/out.bin_data.bin", 400, 401, is_char_io=False)

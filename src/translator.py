@@ -2,6 +2,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Union
+import re
 
 from isa import OPCODE_TO_TERMS_AMOUNT, Instruction, Opcode, Term
 from machine import Address, Memory, Registers
@@ -128,9 +129,23 @@ COMPARE_OPCODE: dict[Operation, Opcode] = {
 }
 
 
+# class Tokenizer:
+#     def tokenize(self, s: str) -> list[str]:
+#         return s.replace("(", " ( ").replace(")", " ) ").split()
+
 class Tokenizer:
-    def tokenize(self, s: str) -> list[str]:
-        return s.replace("(", " ( ").replace(")", " ) ").split()
+    _token_re = re.compile(
+        r'"(?:\\.|[^"])*"' # строка в кавычках
+        r'|[()]' # или одна из скобок
+        r'|[^\s()"]+' # или любая непустая последовательность
+    )
+
+    def tokenize(self, src: str) -> list[str]:
+        raw = self._token_re.findall(src)
+        # снимать экранирование нужно только у строк-литералов
+        # return [t if t.startswith('"') else t for t in raw]
+        return raw
+
 
 
 class Parser:
@@ -338,6 +353,8 @@ class Generator:
 
         self.emit(Opcode.JMP_imm, [], [start_pc])
         self.program[jmp_pc] = self.PC
+
+        return self.reg_controller.alloc()
 
     def handle_cond(self, operands: list[Exp]) -> Registers.Registers:
         dst_reg = self.reg_controller.alloc()
@@ -595,7 +612,7 @@ def main(source, target) -> None:
 
 
 if __name__ == "__main__":
-    main("trash/hello.lisp", "trash/out.bin")
+    main("trash/factorial.lisp", "trash/out.bin")
 
 
     # with open('out.bin', 'rb') as f:

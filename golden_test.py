@@ -40,6 +40,7 @@ def test_translator_and_machine(golden, caplog):
 
     - `in_source` -- исходный код
     - `in_stdin` -- данные на ввод процессора для симуляции
+    - `is_char_io` -- выбор типа обработки ввода/вывода
 
     Выход:
 
@@ -57,6 +58,7 @@ def test_translator_and_machine(golden, caplog):
         input_stream = os.path.join(tmpdirname, "input.txt")
         target = os.path.join(tmpdirname, "target.bin")
         target_hex = os.path.join(tmpdirname, "target.bin.hex")
+        data = os.path.join(tmpdirname, "target.bin_data.bin")
 
         # Записываем входные данные в файлы. Данные берутся из теста.
         with open(source, "w", encoding="utf-8") as file:
@@ -69,7 +71,7 @@ def test_translator_and_machine(golden, caplog):
         with contextlib.redirect_stdout(io.StringIO()) as stdout:
             translator.main(source, target)
             print("============================================================")
-            machine.main(target, 400, 401)
+            machine.main(target, data, 400, 401, is_char_io=golden["is_char_io"])
 
         # Выходные данные также считываем в переменные.
         with open(target, "rb") as file:
