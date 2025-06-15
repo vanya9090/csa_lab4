@@ -166,6 +166,7 @@ class ALU:
 class Registers:
     class Registers(Enum):
         RSP: int = 8
+        RHP: int = 9
         R0: int = 0
         R1: int = 1
         R2: int = 2
@@ -178,6 +179,7 @@ class Registers:
     def __init__(self) -> None:
         self.registers_value: dict[Registers.Registers, int] = {
             Registers.Registers.RSP: 0,
+            Registers.Registers.RHP: 0,
             Registers.Registers.R0: 0,
             Registers.Registers.R1: 0,
             Registers.Registers.R2: 0,
@@ -377,6 +379,7 @@ class DataPath:
         self.control_unit: ControlUnit = ControlUnit(self)
         self.memory = Memory(1024)
         self.registers[Registers.Registers.RSP] = 1023
+        self.registers[Registers.Registers.RHP] = 500
 
         self.program_counter: int = 0
         self.selected_flag: ALU.Flags | None = None
@@ -498,7 +501,7 @@ class DataPath:
 
         value = self.memory[Address(self.program_counter)]
         rsp = self.registers[Registers.Registers.RSP]
-        memory_slice = str([str(self.memory[Address(i)]) for i in range(900, 910)])
+        memory_slice = str([str(self.memory[Address(i)]) for i in range(200, 210)])
         registers = ' '.join(f'{r.name}={v}' for r, v in self.registers.registers_value.items())
         if isinstance(value, Instruction):
             opcode = value.opcode
@@ -570,7 +573,7 @@ def simulation(input_address, output_address, code, data, input_tokens, is_char_
     for i, instr in enumerate(code):
         datapath.memory[Address(i)] = instr
     for i, value in enumerate(data):
-        datapath.memory[Address(i + 900)] = value
+        datapath.memory[Address(i + 200)] = value
 
     datapath.input_buffer = input_tokens
 

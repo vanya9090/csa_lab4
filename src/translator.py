@@ -209,6 +209,7 @@ class Generator:
             "print": self.handle_print,
             "input": self.handle_input,
             "deref": self.handle_dereferencing,
+            "alloc": self.handle_alloc,
         }
         self.var_allocator = var_allocator
         self.reg_controller = reg_controller
@@ -289,6 +290,16 @@ class Generator:
         dst_reg = self.reg_controller.alloc()
         self.emit(Opcode.MOV_ia2r, [Term(dst_reg)], [value.value])
         return dst_reg
+    
+    def handle_alloc(self, operands: list[Exp]) -> Registers.Registers:
+        size_reg = self.generate(operands[0])
+        dst_reg = self.reg_controller.alloc()
+
+        self.emit(Opcode.MOV_r2r, [Term(dst_reg), Term(Registers.Registers.RHP)])
+        self.emit(Opcode.ADD_reg2reg, [Term(Registers.Registers.RHP), Term(Registers.Registers.RHP), Term(size_reg)])
+        self.reg_controller.release(size_reg)
+        return dst_reg
+
 
     def handle_setq(self, operands: list[Exp]) -> Address:
         var_address = self.generate(operands[0])
@@ -474,7 +485,7 @@ class RegisterController:
 
 
 class VariableAllocator:
-    def __init__(self, base_address: int = 900) -> None:
+    def __init__(self, base_address: int = 200) -> None:
         self.base_address = base_address
         self.next_free = base_address
         self.scopes: list[dict[str, Address]] = [{}]
@@ -617,7 +628,7 @@ def main(source, target) -> None:
 
 
 if __name__ == "__main__":
-    main("trash/cat.lisp", "trash/out.bin")
+    main("trash/hello.lisp", "trash/out.bin")
 
 
     # with open('out.bin', 'rb') as f:
