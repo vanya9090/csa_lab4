@@ -71,7 +71,7 @@ def test_translator_and_machine(golden, caplog):
         with contextlib.redirect_stdout(io.StringIO()) as stdout:
             translator.main(source, target)
             print("============================================================")
-            machine.main(target, data, 400, 401, is_char_io=golden["is_char_io"])
+            machine.main(target, data, input_stream, 400, 401, is_char_io=golden["is_char_io"])
 
         # Выходные данные также считываем в переменные.
         with open(target, "rb") as file:
