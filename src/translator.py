@@ -210,6 +210,7 @@ class Generator:
             "input": self.handle_input,
             "deref": self.handle_dereferencing,
             "alloc": self.handle_alloc,
+            "store": self.handle_store,
         }
         self.var_allocator = var_allocator
         self.reg_controller = reg_controller
@@ -292,13 +293,37 @@ class Generator:
         return dst_reg
     
     def handle_alloc(self, operands: list[Exp]) -> Registers.Registers:
-        size_reg = self.generate(operands[0])
+        size = self.generate(operands[0])
         dst_reg = self.reg_controller.alloc()
-
         self.emit(Opcode.MOV_r2r, [Term(dst_reg), Term(Registers.Registers.RHP)])
-        self.emit(Opcode.ADD_reg2reg, [Term(Registers.Registers.RHP), Term(Registers.Registers.RHP), Term(size_reg)])
-        self.reg_controller.release(size_reg)
+
+        if isinstance(size, Registers.Registers):
+            self.emit(Opcode.ADD_reg2reg, [Term(Registers.Registers.RHP), Term(Registers.Registers.RHP), Term(size)])
+            self.reg_controller.release(size)
+        elif isinstance(size, Address):
+            self.emit(Opcode.ADD_mix2reg1, [Term(Registers.Registers.RHP), Term(Registers.Registers.RHP)], [size.value]) # check this moment
+        else:
+            raise TypeError
+        
         return dst_reg
+    
+    def handle_store(self, operands: list[Exp]) -> Address:
+        addr = self.generate(operands[0])
+        value = self.generate(operands[1])
+
+        if isinstance(addr, Registers.Registers):
+            pass
+        elif isinstance(addr, Address):
+            addr_reg = self.reg_controller.alloc()
+        else:
+            raise TypeError
+        
+        if isinstance(value, Registers.Registers):
+            self.emit(Opcode.STORE_r2ri, [Term(addr_reg), Term(value)])
+        elif isinstance(value, Address):
+            self.emit(Opcode.STORE_r2ia, [Term(addr_reg)], [value])
+        else:
+            raise TypeError
 
 
     def handle_setq(self, operands: list[Exp]) -> Address:
