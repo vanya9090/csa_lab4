@@ -449,7 +449,10 @@ class DataPath:
             if self.address_register == self.output_address:
                 raise ValueError("Can't read from output port")
             if self.address_register == self.input_address:
-                self.data_register = self.input_buffer.pop(0)
+                try:
+                    self.data_register = self.input_buffer.pop(0)
+                except IndexError:
+                    raise HltError
             else:
                 self.data_register = self.memory[Address(self.address_register)]
 
@@ -562,12 +565,14 @@ def from_bytes_data(binary_data) -> list[int]:
 
 
 
-def simulation(input_address, output_address, code, data, is_char_io: bool) -> str:
+def simulation(input_address, output_address, code, data, input_tokens, is_char_io: bool) -> str:
     datapath = DataPath(input_address, output_address)
     for i, instr in enumerate(code):
         datapath.memory[Address(i)] = instr
     for i, value in enumerate(data):
         datapath.memory[Address(i + 900)] = value
+
+    datapath.input_buffer = input_tokens
 
     while datapath.tick < MAX_CYCLES:
         try:
@@ -584,19 +589,27 @@ def simulation(input_address, output_address, code, data, is_char_io: bool) -> s
     else:
         return "".join(str(val) for val in datapath.output_buffer)
 
-def main(code_file, data_file, input_address, output_address, is_char_io: bool) -> None:
+def main(code_file, data_file, input_file, input_address, output_address, is_char_io: bool) -> None:
     with open(code_file, 'rb') as f:
         bin_code = f.read()
     with open(data_file, 'rb') as f:
         bin_data = f.read()
+    with open(input_file, 'r') as f:
+        input_text = f.read()
+    
+    if is_char_io:
+        input_tokens = [ord(ch) for ch in input_text]
+    else:
+        input_tokens = [int(str(ch)) for ch in input_text]
+
     code = from_bytes(bin_code)
     data = from_bytes_data(bin_data)
     print(code)
     print(data)
 
-    output = simulation(input_address, output_address, code, data, is_char_io)
+    output = simulation(input_address, output_address, code, data, input_tokens, is_char_io)
     print(output)
 
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.DEBUG)
-    main("trash/out.bin", "trash/out.bin_data.bin", 400, 401, is_char_io=False)
+    main("trash/out.bin", "trash/out.bin_data.bin", "trash/input.txt", 400, 401, is_char_io=True)

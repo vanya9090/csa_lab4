@@ -215,10 +215,11 @@ class Generator:
         self.program = program
         self.PC = 0
         self.label_map: dict[str, dict[str: Address | int]] = {}
-        self.string_pool: dict[str, Address] = {}
 
     def generate(self, expression: Exp | Atom) -> Address | Registers.Registers | None:
         if isinstance(expression, Atom):
+            if expression.value.value in self.handlers_map:
+                return self.handlers_map[expression.as_symbol()]()
             return self.handle_atom(expression)
         if isinstance(expression, Exp):
             op = expression.operation
@@ -278,20 +279,23 @@ class Generator:
         elif isinstance(value, Address):
             self.emit(Opcode.MOV_mem2mem, [], [value.value, 401])
 
+    def handle_input(self) -> Registers.Registers:
+        dst_reg = self.reg_controller.alloc()
+        self.emit(Opcode.MOV_da2r, [Term(dst_reg)], [400])
+        return dst_reg
+
     def handle_dereferencing(self, operands: list[Exp]) -> Registers.Registers:
         value = self.generate(operands[0])
         dst_reg = self.reg_controller.alloc()
         self.emit(Opcode.MOV_ia2r, [Term(dst_reg)], [value.value])
         return dst_reg
 
-    def handle_input(self) -> None:
-        pass
-
     def handle_setq(self, operands: list[Exp]) -> Address:
         var_address = self.generate(operands[0])
         assert isinstance(var_address, Address)
 
         var_value = self.generate(operands[1])
+        print(var_value)
         assert isinstance(var_value, Registers.Registers | Address)
 
         if isinstance(var_value, Address):
@@ -490,6 +494,7 @@ class VariableAllocator:
         scope = self.scopes[-1]
         if name not in scope:
             scope[name] = self._new_addr()
+        print("var alloc", name, scope[name])
         return scope[name]
 
     def push_fn_scope(self, fn_name: str, params: list[str]) -> None:
@@ -612,7 +617,7 @@ def main(source, target) -> None:
 
 
 if __name__ == "__main__":
-    main("trash/factorial.lisp", "trash/out.bin")
+    main("trash/cat.lisp", "trash/out.bin")
 
 
     # with open('out.bin', 'rb') as f:
