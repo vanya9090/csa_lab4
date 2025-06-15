@@ -100,8 +100,8 @@ OPCODE_TO_TERMS_AMOUNT: dict[Opcode, list[int]] = {
     Opcode.DEC_r          : [1, 0],
     Opcode.DEC_mem        : [0, 1],
 
-    Opcode.STORE_r2rd     : [2, 1],
-    Opcode.STORE_r2ri     : [2, 1],
+    Opcode.STORE_r2rd     : [2, 0],
+    Opcode.STORE_r2ri     : [2, 0],
     Opcode.STORE_r2da     : [1, 1],
     Opcode.STORE_r2ia     : [1, 1],
 
@@ -185,57 +185,3 @@ class Instruction:
     opcode: Opcode
     terms: list[Term]
 
-
-# def to_bytes(code):
-#     """Преобразует инструкции в бинарное представление"""
-#     binary_bytes = bytearray()
-#     for instr in code:
-#         if isinstance(instr, Instruction):
-#             # Получаем бинарный код операции
-#             binary_instr = instr.opcode.value << 22
-#             for i, term in enumerate(instr.terms):
-#                 binary_instr = binary_instr | (term.value.value << (19 - i * 3))
-#             # Преобразуем 32-битное целое число в 4 байта (big-endian)
-#             binary_bytes.extend(
-#                 ((binary_instr >> 24) & 0xFF, (binary_instr >> 16) & 0xFF, (binary_instr >> 8) & 0xFF, binary_instr & 0xFF)
-#             )
-#         else:
-#             binary_bytes.extend(
-#                 ((instr >> 24) & 0xFF, (instr >> 16) & 0xFF, (instr >> 8) & 0xFF, instr & 0xFF)
-#             )
-
-#     return bytes(binary_bytes)
-
-
-# def from_bytes(binary_code):
-#     """Преобразует бинарное представление машинного кода в структурированный формат."""
-#     structured_code = []
-#     # Обрабатываем байты по 4 за раз для получения 32-битных инструкций
-#     i = 0
-#     while i + 3 < len(binary_code):
-
-#         # Формируем 32-битное слово из 4 байтов
-#         binary_instr = (
-#             (binary_code[i] << 24) | (binary_code[i + 1] << 16) | (binary_code[i + 2] << 8) | binary_code[i + 3]
-#         )
-#         # Извлекаем опкод (старшие 10 бит)
-#         opcode_bin = (binary_instr >> 22)
-#         opcode = Opcode(opcode_bin)
-
-#         terms = []
-#         for j in range(OPCODE_TO_TERMS_AMOUNT[opcode][0]):
-#             value = binary_instr >> (19  - (j * 3)) & 0b111
-#             terms += [Term(value)]
-
-#         structured_code.append(Instruction(opcode, terms))
-
-#         for j in range(OPCODE_TO_TERMS_AMOUNT[opcode][1]):
-#             i += 4
-#             binary_instr = (
-#                 (binary_code[i] << 24) | (binary_code[i + 1] << 16) | (binary_code[i + 2] << 8) | binary_code[i + 3]
-#             )
-#             structured_code.append(binary_instr)
-
-#         i += 4
-
-#     return structured_code

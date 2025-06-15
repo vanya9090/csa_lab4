@@ -295,13 +295,13 @@ class Generator:
     def handle_alloc(self, operands: list[Exp]) -> Registers.Registers:
         size = self.generate(operands[0])
         dst_reg = self.reg_controller.alloc()
-        self.emit(Opcode.MOV_r2r, [Term(dst_reg), Term(Registers.Registers.RHP)])
+        self.emit(Opcode.MOV_r2r, [Term(dst_reg), Term(Registers.Registers.RHP)], [])
 
         if isinstance(size, Registers.Registers):
-            self.emit(Opcode.ADD_reg2reg, [Term(Registers.Registers.RHP), Term(Registers.Registers.RHP), Term(size)])
+            self.emit(Opcode.ADD_reg2reg, [Term(Registers.Registers.RHP), Term(Registers.Registers.RHP), Term(size)], [])
             self.reg_controller.release(size)
         elif isinstance(size, Address):
-            self.emit(Opcode.ADD_mix2reg1, [Term(Registers.Registers.RHP), Term(Registers.Registers.RHP)], [size.value]) # check this moment
+            self.emit(Opcode.ADD_mix2reg1, [Term(Registers.Registers.RHP), Term(Registers.Registers.RHP)], [size.value])
         else:
             raise TypeError
         
@@ -311,27 +311,29 @@ class Generator:
         addr = self.generate(operands[0])
         value = self.generate(operands[1])
 
-        if isinstance(addr, Registers.Registers):
-            pass
-        elif isinstance(addr, Address):
-            addr_reg = self.reg_controller.alloc()
+        if isinstance(value, Registers.Registers):
+            value_reg = value
+        elif isinstance(value, Address):
+            value_reg = self.reg_controller.alloc()
+            self.emit(Opcode.MOV_da2r, [Term(value_reg)], [value.value])
         else:
             raise TypeError
         
-        if isinstance(value, Registers.Registers):
-            self.emit(Opcode.STORE_r2ri, [Term(addr_reg), Term(value)])
-        elif isinstance(value, Address):
-            self.emit(Opcode.STORE_r2ia, [Term(addr_reg)], [value])
+        if isinstance(addr, Registers.Registers):
+            self.emit(Opcode.STORE_r2rd, [Term(value_reg), Term(addr)], [])
+            self.reg_controller.release(addr)
+        elif isinstance(addr, Address):
+            self.emit(Opcode.STORE_r2da, [Term(value_reg)], [addr.value])
         else:
             raise TypeError
-
+        
+        self.reg_controller.release(value_reg)
 
     def handle_setq(self, operands: list[Exp]) -> Address:
         var_address = self.generate(operands[0])
         assert isinstance(var_address, Address)
 
         var_value = self.generate(operands[1])
-        print(var_value)
         assert isinstance(var_value, Registers.Registers | Address)
 
         if isinstance(var_value, Address):
@@ -499,7 +501,7 @@ MAX_REGISTER = 7
 MIN_REGISTER = 1
 class RegisterController:
     def __init__(self):
-        self.available = [1, 2, 3, 4, 5, 6, 7]
+        self.available = [1, 2, 3, 4, 5]
 
     def alloc(self) -> Registers.Registers:
         return Registers.Registers(self.available.pop())
@@ -530,7 +532,6 @@ class VariableAllocator:
         scope = self.scopes[-1]
         if name not in scope:
             scope[name] = self._new_addr()
-        print("var alloc", name, scope[name])
         return scope[name]
 
     def push_fn_scope(self, fn_name: str, params: list[str]) -> None:
@@ -585,7 +586,6 @@ def to_hex(code: list[Instruction | int]) -> list[str]:
         opcode = Opcode(binary_instr >> 22)
         instr_repr += f"{binary_instr:08X}"
         
-        print(opcode)
         for _ in range(OPCODE_TO_TERMS_AMOUNT[opcode][1]):
             i += 4
             binary_instr = (
@@ -599,7 +599,6 @@ def to_hex(code: list[Instruction | int]) -> list[str]:
 
 
 def program_debug_info(code: list[Instruction | int]) -> str:
-    print(code)
     hex_repr = to_hex(code)
     program_repr = []
     pcs = []
@@ -632,10 +631,6 @@ def main(source, target) -> None:
 
     with open(source, encoding="utf-8") as f:
         source = f.read()
-    print(tokenizer.tokenize(source))
-    print()
-    print(parser.parse(tokenizer.tokenize(source)))
-    print()
     generator.generate(parser.parse(tokenizer.tokenize(source)))
     program[generator.PC] = Instruction(Opcode.HLT, [])
     generator.PC += 1
@@ -653,7 +648,7 @@ def main(source, target) -> None:
 
 
 if __name__ == "__main__":
-    main("trash/hello.lisp", "trash/out.bin")
+    main("trash/hello_user_name.lisp", "trash/out.bin")
 
 
     # with open('out.bin', 'rb') as f:

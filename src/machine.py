@@ -7,7 +7,7 @@ from enums import ALUOperations, Sel, Signal
 from isa import OPCODE_TO_TERMS_AMOUNT, Instruction, Opcode, Term
 from microprogram import mprogram
 
-MAX_CYCLES = 10000
+MAX_CYCLES = 20000
 
 class HltError(Exception):
     pass
@@ -158,23 +158,20 @@ class ALU:
             self.__right_term = 0
 
     def perform(self, operation: ALUOperations) -> None:
-        print(operation, self.__left_term, self.__right_term)
         self.result = self.__operations[operation](self.__left_term, self.__right_term)
         self.__set_flags()
 
 
 class Registers:
     class Registers(Enum):
-        RSP: int = 8
-        RHP: int = 9
         R0: int = 0
         R1: int = 1
         R2: int = 2
         R3: int = 3
         R4: int = 4
         R5: int = 5
-        R6: int = 6
-        R7: int = 7
+        RSP: int = 6
+        RHP: int = 7
 
     def __init__(self) -> None:
         self.registers_value: dict[Registers.Registers, int] = {
@@ -186,8 +183,6 @@ class Registers:
             Registers.Registers.R3: 0,
             Registers.Registers.R4: 0,
             Registers.Registers.R5: 0,
-            Registers.Registers.R6: 0,
-            Registers.Registers.R7: 0,
         }
 
     def __getitem__(self, key: Registers) -> int:
@@ -251,18 +246,6 @@ class ControlUnit:
         self.mprogram = mprogram
 
     def decode(self, instruction: Instruction) -> None:
-        # for i in range(1000, 1024):
-        #     print(self.datapath.memory[Address(i)], end=" ")
-
-        # print()
-        # keys = self.datapath.registers.registers_value.keys()
-        # values = self.datapath.registers.registers_value.values()
-        # print(" ".join(f"{r.name:>4}" for r in keys))
-        # print(" ".join(f"{v:>4}" for v in values))
-
-
-        # print("---------------------------------")
-        # print(f"PC: {self.datapath.program_counter} {instruction}")
         self.opcode: Opcode = instruction.opcode
         self.terms: list[Term] = instruction.terms
         if self.opcode in MOV_codes:
@@ -389,9 +372,9 @@ class DataPath:
         self.data_register: int = 0
         self.address_register: int = 0
 
-        self.src_left_register: Registers.Registers = Registers.Registers.R7
-        self.src_right_register: Registers.Registers = Registers.Registers.R6
-        self.dst_register: Registers.Registers = Registers.Registers.R5
+        self.src_left_register: Registers.Registers = Registers.Registers.R5
+        self.src_right_register: Registers.Registers = Registers.Registers.R4
+        self.dst_register: Registers.Registers = Registers.Registers.R3
 
         self.input_address: int = input_address
         self.output_address: int = output_address
@@ -513,11 +496,11 @@ class DataPath:
             i = 1
             while isinstance(self.memory[Address(self.program_counter + i)], int) and opcode != Opcode.HLT:
                 instr_repr += f" {self.memory[Address(self.program_counter + i)]}"
-                i += 1
+                i += 1  
 
             state_repr = f"TICK: {self.tick:4} PC: {self.program_counter:3} SP: {rsp:4} INSTR: {instr_repr:3} MEMORY: {memory_slice:10} REGS: {registers}"
         else:
-            state_repr = f"TICK: {self.tick:4} PC: {self.program_counter:3} SP: {rsp:4} VALUE: {value:3} MEMORY: {memory_slice:10} REGS: {registers} DR: {self.data_register}"
+            state_repr = f"TICK: {self.tick:4} PC: {self.program_counter:3} SP: {rsp:4} VALUE: {value:3} MEMORY: {memory_slice:10} REGS: {registers}"
 
         return state_repr
 
@@ -588,7 +571,7 @@ def simulation(input_address, output_address, code, data, input_tokens, is_char_
         logging.error("Cycle limit hit")
     
     if is_char_io:
-        return "".join(chr(val) for val in datapath.output_buffer)
+        return "".join(chr(val) for val in datapath.output_buffer).encode().decode('unicode_escape')
     else:
         return "".join(str(val) for val in datapath.output_buffer)
 
@@ -601,14 +584,12 @@ def main(code_file, data_file, input_file, input_address, output_address, is_cha
         input_text = f.read()
     
     if is_char_io:
-        input_tokens = [ord(ch) for ch in input_text]
+        input_tokens = [ord(ch) for ch in input_text + '\0']
     else:
         input_tokens = [int(str(ch)) for ch in input_text]
 
     code = from_bytes(bin_code)
     data = from_bytes_data(bin_data)
-    print(code)
-    print(data)
 
     output = simulation(input_address, output_address, code, data, input_tokens, is_char_io)
     print(output)
