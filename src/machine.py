@@ -7,7 +7,7 @@ from enums import ALUOperations, Sel, Signal
 from isa import OPCODE_TO_TERMS_AMOUNT, Instruction, Opcode, Term
 from microprogram import mprogram
 
-MAX_CYCLES = 20000
+MAX_CYCLES = 20_000
 
 class HltError(Exception):
     pass
@@ -440,6 +440,7 @@ class DataPath:
                 try:
                     self.data_register = self.input_buffer.pop(0)
                 except IndexError:
+                    print('ksdjfkldsjfkljsdfklj')
                     raise HltError
             else:
                 self.data_register = self.memory[Address(self.address_register)]
@@ -575,7 +576,7 @@ def simulation(input_address, output_address, code, data, input_tokens, is_char_
     if is_char_io:
         return "".join(chr(val) for val in datapath.output_buffer).encode().decode('unicode_escape')
     else:
-        return "".join(str(val) for val in datapath.output_buffer)
+        return " ".join(str(val) for val in datapath.output_buffer)
 
 def main(code_file, data_file, input_file, input_address, output_address, is_char_io: bool) -> None:
     with open(code_file, 'rb') as f:

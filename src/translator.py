@@ -214,6 +214,7 @@ class Generator:
             "cons": self.handle_cons,
             "car": self.handle_car,
             "cdr": self.handle_cdr,
+            "insert": self.handle_insert,
         }
         self.var_allocator = var_allocator
         self.reg_controller = reg_controller
@@ -282,7 +283,10 @@ class Generator:
             return value
         
         elif isinstance(value, Address):
-            self.emit(Opcode.MOV_mem2mem, [], [value.value, 401])
+            tmp_reg = self.reg_controller.alloc()
+            self.emit(Opcode.MOV_da2r, [Term(tmp_reg)], [value.value])
+            self.emit(Opcode.STORE_r2da, [Term(tmp_reg)], [401])
+            self.reg_controller.release(tmp_reg)
 
     def handle_input(self) -> Registers.Registers:
         dst_reg = self.reg_controller.alloc()
@@ -335,7 +339,7 @@ class Generator:
             self.emit(Opcode.STORE_r2da, [Term(value_reg)], [addr.value])
         else:
             raise TypeError
-        
+
         self.reg_controller.release(value_reg)
 
     def handle_setq(self, operands: list[Exp]) -> Address:
@@ -346,7 +350,10 @@ class Generator:
         assert isinstance(var_value, Registers.Registers | Address)
 
         if isinstance(var_value, Address):
-            self.emit(Opcode.MOV_mem2mem, [], [var_value.value, var_address.value])
+            tmp_reg = self.reg_controller.alloc()
+            self.emit(Opcode.MOV_da2r, [Term(tmp_reg)], [var_value.value])
+            self.emit(Opcode.STORE_r2da, [Term(tmp_reg)], [var_address.value])
+            self.reg_controller.release(tmp_reg)
 
         elif isinstance(var_value, Registers.Registers):
             self.emit(Opcode.STORE_r2da, [Term(var_value)], [var_address.value])
@@ -515,6 +522,11 @@ class Generator:
         if isinstance(value, Registers.Registers):
             self.emit(Opcode.STORE_r2rd, [Term(value), Term(buf)], [])
             self.reg_controller.release(value)
+        elif isinstance(value, Address):
+            tmp_reg = self.reg_controller.alloc()
+            self.emit(Opcode.MOV_da2r, [Term(tmp_reg)], [value.value])
+            self.emit(Opcode.STORE_r2rd, [Term(tmp_reg), Term(buf)], [])
+            self.reg_controller.release(tmp_reg)
         else:
             raise TypeError
 
@@ -567,7 +579,63 @@ class Generator:
         self.emit(Opcode.MOV_rd2r, [Term(dst_reg), Term(one)], [])
         self.reg_controller.release(one)
         return dst_reg
-        
+    
+    def handle_insert(self, operands: list[Exp]):
+        value = self.generate(operands[0]) # value insert to list
+        ptr = self.generate(operands[1]) # insert after this element
+        buf = self.handle_alloc([Atom(Number(2))])
+
+        if isinstance(value, Registers.Registers):
+            self.emit(Opcode.STORE_r2rd, [Term(value), Term(buf)], []) # store value to buf
+            self.reg_controller.release(value)
+        elif isinstance(value, Address):
+            tmp_reg = self.reg_controller.alloc()
+            self.emit(Opcode.MOV_da2r, [Term(tmp_reg)], [value.value])
+            self.emit(Opcode.STORE_r2rd, [Term(tmp_reg), Term(buf)], []) # store value to buf
+            self.reg_controller.release(tmp_reg)
+        else:
+            raise TypeError
+    
+    def handle_insert(self, operands: list[Exp]):
+        value = self.generate(operands[0]) # value insert to list
+        ptr = self.generate(operands[1]) # insert after this element
+        buf = self.handle_alloc([Atom(Number(2))])
+
+        if isinstance(value, Registers.Registers):
+            self.emit(Opcode.STORE_r2rd, [Term(value), Term(buf)], []) # store value to buf
+            self.reg_controller.release(value)
+        elif isinstance(value, Address):
+            tmp_reg = self.reg_controller.alloc()
+            self.emit(Opcode.MOV_da2r, [Term(tmp_reg)], [value.value])
+            self.emit(Opcode.STORE_r2rd, [Term(tmp_reg), Term(buf)], []) # store value to buf
+            self.reg_controller.release(tmp_reg)
+        else:
+            raise TypeError
+
+        nxt_ptr = self.reg_controller.alloc()
+        self.emit(Opcode.MOV_imm2r, [Term(nxt_ptr)], [1])
+        if isinstance(ptr, Registers.Registers):
+            self.emit(Opcode.ADD_reg2reg, [Term(nxt_ptr), Term(ptr), Term(nxt_ptr)], []) # nxt_ptr = ptr + 1
+        elif isinstance(ptr, Address):
+            self.emit(Opcode.ADD_mix2reg1, [Term(nxt_ptr), Term(nxt_ptr)], [ptr.value]) # nxt_ptr = ptr + 1
+        else:
+            raise TypeError
+        nxt_buf = self.reg_controller.alloc()
+        self.emit(Opcode.MOV_imm2r, [Term(nxt_buf)], [1])
+        self.emit(Opcode.ADD_reg2reg, [Term(nxt_buf), Term(buf), Term(nxt_buf)], [])
+
+        tmp_reg = self.reg_controller.alloc()
+        self.emit(Opcode.MOV_rd2r, [Term(tmp_reg), Term(nxt_ptr)], [])
+        self.emit(Opcode.STORE_r2rd, [Term(tmp_reg), Term(nxt_buf)], []) # store nxt_ptr
+        self.reg_controller.release(tmp_reg)
+
+        self.reg_controller.release(nxt_buf)
+
+        self.emit(Opcode.STORE_r2rd, [Term(buf), Term(nxt_ptr)], [])
+        self.reg_controller.release(nxt_ptr)
+
+        self.reg_controller.release(buf)
+        return ptr
 
 MAX_REGISTER = 7
 MIN_REGISTER = 1
@@ -647,8 +715,6 @@ def to_bytes(code) -> bytes:
 
 
 def to_hex(code: list[Instruction | int]) -> list[str]:
-    for instr in code:
-        print(instr)
     code_repr = []
     binary_code = to_bytes(code)
     i = 0
@@ -657,7 +723,6 @@ def to_hex(code: list[Instruction | int]) -> list[str]:
         binary_instr = (
             (binary_code[i] << 24) | (binary_code[i + 1] << 16) | (binary_code[i + 2] << 8) | binary_code[i + 3]
         )
-        print(binary_instr >> 22, bin(binary_instr))
         opcode = Opcode(binary_instr >> 22)
         instr_repr += f"{binary_instr:08X}"
         for _ in range(OPCODE_TO_TERMS_AMOUNT[opcode][1]):
@@ -722,7 +787,7 @@ def main(source, target) -> None:
 
 
 if __name__ == "__main__":
-    main("trash/sort.lisp", "trash/out.bin")
+    main("trash/trash.lisp", "trash/out.bin")
 
 
     # with open('out.bin', 'rb') as f:
