@@ -485,7 +485,7 @@ class DataPath:
 
         value = self.memory[Address(self.program_counter)]
         rsp = self.registers[Registers.Registers.RSP]
-        memory_slice = str([self.memory[Address(i)] for i in range(500, 510)])
+        memory_slice = str([self.memory[Address(i)] for i in range(500, 510)]) + str([self.memory[Address(i)] for i in range(700, 710)])
         registers = ' '.join(f'{r.name}={v}' for r, v in self.registers.registers_value.items())
         if isinstance(value, Instruction):
             opcode = value.opcode
