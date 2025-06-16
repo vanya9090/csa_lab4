@@ -994,4 +994,8 @@ mprogram = [
 
     (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
     (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
+    # GET_CARRY + 15
+    (Signal.LATCH_REGISTER, Sel.Register.CARRY),
+    (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+    (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 ]

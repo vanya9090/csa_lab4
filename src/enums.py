@@ -78,6 +78,7 @@ class Sel:
         # VALUE : int = 1
         ALU: int = 2
         DR: int = 3
+        CARRY: int = 4
 
     class N(Enum):
         DECODER: int = 0

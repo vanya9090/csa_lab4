@@ -1,7 +1,7 @@
 in_source: |-
   (begin
       (setq ch input)
-      (while (== ch 0)
+      (while (!= ch 0)
           (print ch)
           (setq ch input)
       )
@@ -10,670 +10,413 @@ in_stdin: |-
   hello
 is_char_io: 1
 out_log: |-
-  DEBUG    root:machine.py:569 TICK:    1 PC:   0 SP: 1023 INSTR: MOV_da2r R5 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:    2 PC:   0 SP: 1023 INSTR: MOV_da2r R5 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:    3 PC:   0 SP: 1023 INSTR: MOV_da2r R5 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:    4 PC:   0 SP: 1023 INSTR: MOV_da2r R5 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:    5 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:    6 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:    7 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:    8 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:    9 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   10 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   11 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   12 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   13 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   14 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   15 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   16 PC:   1 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   17 PC:   2 SP: 1023 INSTR: STORE_r2da R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   18 PC:   2 SP: 1023 INSTR: STORE_r2da R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   19 PC:   2 SP: 1023 INSTR: STORE_r2da R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   20 PC:   2 SP: 1023 INSTR: STORE_r2da R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   21 PC:   2 SP: 1023 INSTR: STORE_r2da R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   22 PC:   2 SP: 1023 INSTR: STORE_r2da R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   23 PC:   3 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   24 PC:   3 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   25 PC:   3 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   26 PC:   3 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   27 PC:   3 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   28 PC:   3 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   29 PC:   3 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   30 PC:   3 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   31 PC:   3 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   32 PC:   3 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   33 PC:   3 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   34 PC:   3 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   35 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   36 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   37 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   38 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   39 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   40 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   41 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   42 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   43 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
-  DEBUG    root:machine.py:569 TICK:   44 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   45 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   46 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   47 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   48 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   49 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   50 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   51 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   52 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   53 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   54 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   55 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   56 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   57 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   58 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:   59 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   60 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   61 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   62 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   63 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   64 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   65 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   66 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   67 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   68 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   69 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   70 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   71 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   72 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   73 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   74 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   75 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   76 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   77 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   78 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   79 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   80 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   81 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   82 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   83 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   84 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   85 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   86 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   87 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   88 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   89 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   90 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   91 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   92 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   93 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   94 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   95 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   96 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   97 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   98 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:   99 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:  100 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:  101 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:  102 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:  103 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:  104 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:  105 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:  106 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:  107 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:  108 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:  109 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:  110 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:  111 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:  112 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:  113 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:  114 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
-  DEBUG    root:machine.py:569 TICK:  115 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  116 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  117 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  118 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  119 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  120 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  121 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  122 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  123 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  124 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  125 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  126 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  127 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  128 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  129 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  130 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  131 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  132 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  133 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  134 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  135 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  136 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  137 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  138 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  139 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  140 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  141 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  142 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  143 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  144 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  145 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  146 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  147 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  148 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  149 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  150 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  151 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  152 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  153 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  154 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  155 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  156 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  157 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  158 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  159 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  160 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  161 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  162 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  163 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  164 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  165 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  166 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  167 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  168 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  169 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  170 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  171 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
-  DEBUG    root:machine.py:569 TICK:  172 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  173 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  174 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  175 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  176 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  177 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  178 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  179 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  180 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  181 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  182 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  183 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  184 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  185 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  186 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  187 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  188 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  189 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  190 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  191 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  192 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  193 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  194 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  195 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  196 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  197 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  198 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  199 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  200 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  201 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  202 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  203 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  204 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  205 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  206 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  207 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  208 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  209 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  210 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  211 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  212 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  213 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  214 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  215 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  216 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  217 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  218 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  219 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  220 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  221 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  222 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  223 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  224 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  225 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  226 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  227 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
-  DEBUG    root:machine.py:569 TICK:  228 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  229 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  230 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  231 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  232 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  233 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  234 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  235 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  236 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  237 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  238 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  239 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  240 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  241 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  242 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  243 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  244 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  245 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  246 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  247 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  248 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  249 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  250 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  251 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  252 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  253 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  254 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  255 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  256 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  257 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  258 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  259 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  260 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  261 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  262 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  263 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  264 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  265 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  266 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  267 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  268 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  269 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  270 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  271 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  272 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  273 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  274 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  275 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  276 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  277 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  278 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  279 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  280 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  281 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  282 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  283 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  284 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  285 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  286 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  287 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  288 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  289 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  290 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  291 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  292 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  293 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  294 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  295 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  296 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  297 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  298 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  299 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  300 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  301 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  302 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  303 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  304 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  305 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  306 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  307 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  308 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  309 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  310 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  311 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  312 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  313 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  314 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  315 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  316 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  317 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  318 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  319 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  320 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  321 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  322 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  323 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  324 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  325 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  326 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  327 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  328 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  329 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  330 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  331 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  332 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  333 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  334 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  335 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  336 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  337 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  338 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  339 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  340 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  341 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  342 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  343 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  344 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  345 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  346 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  347 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  348 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  349 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  350 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  351 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  352 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  353 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  354 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  355 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  356 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  357 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  358 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  359 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  360 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  361 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  362 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  363 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  364 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  365 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  366 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  367 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  368 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  369 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  370 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  371 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  372 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  373 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  374 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  375 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  376 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  377 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  378 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  379 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  380 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  381 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  382 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  383 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  384 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  385 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  386 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  387 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  388 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  389 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  390 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  391 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  392 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  393 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  394 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  395 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  396 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  397 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
-  DEBUG    root:machine.py:569 TICK:  398 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  399 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  400 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  401 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  402 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  403 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  404 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  405 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  406 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  407 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  408 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  409 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  410 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  411 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  412 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  413 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  414 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  415 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  416 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  417 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  418 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  419 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  420 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  421 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  422 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  423 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  424 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  425 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  426 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  427 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  428 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  429 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  430 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  431 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  432 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  433 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  434 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  435 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  436 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  437 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  438 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  439 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  440 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  441 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  442 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  443 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  444 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  445 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  446 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  447 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  448 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  449 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  450 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  451 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  452 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  453 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
-  DEBUG    root:machine.py:569 TICK:  454 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  455 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  456 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  457 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  458 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  459 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  460 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  461 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  462 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  463 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  464 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  465 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  466 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  467 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  468 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  469 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  470 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  471 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  472 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  473 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  474 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  475 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  476 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  477 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  478 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  479 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  480 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  481 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  482 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  483 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  484 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  485 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  486 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  487 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  488 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  489 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  490 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  491 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  492 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  493 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  494 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  495 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  496 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  497 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  498 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  499 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  500 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  501 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  502 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  503 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  504 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  505 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  506 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  507 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  508 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  509 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  510 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=111 R5=0
-  DEBUG    root:machine.py:569 TICK:  511 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  512 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  513 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  514 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  515 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  516 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  517 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  518 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  519 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  520 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  521 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  522 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  523 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  524 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  525 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  526 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  527 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  528 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  529 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  530 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  531 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  532 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  533 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  534 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  535 PC:  10 SP: 1023 INSTR: MOV_mem2mem 200 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  536 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  537 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  538 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  539 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  540 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  541 PC:  11 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  542 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  543 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  544 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  545 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  546 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  547 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  548 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  549 PC:  12 SP: 1023 VALUE: 401 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  550 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  551 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  552 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  553 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  554 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  555 PC:  13 SP: 1023 INSTR: MOV_da2r R4 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  556 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  557 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  558 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  559 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  560 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  561 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  562 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  563 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  564 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  565 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  566 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-111 R5=0
-  DEBUG    root:machine.py:569 TICK:  567 PC:  14 SP: 1023 VALUE: 400 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  568 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  569 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  570 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  571 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  572 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  573 PC:  15 SP: 1023 INSTR: STORE_r2da R4 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  574 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  575 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  576 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  577 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  578 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  579 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  580 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  581 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  582 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  583 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  584 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  585 PC:  16 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  586 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  587 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  588 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  589 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  590 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  591 PC:  17 SP: 1023 INSTR: JMP_imm 4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  592 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  593 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  594 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  595 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  596 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  597 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  598 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  599 PC:  18 SP: 1023 VALUE:   4 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  600 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  601 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  602 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  603 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  604 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  605 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  606 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  607 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  608 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  609 PC:   5 SP: 1023 VALUE:   0 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  610 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  611 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  612 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  613 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  614 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  615 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  616 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  617 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  618 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  619 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  620 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  621 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  622 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  623 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  624 PC:   7 SP: 1023 VALUE: 200 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  625 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  626 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  627 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  628 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  629 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  630 PC:   8 SP: 1023 INSTR: BEQZ R4 19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  631 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  632 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  633 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  634 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  635 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  636 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  637 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  638 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  639 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  640 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  641 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  642 PC:   9 SP: 1023 VALUE:  19 MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  643 PC:  19 SP: 1023 INSTR: HLT MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  644 PC:  19 SP: 1023 INSTR: HLT MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  645 PC:  19 SP: 1023 INSTR: HLT MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  646 PC:  19 SP: 1023 INSTR: HLT MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  647 PC:  19 SP: 1023 INSTR: HLT MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:569 TICK:  648 PC:  19 SP: 1023 INSTR: HLT MEMORY: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'] REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
-  DEBUG    root:machine.py:567 HLT
-  EOF
+  DEBUG    root:machine.py:575 TICK:    1 PC:   0 SP: 1023 INSTR: MOV_da2r R5 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:    2 PC:   0 SP: 1023 INSTR: MOV_da2r R5 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:    3 PC:   0 SP: 1023 INSTR: MOV_da2r R5 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:    4 PC:   0 SP: 1023 INSTR: MOV_da2r R5 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:    5 PC:   1 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:    6 PC:   1 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:    7 PC:   1 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:    8 PC:   1 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:    9 PC:   1 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   10 PC:   1 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   11 PC:   1 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   12 PC:   1 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   13 PC:   1 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   14 PC:   1 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   15 PC:   1 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   16 PC:   1 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   17 PC:   2 SP: 1023 INSTR: STORE_r2da R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   18 PC:   2 SP: 1023 INSTR: STORE_r2da R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   19 PC:   2 SP: 1023 INSTR: STORE_r2da R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   20 PC:   2 SP: 1023 INSTR: STORE_r2da R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   21 PC:   2 SP: 1023 INSTR: STORE_r2da R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   22 PC:   2 SP: 1023 INSTR: STORE_r2da R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   23 PC:   3 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   24 PC:   3 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   25 PC:   3 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   26 PC:   3 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   27 PC:   3 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   28 PC:   3 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   29 PC:   3 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   30 PC:   3 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   31 PC:   3 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   32 PC:   3 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   33 PC:   3 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   34 PC:   3 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   35 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   36 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   37 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   38 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   39 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   40 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   41 PC:   5 SP: 1023 VALUE:   0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   42 PC:   5 SP: 1023 VALUE:   0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   43 PC:   5 SP: 1023 VALUE:   0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=104
+  DEBUG    root:machine.py:575 TICK:   44 PC:   5 SP: 1023 VALUE:   0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   45 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   46 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   47 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   48 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   49 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   50 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   51 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   52 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   53 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   54 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   55 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   56 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   57 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   58 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=0 R5=0
+  DEBUG    root:machine.py:575 TICK:   59 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   60 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   61 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   62 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   63 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   64 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   65 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   66 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   67 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   68 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   69 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   70 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   71 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   72 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   73 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   74 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   75 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   76 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   77 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   78 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   79 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   80 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   81 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   82 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   83 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   84 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   85 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   86 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   87 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   88 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   89 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   90 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   91 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   92 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   93 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   94 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-104 R5=0
+  DEBUG    root:machine.py:575 TICK:   95 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:   96 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:   97 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:   98 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:   99 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  100 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  101 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  102 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  103 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  104 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  105 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  106 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  107 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  108 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  109 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  110 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  111 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  112 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  113 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  114 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  115 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  116 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  117 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  118 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  119 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  120 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  121 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  122 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  123 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  124 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  125 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  126 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  127 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  128 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  129 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  130 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=104 R5=0
+  DEBUG    root:machine.py:575 TICK:  131 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  132 PC:  16 SP: 1023 INSTR: STORE_r2da R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  133 PC:  16 SP: 1023 INSTR: STORE_r2da R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  134 PC:  16 SP: 1023 INSTR: STORE_r2da R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  135 PC:  16 SP: 1023 INSTR: STORE_r2da R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  136 PC:  16 SP: 1023 INSTR: STORE_r2da R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  137 PC:  16 SP: 1023 INSTR: STORE_r2da R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  138 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  139 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  140 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  141 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  142 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  143 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  144 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  145 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  146 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  147 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  148 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  149 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  150 PC:  18 SP: 1023 INSTR: JMP_imm 4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  151 PC:  18 SP: 1023 INSTR: JMP_imm 4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  152 PC:  18 SP: 1023 INSTR: JMP_imm 4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  153 PC:  18 SP: 1023 INSTR: JMP_imm 4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  154 PC:  18 SP: 1023 INSTR: JMP_imm 4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  155 PC:  18 SP: 1023 INSTR: JMP_imm 4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  156 PC:  19 SP: 1023 VALUE:   4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  157 PC:  19 SP: 1023 VALUE:   4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  158 PC:  19 SP: 1023 VALUE:   4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  159 PC:  19 SP: 1023 VALUE:   4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  160 PC:  19 SP: 1023 VALUE:   4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  161 PC:  19 SP: 1023 VALUE:   4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  162 PC:  19 SP: 1023 VALUE:   4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  163 PC:  19 SP: 1023 VALUE:   4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  164 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  165 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  166 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  167 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  168 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  169 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  170 PC:   5 SP: 1023 VALUE:   0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  171 PC:   5 SP: 1023 VALUE:   0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  172 PC:   5 SP: 1023 VALUE:   0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  173 PC:   5 SP: 1023 VALUE:   0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  174 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  175 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  176 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  177 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  178 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  179 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  180 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  181 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  182 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  183 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  184 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  185 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  186 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  187 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  188 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  189 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  190 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  191 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  192 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  193 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  194 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  195 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  196 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  197 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  198 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  199 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  200 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  201 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  202 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  203 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  204 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  205 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  206 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  207 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  208 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  209 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  210 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  211 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  212 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  213 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  214 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  215 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  216 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  217 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  218 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  219 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  220 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  221 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  222 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  223 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-101 R5=0
+  DEBUG    root:machine.py:575 TICK:  224 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  225 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  226 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  227 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  228 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  229 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  230 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  231 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  232 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  233 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  234 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  235 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  236 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  237 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  238 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  239 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  240 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  241 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  242 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  243 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  244 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  245 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  246 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  247 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  248 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  249 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  250 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  251 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  252 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  253 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  254 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  255 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  256 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  257 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  258 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  259 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=101 R5=0
+  DEBUG    root:machine.py:575 TICK:  260 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  261 PC:  16 SP: 1023 INSTR: STORE_r2da R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  262 PC:  16 SP: 1023 INSTR: STORE_r2da R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  263 PC:  16 SP: 1023 INSTR: STORE_r2da R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  264 PC:  16 SP: 1023 INSTR: STORE_r2da R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  265 PC:  16 SP: 1023 INSTR: STORE_r2da R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  266 PC:  16 SP: 1023 INSTR: STORE_r2da R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  267 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  268 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  269 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  270 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  271 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  272 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  273 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  274 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  275 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  276 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  277 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  278 PC:  17 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  279 PC:  18 SP: 1023 INSTR: JMP_imm 4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  280 PC:  18 SP: 1023 INSTR: JMP_imm 4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  281 PC:  18 SP: 1023 INSTR: JMP_imm 4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  282 PC:  18 SP: 1023 INSTR: JMP_imm 4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  283 PC:  18 SP: 1023 INSTR: JMP_imm 4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  284 PC:  18 SP: 1023 INSTR: JMP_imm 4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  285 PC:  19 SP: 1023 VALUE:   4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  286 PC:  19 SP: 1023 VALUE:   4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  287 PC:  19 SP: 1023 VALUE:   4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  288 PC:  19 SP: 1023 VALUE:   4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  289 PC:  19 SP: 1023 VALUE:   4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  290 PC:  19 SP: 1023 VALUE:   4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  291 PC:  19 SP: 1023 VALUE:   4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  292 PC:  19 SP: 1023 VALUE:   4 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  293 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  294 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  295 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  296 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  297 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  298 PC:   4 SP: 1023 INSTR: MOV_imm2r R5 0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  299 PC:   5 SP: 1023 VALUE:   0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  300 PC:   5 SP: 1023 VALUE:   0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  301 PC:   5 SP: 1023 VALUE:   0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  302 PC:   5 SP: 1023 VALUE:   0 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  303 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  304 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  305 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  306 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  307 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  308 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  309 PC:   6 SP: 1023 INSTR: SUB_mix2reg1 R4 R5 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  310 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  311 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  312 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  313 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  314 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  315 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  316 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  317 PC:   7 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  318 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  319 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  320 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  321 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  322 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  323 PC:   8 SP: 1023 INSTR: BNEZ R4 20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  324 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  325 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  326 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  327 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  328 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  329 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  330 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  331 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  332 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  333 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  334 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  335 PC:   9 SP: 1023 VALUE:  20 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  336 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  337 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  338 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  339 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  340 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  341 PC:  10 SP: 1023 INSTR: MOV_da2r R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  342 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  343 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  344 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  345 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  346 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  347 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  348 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  349 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  350 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  351 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  352 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=-108 R5=0
+  DEBUG    root:machine.py:575 TICK:  353 PC:  11 SP: 1023 VALUE: 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  354 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  355 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  356 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  357 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  358 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  359 PC:  12 SP: 1023 INSTR: STORE_r2da R4 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  360 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  361 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  362 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  363 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  364 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  365 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  366 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  367 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  368 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  369 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  370 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  371 PC:  13 SP: 1023 VALUE: 401 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  372 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  373 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  374 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  375 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  376 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  377 PC:  14 SP: 1023 INSTR: MOV_da2r R4 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  378 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  379 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  380 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  381 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  382 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  383 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  384 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  385 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  386 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  387 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  388 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  389 PC:  15 SP: 1023 VALUE: 400 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  390 PC:  16 SP: 1023 INSTR: STORE_r2da R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  391 PC:  16 SP: 1023 INSTR: STORE_r2da R4 200 REGS: RSP=1023 RHP=500 R0=0 R1=0 R2=0 R3=0 R4=108 R5=0
+  DEBUG    root:machine.py:575 TICK:  392 PC:  16 SP: EOF
 out_stdout: |
   ============================================================
   hello
 out_code_hex: |2-
-     0: MOV_da2r R5 400           06A8000000000190
-     2: STORE_r2da R5 200         20280000000000C8
-     4: MOV_imm2r R5 0            0528000000000000
-     6: SUB_mix2reg1 R4 R5 200    71A50000000000C8
-     8: BEQZ R4 19                3CA0000000000013
-    10: MOV_mem2mem 200 401       62C00000000000C800000191
-    13: MOV_da2r R4 400           06A0000000000190
-    15: STORE_r2da R4 200         20200000000000C8
-    17: JMP_imm 4                 3A00000000000004
-    19: HLT                       D1400000
+     0: MOV_da2r R5 400           06E8000000000190
+     2: STORE_r2da R5 200         20680000000000C8
+     4: MOV_imm2r R5 0            0568000000000000
+     6: SUB_mix2reg1 R4 R5 200    71E50000000000C8
+     8: BNEZ R4 20                4060000000000014
+    10: MOV_da2r R4 200           06E00000000000C8
+    12: STORE_r2da R4 401         2060000000000191
+    14: MOV_da2r R4 400           06E0000000000190
+    16: STORE_r2da R4 200         20600000000000C8
+    18: JMP_imm 4                 3A40000000000004
+    20: HLT                       D1800000
 out_code: !!binary |
-  BqgAAAAAAZAgKAAAAAAAyAUoAAAAAAAAcaUAAAAAAMg8oAAAAAAAE2LAAAAAAADIAAABkQagAAAA
-  AAGQICAAAAAAAMg6AAAAAAAABNFAAAA=
+  BugAAAAAAZAgaAAAAAAAyAVoAAAAAAAAceUAAAAAAMhAYAAAAAAAFAbgAAAAAADIIGAAAAAAAZEG
+  4AAAAAABkCBgAAAAAADIOkAAAAAAAATRgAAA

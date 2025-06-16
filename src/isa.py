@@ -88,6 +88,7 @@ class Opcode(Enum):
     HLT: int = POP + 6
 
     MOV_ri2r: int = HLT + 1
+    GET_CARRY: int = MOV_ri2r + 15
 
 
 OPCODE_TO_TERMS_AMOUNT: dict[Opcode, list[int]] = {
@@ -173,6 +174,7 @@ OPCODE_TO_TERMS_AMOUNT: dict[Opcode, list[int]] = {
 
     Opcode.MOV_mem2mem    : [0, 2],
     Opcode.HLT            : [0, 0],
+    Opcode.GET_CARRY      : [1, 0],
 }
 
 

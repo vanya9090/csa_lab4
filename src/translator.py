@@ -215,6 +215,7 @@ class Generator:
             "car": self.handle_car,
             "cdr": self.handle_cdr,
             "insert": self.handle_insert,
+            "get_carry": self.handle_get_carry,
         }
         self.var_allocator = var_allocator
         self.reg_controller = reg_controller
@@ -420,6 +421,8 @@ class Generator:
             if i % 2 == 0:
                 cond_reg = self.generate(op)
                 jmp_pc = self.PC + 1
+                if op.operation == Operation.EQ: op.operation = Operation.NEQ
+                elif op.operation == Operation.NEQ: op.operation = Operation.EQ
                 self.emit(COMPARE_OPCODE[op.operation], [Term(cond_reg)], [None])
                 self.reg_controller.release(cond_reg)
             else:
@@ -637,6 +640,11 @@ class Generator:
         self.reg_controller.release(buf)
         return ptr
 
+    def handle_get_carry(self):
+        dst_reg = self.reg_controller.alloc()
+        self.emit(Opcode.GET_CARRY, [Term(dst_reg)], [])
+        return dst_reg
+
 MAX_REGISTER = 7
 MIN_REGISTER = 1
 class RegisterController:
@@ -787,7 +795,7 @@ def main(source, target) -> None:
 
 
 if __name__ == "__main__":
-    main("trash/trash.lisp", "trash/out.bin")
+    main("trash/bigint.lisp", "trash/out.bin")
 
 
     # with open('out.bin', 'rb') as f:

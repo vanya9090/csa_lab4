@@ -121,6 +121,7 @@ class ALU:
     def __set_flags(self) -> None:
         self.flags[self.Flags.ZERO] = self.result == 0
         self.flags[self.Flags.NEGATIVE] = self.result < 0
+        self.flags[self.Flags.CARRY] = self.result > (2**31 - 1)
 
     # left alu only can get src_left_register
     def latch_left_alu(self, sel: Sel.LeftALU) -> None:
@@ -159,7 +160,6 @@ class ALU:
             self.__right_term = 0
 
     def perform(self, operation: ALUOperations) -> None:
-        print(operation, self.__left_term, self.__right_term)
         self.result = self.__operations[operation](self.__left_term, self.__right_term)
         self.__set_flags()
 
@@ -307,6 +307,8 @@ class ControlUnit:
             self.datapath.select_dst_register(self.terms[0].value)
         elif self.opcode == Opcode.HLT:
             pass
+        elif self.opcode == Opcode.GET_CARRY:
+            self.datapath.select_dst_register(self.terms[0].value)
         else:
             raise RuntimeError
 
@@ -440,7 +442,6 @@ class DataPath:
                 try:
                     self.data_register = self.input_buffer.pop(0)
                 except IndexError:
-                    print('ksdjfkldsjfkljsdfklj')
                     raise HltError
             else:
                 self.data_register = self.memory[Address(self.address_register)]
@@ -468,6 +469,8 @@ class DataPath:
             self.registers[self.dst_register] = self.data_register
         elif sel == Sel.Register.REGISTER:
             self.registers[self.dst_register] = self.registers[self.src_left_register]
+        elif sel == Sel.Register.CARRY:
+            self.registers[self.dst_register] = self.alu.flags[self.alu.Flags.CARRY]
 
     def latch_memory(self) -> None:
         if 0 > self.address_register > self.memory.memory_size:
@@ -487,7 +490,7 @@ class DataPath:
 
         value = self.memory[Address(self.program_counter)]
         rsp = self.registers[Registers.Registers.RSP]
-        memory_slice = str([self.memory[Address(i)] for i in range(500, 510)]) + str([self.memory[Address(i)] for i in range(700, 710)])
+        memory_slice = str([self.memory[Address(i)] for i in range(700, 720)])
         registers = ' '.join(f'{r.name}={v}' for r, v in self.registers.registers_value.items())
         if isinstance(value, Instruction):
             opcode = value.opcode
@@ -501,9 +504,9 @@ class DataPath:
                 instr_repr += f" {self.memory[Address(self.program_counter + i)]}"
                 i += 1  
 
-            state_repr = f"TICK: {self.tick:4} PC: {self.program_counter:3} SP: {rsp:4} INSTR: {instr_repr:3} MEMORY: {memory_slice:10} REGS: {registers}"
+            state_repr = f"TICK: {self.tick:4} PC: {self.program_counter:3} SP: {rsp:4} INSTR: {instr_repr:3} REGS: {registers}"
         else:
-            state_repr = f"TICK: {self.tick:4} PC: {self.program_counter:3} SP: {rsp:4} VALUE: {value:3} MEMORY: {memory_slice:10} REGS: {registers}"
+            state_repr = f"TICK: {self.tick:4} PC: {self.program_counter:3} SP: {rsp:4} VALUE: {value:3} REGS: {registers}"
 
         return state_repr
 
