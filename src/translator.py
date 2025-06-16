@@ -292,7 +292,13 @@ class Generator:
     def handle_dereferencing(self, operands: list[Exp]) -> Registers.Registers:
         value = self.generate(operands[0])
         dst_reg = self.reg_controller.alloc()
-        self.emit(Opcode.MOV_ia2r, [Term(dst_reg)], [value.value])
+        if isinstance(value, Address):
+            self.emit(Opcode.MOV_ia2r, [Term(dst_reg)], [value.value])
+        elif isinstance(value, Registers.Registers):
+            self.emit(Opcode.MOV_rd2r, [Term(dst_reg), Term(value)], [])
+            self.reg_controller.release(value)
+        else:
+            raise TypeError
         return dst_reg
     
     def handle_alloc(self, operands: list[Exp]) -> Registers.Registers:
@@ -534,10 +540,10 @@ class Generator:
         ptr = self.generate(operands[0])
         dst_reg = self.reg_controller.alloc()
         if isinstance(ptr, Registers.Registers):
-            self.emit(Opcode.MOV_rd2r, [Term(dst_reg), Term(ptr)], [])
+            self.emit(Opcode.MOV_r2r, [Term(dst_reg), Term(ptr)], [])
             self.reg_controller.release(ptr)
         elif isinstance(ptr, Address):
-            self.emit(Opcode.MOV_ia2r, [Term(dst_reg)], [ptr.value])
+            self.emit(Opcode.MOV_da2r, [Term(dst_reg)], [ptr.value])
         else:
             raise TypeError
 
@@ -558,7 +564,7 @@ class Generator:
         else:
             raise TypeError
         
-        self.emit(Opcode.MOV_ri2r, [Term(dst_reg), Term(one)], [])
+        self.emit(Opcode.MOV_rd2r, [Term(dst_reg), Term(one)], [])
         self.reg_controller.release(one)
         return dst_reg
         

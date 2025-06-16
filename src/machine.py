@@ -159,6 +159,7 @@ class ALU:
             self.__right_term = 0
 
     def perform(self, operation: ALUOperations) -> None:
+        print(operation, self.__left_term, self.__right_term)
         self.result = self.__operations[operation](self.__left_term, self.__right_term)
         self.__set_flags()
 
