@@ -16,6 +16,7 @@ mprogram = [
     # MOV register direct (10)
     (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER),  # src register
     (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
+    (Signal.EXECUTE_ALU, ALUOperations.ADD),
     (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU),
     (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
     (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DR),
