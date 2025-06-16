@@ -87,13 +87,16 @@ class Opcode(Enum):
     POP: int = PUSH + 9
     HLT: int = POP + 6
 
+    MOV_ri2r: int = HLT + 1
+
 
 OPCODE_TO_TERMS_AMOUNT: dict[Opcode, list[int]] = {
     Opcode.MOV_r2r        : [2, 0],
-    Opcode.MOV_rd2r       : [1, 1],
+    Opcode.MOV_rd2r       : [2, 0],
     Opcode.MOV_imm2r      : [1, 1],
     Opcode.MOV_da2r       : [1, 1],
     Opcode.MOV_ia2r       : [1, 1],
+    Opcode.MOV_ri2r       : [2, 0],
 
     Opcode.INC_r          : [1, 0],
     Opcode.INC_mem        : [0, 1],

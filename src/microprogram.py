@@ -13,7 +13,7 @@ mprogram = [
     (Signal.LATCH_REGISTER, Sel.Register.ALU),  # dst register
     (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
     (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
-    # MOV register indirect (10)
+    # MOV register direct (10)
     (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER),  # src register
     (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
     (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU),
@@ -972,6 +972,25 @@ mprogram = [
     (Signal.LATCH_RSP, Sel.RSP.PLUS_1),
     (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
     (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
-    # HLT
+    # HLT + 6
     (Signal.HLT, None),
+    # MOV register indirect + 1
+    (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER),  # src register
+    (Signal.LATCH_RIGHT_ALU, Sel.RightALU.ZERO),
+    (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU),
+    (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+
+    (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DR),
+    (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
+    (Signal.EXECUTE_ALU, ALUOperations.ADD),
+    (Signal.LATCH_ADDRESS_REGISTER, Sel.AddressRegister.ALU),
+    (Signal.LATCH_DATA_REGISTER, Sel.DataRegister.MEMORY),
+
+    (Signal.LATCH_RIGHT_ALU, Sel.RightALU.DR),
+    (Signal.LATCH_LEFT_ALU, Sel.LeftALU.ZERO),
+    (Signal.EXECUTE_ALU, ALUOperations.ADD),
+    (Signal.LATCH_REGISTER, Sel.Register.ALU),
+
+    (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.NEXT),
+    (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
 ]

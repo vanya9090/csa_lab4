@@ -77,6 +77,7 @@ MOV_codes = (
     Opcode.MOV_da2r,
     Opcode.MOV_ia2r,
     Opcode.MOV_mem2mem,
+    Opcode.MOV_ri2r
 )
 INC_DEC_codes = (Opcode.INC_mem, Opcode.INC_r, Opcode.DEC_mem, Opcode.DEC_r)
 STORE_codes = (
@@ -249,7 +250,7 @@ class ControlUnit:
         self.opcode: Opcode = instruction.opcode
         self.terms: list[Term] = instruction.terms
         if self.opcode in MOV_codes:
-            if self.opcode in (Opcode.MOV_r2r, Opcode.MOV_rd2r):
+            if self.opcode in (Opcode.MOV_r2r, Opcode.MOV_rd2r, Opcode.MOV_ri2r):
                 self.datapath.select_dst_register(self.terms[0].value)
                 self.datapath.select_left_register(self.terms[1].value)
             elif self.opcode == Opcode.MOV_mem2mem:
@@ -484,7 +485,7 @@ class DataPath:
 
         value = self.memory[Address(self.program_counter)]
         rsp = self.registers[Registers.Registers.RSP]
-        memory_slice = str([str(self.memory[Address(i)]) for i in range(1014, 1024)])
+        memory_slice = str([self.memory[Address(i)] for i in range(500, 510)])
         registers = ' '.join(f'{r.name}={v}' for r, v in self.registers.registers_value.items())
         if isinstance(value, Instruction):
             opcode = value.opcode
@@ -587,7 +588,7 @@ def main(code_file, data_file, input_file, input_address, output_address, is_cha
         input_tokens = [ord(ch) for ch in input_text + '\0']
     else:
         if input_text != '':
-            input_tokens = [int(input_text)]
+            input_tokens = [int(num) for num in input_text.split('\n')]
         else:
             input_tokens = []
 
