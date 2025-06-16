@@ -285,7 +285,7 @@ mprogram = [
     (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER),
     (Signal.EXECUTE_ALU, ALUOperations.ADD),  # set_flags(src_reg)
     (Signal.LATCH_FLAG, Sel.Flag.ZERO),
-    (Signal.LATCH_INVERSE, Sel.Inverse.IDENTITY),
+    (Signal.LATCH_INVERSE, Sel.Inverse.INVERSE),
     (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.CONDITION),
     (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
     # BNEZ (255)
@@ -300,7 +300,7 @@ mprogram = [
     (Signal.LATCH_LEFT_ALU, Sel.LeftALU.REGISTER),
     (Signal.EXECUTE_ALU, ALUOperations.ADD),  # set_flags(src_reg)
     (Signal.LATCH_FLAG, Sel.Flag.ZERO),
-    (Signal.LATCH_INVERSE, Sel.Inverse.INVERSE),
+    (Signal.LATCH_INVERSE, Sel.Inverse.IDENTITY),
     (Signal.LATCH_PROGRAM_COUNTER, Sel.ProgramCounter.CONDITION),
     (Signal.LATCH_MPROGRAM_COUNTER, Sel.MProgramCounter.ZERO),
     # BGZ (269)
