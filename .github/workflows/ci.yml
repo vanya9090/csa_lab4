@@ -37,4 +37,4 @@ jobs:
     #   run: mypy src
 
     - name: Run pytest
-      run: pytest
+      run: pytest -v
