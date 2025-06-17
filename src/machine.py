@@ -1,5 +1,5 @@
-import sys
 import logging
+import sys
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
