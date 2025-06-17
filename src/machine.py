@@ -1,3 +1,4 @@
+import sys
 import logging
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -603,4 +604,6 @@ def main(code_file, data_file, input_file, input_address, output_address, is_cha
 
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.DEBUG)
-    main("trash/out.bin", "trash/out.bin_data.bin", "trash/input.txt", 400, 401, is_char_io=False)
+    _, code, data, inp, char_io = sys.argv
+    main(code, data, inp, 400, 401, is_char_io=int(char_io))
+    # main("trash/out.bin", "trash/out.bin_data.bin", "trash/input.txt", 400, 401, is_char_io=False)
