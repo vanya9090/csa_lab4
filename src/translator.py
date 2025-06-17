@@ -1,8 +1,8 @@
+import re
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Union
-import re
 
 from isa import OPCODE_TO_TERMS_AMOUNT, Instruction, Opcode, Term
 from machine import Address, Memory, Registers
@@ -137,14 +137,12 @@ class Tokenizer:
     _token_re = re.compile(
         r'"(?:\\.|[^"])*"' # строка в кавычках
         r'|[()]' # или одна из скобок
-        r'|[^\s()"]+' # или любая непустая последовательность
+        r'|[^\s()"]+', # или любая непустая последовательность
     )
 
     def tokenize(self, src: str) -> list[str]:
-        raw = self._token_re.findall(src)
         # снимать экранирование нужно только у строк-литералов
-        # return [t if t.startswith('"') else t for t in raw]
-        return raw
+        return self._token_re.findall(src)
 
 
 
@@ -248,10 +246,10 @@ class Generator:
             self.PC += 1
 
     def _store_string(self, text: str) -> Address:
-        addr = self.var_allocator._new_addr()
-        for i, ch in enumerate(text.encode() + b'\0'):
+        addr = self.var_allocator.new_addr()
+        for i, ch in enumerate(text.encode() + b"\0"):
             self.program[addr.value + i] = ch
-            self.var_allocator._new_addr()
+            self.var_allocator.new_addr()
         return addr
 
 
@@ -274,20 +272,21 @@ class Generator:
             addr = self._store_string(atom.value.value)
             self.emit(Opcode.MOV_imm2r, [Term(dst_reg)], [addr.value])
             return dst_reg
-        
+
         raise RuntimeError(f"Atom {atom} isn't atom")
 
-    def handle_print(self, operands: list[Exp]) -> None:
+    def handle_print(self, operands: list[Exp]) -> Registers.Registers:
         value = self.generate(operands[0])
         if isinstance(value, Registers.Registers):
             self.emit(Opcode.STORE_r2da, [Term(value)], [401])
-            return value
-        
-        elif isinstance(value, Address):
+
+        if isinstance(value, Address):
             tmp_reg = self.reg_controller.alloc()
             self.emit(Opcode.MOV_da2r, [Term(tmp_reg)], [value.value])
             self.emit(Opcode.STORE_r2da, [Term(tmp_reg)], [401])
             self.reg_controller.release(tmp_reg)
+            value = tmp_reg
+        return value
 
     def handle_input(self) -> Registers.Registers:
         dst_reg = self.reg_controller.alloc()
@@ -305,7 +304,7 @@ class Generator:
         else:
             raise TypeError
         return dst_reg
-    
+
     def handle_alloc(self, operands: list[Exp]) -> Registers.Registers:
         size = self.generate(operands[0])
         dst_reg = self.reg_controller.alloc()
@@ -318,9 +317,9 @@ class Generator:
             self.emit(Opcode.ADD_mix2reg1, [Term(Registers.Registers.RHP), Term(Registers.Registers.RHP)], [size.value])
         else:
             raise TypeError
-        
+
         return dst_reg
-    
+
     def handle_store(self, operands: list[Exp]) -> Address:
         addr = self.generate(operands[0])
         value = self.generate(operands[1])
@@ -332,7 +331,7 @@ class Generator:
             self.emit(Opcode.MOV_da2r, [Term(value_reg)], [value.value])
         else:
             raise TypeError
-        
+
         if isinstance(addr, Registers.Registers):
             self.emit(Opcode.STORE_r2rd, [Term(value_reg), Term(addr)], [])
             self.reg_controller.release(addr)
@@ -421,8 +420,10 @@ class Generator:
             if i % 2 == 0:
                 cond_reg = self.generate(op)
                 jmp_pc = self.PC + 1
-                if op.operation == Operation.EQ: op.operation = Operation.NEQ
-                elif op.operation == Operation.NEQ: op.operation = Operation.EQ
+                if op.operation == Operation.EQ:
+                    op.operation = Operation.NEQ
+                elif op.operation == Operation.NEQ:
+                    op.operation = Operation.EQ
                 self.emit(COMPARE_OPCODE[op.operation], [Term(cond_reg)], [None])
                 self.reg_controller.release(cond_reg)
             else:
@@ -515,9 +516,9 @@ class Generator:
             self.reg_controller.release(param_reg)
 
         return Registers.Registers.R0
-    
 
-    def handle_cons(self, operands: list[Exp]):
+
+    def handle_cons(self, operands: list[Exp]) -> Registers.Registers | Address:
         value = self.generate(operands[0])
         nxt = self.generate(operands[1])
         buf = self.handle_alloc([Atom(Number(2))])
@@ -536,7 +537,7 @@ class Generator:
         one = self.reg_controller.alloc()
         self.emit(Opcode.MOV_imm2r, [Term(one)], [1])
         self.emit(Opcode.ADD_reg2reg, [Term(one), Term(buf), Term(one)], [])
-        
+
         if isinstance(nxt, Registers.Registers):
             self.emit(Opcode.STORE_r2rd, [Term(nxt), Term(one)], [])
             self.reg_controller.release(nxt)
@@ -548,10 +549,10 @@ class Generator:
         else:
             raise TypeError
 
-        self.reg_controller.release(one)            
+        self.reg_controller.release(one)
         return buf
-    
-    def handle_car(self, operands: list[Exp]):
+
+    def handle_car(self, operands: list[Exp]) -> Registers.Registers:
         ptr = self.generate(operands[0])
         dst_reg = self.reg_controller.alloc()
         if isinstance(ptr, Registers.Registers):
@@ -563,8 +564,8 @@ class Generator:
             raise TypeError
 
         return dst_reg
-    
-    def handle_cdr(self, operands: list[Exp]):
+
+    def handle_cdr(self, operands: list[Exp]) -> Registers.Registers:
         ptr = self.generate(operands[0])
         dst_reg = self.reg_controller.alloc()
 
@@ -578,28 +579,12 @@ class Generator:
             self.emit(Opcode.ADD_mix2reg1, [Term(one), Term(one)], [ptr.value])
         else:
             raise TypeError
-        
+
         self.emit(Opcode.MOV_rd2r, [Term(dst_reg), Term(one)], [])
         self.reg_controller.release(one)
         return dst_reg
-    
-    def handle_insert(self, operands: list[Exp]):
-        value = self.generate(operands[0]) # value insert to list
-        ptr = self.generate(operands[1]) # insert after this element
-        buf = self.handle_alloc([Atom(Number(2))])
 
-        if isinstance(value, Registers.Registers):
-            self.emit(Opcode.STORE_r2rd, [Term(value), Term(buf)], []) # store value to buf
-            self.reg_controller.release(value)
-        elif isinstance(value, Address):
-            tmp_reg = self.reg_controller.alloc()
-            self.emit(Opcode.MOV_da2r, [Term(tmp_reg)], [value.value])
-            self.emit(Opcode.STORE_r2rd, [Term(tmp_reg), Term(buf)], []) # store value to buf
-            self.reg_controller.release(tmp_reg)
-        else:
-            raise TypeError
-    
-    def handle_insert(self, operands: list[Exp]):
+    def handle_insert(self, operands: list[Exp]) -> Registers.Registers | Address:
         value = self.generate(operands[0]) # value insert to list
         ptr = self.generate(operands[1]) # insert after this element
         buf = self.handle_alloc([Atom(Number(2))])
@@ -640,7 +625,7 @@ class Generator:
         self.reg_controller.release(buf)
         return ptr
 
-    def handle_get_carry(self):
+    def handle_get_carry(self) -> Registers.Registers:
         dst_reg = self.reg_controller.alloc()
         self.emit(Opcode.GET_CARRY, [Term(dst_reg)], [])
         return dst_reg
@@ -665,7 +650,7 @@ class VariableAllocator:
         self.next_free = base_address
         self.scopes: list[dict[str, Address]] = [{}]
 
-    def _new_addr(self) -> Address:
+    def new_addr(self) -> Address:
         addr = Address(self.next_free)
         self.next_free += 1
         return addr
@@ -679,7 +664,7 @@ class VariableAllocator:
     def allocate(self, name: str) -> Address:
         scope = self.scopes[-1]
         if name not in scope:
-            scope[name] = self._new_addr()
+            scope[name] = self.new_addr()
         return scope[name]
 
     def push_fn_scope(self, fn_name: str, params: list[str]) -> None:
@@ -688,7 +673,7 @@ class VariableAllocator:
             if p in frame:
                 err_message = f"parameter {p!r} repeated"
                 raise SyntaxError(err_message)
-            frame[p] = self._new_addr()
+            frame[p] = self.new_addr()
         self.scopes.append(frame)
 
     def pop_fn_scope(self) -> None:
@@ -790,7 +775,7 @@ def main(source, target) -> None:
     with open(target + ".hex", "w") as f:
         f.write(program_info)
 
-    with open(target + '_data.bin', "wb") as f:
+    with open(target + "_data.bin", "wb") as f:
         f.write(to_bytes(program[var_allocator.base_address:var_allocator.next_free]))
 
 

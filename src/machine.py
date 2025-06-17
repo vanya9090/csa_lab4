@@ -77,7 +77,7 @@ MOV_codes = (
     Opcode.MOV_da2r,
     Opcode.MOV_ia2r,
     Opcode.MOV_mem2mem,
-    Opcode.MOV_ri2r
+    Opcode.MOV_ri2r,
 )
 INC_DEC_codes = (Opcode.INC_mem, Opcode.INC_r, Opcode.DEC_mem, Opcode.DEC_r)
 STORE_codes = (
@@ -491,7 +491,7 @@ class DataPath:
         value = self.memory[Address(self.program_counter)]
         rsp = self.registers[Registers.Registers.RSP]
         memory_slice = str([self.memory[Address(i)] for i in range(700, 720)])
-        registers = ' '.join(f'{r.name}={v}' for r, v in self.registers.registers_value.items())
+        registers = " ".join(f"{r.name}={v}" for r, v in self.registers.registers_value.items())
         if isinstance(value, Instruction):
             opcode = value.opcode
             instr_repr = str(opcode.name)
@@ -502,7 +502,7 @@ class DataPath:
             i = 1
             while isinstance(self.memory[Address(self.program_counter + i)], int) and opcode != Opcode.HLT:
                 instr_repr += f" {self.memory[Address(self.program_counter + i)]}"
-                i += 1  
+                i += 1
 
             state_repr = f"TICK: {self.tick:4} PC: {self.program_counter:3} SP: {rsp:4} INSTR: {instr_repr:3} REGS: {registers}"
         else:
@@ -557,7 +557,7 @@ def from_bytes_data(binary_data) -> list[int]:
 
 
 
-def simulation(input_address, output_address, code, data, input_tokens, is_char_io: bool) -> str:
+def simulation(input_address, output_address, code, data, input_tokens, is_char_io) -> str:
     datapath = DataPath(input_address, output_address)
     for i, instr in enumerate(code):
         datapath.memory[Address(i)] = instr
@@ -575,27 +575,25 @@ def simulation(input_address, output_address, code, data, input_tokens, is_char_
         logging.debug(str(datapath))
     else:
         logging.error("Cycle limit hit")
-    
-    if is_char_io:
-        return "".join(chr(val) for val in datapath.output_buffer).encode().decode('unicode_escape')
-    else:
-        return " ".join(str(val) for val in datapath.output_buffer)
 
-def main(code_file, data_file, input_file, input_address, output_address, is_char_io: bool) -> None:
-    with open(code_file, 'rb') as f:
-        bin_code = f.read()
-    with open(data_file, 'rb') as f:
-        bin_data = f.read()
-    with open(input_file, 'r') as f:
-        input_text = f.read()
-    
     if is_char_io:
-        input_tokens = [ord(ch) for ch in input_text + '\0']
+        return "".join(chr(val) for val in datapath.output_buffer).encode().decode("unicode_escape")
+    return " ".join(str(val) for val in datapath.output_buffer)
+
+def main(code_file, data_file, input_file, input_address, output_address, is_char_io) -> None:
+    with open(code_file, "rb") as f:
+        bin_code = f.read()
+    with open(data_file, "rb") as f:
+        bin_data = f.read()
+    with open(input_file) as f:
+        input_text = f.read()
+
+    if is_char_io:
+        input_tokens = [ord(ch) for ch in input_text + "\0"]
+    elif input_text != "":
+        input_tokens = [int(num) for num in input_text.split("\n")]
     else:
-        if input_text != '':
-            input_tokens = [int(num) for num in input_text.split('\n')]
-        else:
-            input_tokens = []
+        input_tokens = []
 
     code = from_bytes(bin_code)
     data = from_bytes_data(bin_data)

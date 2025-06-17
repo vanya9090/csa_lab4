@@ -31,7 +31,13 @@ ignore = [
     "PTH123", # path open
     "LOG015",
     "EM101",
-    "TRY003"
+    "TRY003",
+    "F841",
+    "B904",
+    "EM102", # f-strings in exception
+    "RUF003",
+    "PLR0913", # too many args
+    "PLR0915", # too many sttmnts
     ]
 select = ["ALL"]
 target-version = "py310"
